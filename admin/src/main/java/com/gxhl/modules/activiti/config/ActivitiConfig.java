@@ -18,7 +18,7 @@ public class ActivitiConfig {
         SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
         processEngineConfiguration.setDataSource(dataSource);
         processEngineConfiguration.setDatabaseSchemaUpdate("true");
-        processEngineConfiguration.setDatabaseType("mysql");
+        processEngineConfiguration.setDatabaseType("mysql"); // TODO 获得数据类型
 
         processEngineConfiguration.setTransactionManager(transactionManager);
 
