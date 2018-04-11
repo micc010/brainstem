@@ -15,7 +15,7 @@ package com.github.rogerli.modules.job.controller;
 import com.github.rogerli.common.annotation.SysLog;
 import com.github.rogerli.common.model.R;
 import com.github.rogerli.common.utils.PageUtils;
-import com.github.rogerli.common.validator.ValidatorUtils;
+import com.github.rogerli.common.utils.validator.ValidatorUtils;
 import com.github.rogerli.modules.job.entity.ScheduleJobEntity;
 import com.github.rogerli.modules.job.service.ScheduleJobService;
 import org.springframework.beans.factory.annotation.Autowired;

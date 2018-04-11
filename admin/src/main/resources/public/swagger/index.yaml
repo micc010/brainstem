@@ -61,7 +61,7 @@ paths:
                 description: 失败原因
                 type: string
 
-  /sys/user/list:
+  /sys/user/data:
     get:
       tags:
         - 管理员管理
@@ -208,7 +208,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/dept/list:
+  /sys/dept/data:
     get:
       tags:
         - 部门管理
@@ -335,7 +335,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/role/list:
+  /sys/role/data:
     get:
       tags:
         - 角色管理
@@ -461,7 +461,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/menu/list:
+  /sys/menu/data:
     get:
       tags:
         - 菜单管理
@@ -576,7 +576,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/log/list:
+  /sys/log/data:
     get:
       tags:
         - 系统日志
@@ -612,7 +612,7 @@ paths:
           schema:
             $ref: '#/definitions/SysLogEntity'
 
-  /sys/config/list:
+  /sys/config/data:
     get:
       tags:
         - 参数管理
@@ -725,7 +725,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/oss/list:
+  /sys/oss/data:
     get:
       tags:
         - 文件服务
@@ -840,7 +840,7 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/schedule/list:
+  /sys/schedule/data:
     get:
       tags:
         - 定时任务

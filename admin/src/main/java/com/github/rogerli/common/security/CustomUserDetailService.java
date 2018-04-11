@@ -12,6 +12,9 @@
  */
 package com.github.rogerli.common.security;
 
+import com.github.rogerli.modules.sys.entity.SysUser;
+import com.github.rogerli.modules.sys.service.SysRoleService;
+import com.github.rogerli.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,10 +38,10 @@ import java.util.Set;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
-    private LoginService loginService;
+    private SysUserService sysUserService;
 
     @Autowired
-    private RoleService roleService;
+    private SysRoleService sysRoleService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,18 +50,16 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("用户名为空");
         }
 
-        Login login = loginService.findByUsername(username);
+        SysUser login = sysUserService.findByUsername(username);
         if (login == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
-        roleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
-
-        authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS")); // 如果默认需要权限的需要更改标志
+        sysRoleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return new CustomUserDetails(login.getId(), login.getUserName(), login.getFullName(), null, login.getOrganId(), null, new Date(), Whether.no.value(), authorities);
+        return new CustomUserDetails(login.getUserId(), login.getUsername(), login.getFullName(), null, login.getDeptId(), null, new Date(), Whether.no.value(), authorities);
     }
 
 }

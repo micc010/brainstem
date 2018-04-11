@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 2018-03-30
  */
 public class Q<T> extends LinkedHashMap<String, Object> {
-    private static final long serialVersionUID = 1L;
+
     /**
      * mybatis-plus分页参数
      */
@@ -34,40 +34,40 @@ public class Q<T> extends LinkedHashMap<String, Object> {
     /**
      * 当前页码
      */
-    private int currPage = 1;
+    private int pageNum = 1;
     /**
      * 每页条数
      */
-    private int limit = 10;
+    private int pageSize = 10;
 
     public Q(Map<String, Object> params) {
         this.putAll(params);
 
         //分页参数
-        if (params.get("page") != null) {
-            currPage = Integer.parseInt((String) params.get("page"));
+        if (params.get("pageNum") != null) {
+            pageNum = Integer.parseInt((String) params.get("pageNum"));
         }
-        if (params.get("limit") != null) {
-            limit = Integer.parseInt((String) params.get("limit"));
+        if (params.get("pageSize") != null) {
+            pageSize = Integer.parseInt((String) params.get("pageSize"));
         }
 
-        this.put("offset", (currPage - 1) * limit);
-        this.put("page", currPage);
-        this.put("limit", limit);
+        this.put("offset", (pageNum - 1) * pageSize);
+        this.put("pageNum", pageNum);
+        this.put("pageSize", pageSize);
 
         //防止SQL注入（因为sidx、order是通过拼接SQL实现排序的，会有SQL注入风险）
-        String sidx = SQLFilter.sqlInject((String) params.get("sidx"));
-        String order = SQLFilter.sqlInject((String) params.get("order"));
-        this.put("sidx", sidx);
-        this.put("order", order);
+        String sortby = SQLFilter.sqlInject((String) params.get("sortby"));
+        String sorted = SQLFilter.sqlInject((String) params.get("sorted"));
+        this.put("sortby", sortby);
+        this.put("sorted", sorted);
 
         //mybatis-plus分页
-        this.page = new Page<>(currPage, limit);
+        this.page = new Page<>(pageNum, pageSize, sortby);
 
         //排序
-        if (StringUtils.isNotBlank(sidx) && StringUtils.isNotBlank(order)) {
-            this.page.setOrderByField(sidx);
-            this.page.setAsc("ASC".equalsIgnoreCase(order));
+        if (StringUtils.isNotBlank(sortby) && StringUtils.isNotBlank(sorted)) {
+            this.page.setOrderByField(sortby);
+            this.page.setAsc("ASC".equalsIgnoreCase(sorted));
         }
 
     }
@@ -76,11 +76,11 @@ public class Q<T> extends LinkedHashMap<String, Object> {
         return page;
     }
 
-    public int getCurrPage() {
-        return currPage;
+    public int getPageNum() {
+        return pageNum;
     }
 
-    public int getLimit() {
-        return limit;
+    public int getPageSize() {
+        return pageSize;
     }
 }

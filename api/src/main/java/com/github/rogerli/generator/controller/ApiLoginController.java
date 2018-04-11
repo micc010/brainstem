@@ -16,7 +16,7 @@ import com.github.rogerli.annotation.Login;
 import com.github.rogerli.common.model.R;
 import com.github.rogerli.generator.service.UserService;
 import com.github.rogerli.form.LoginForm;
-import com.github.rogerli.common.validator.ValidatorUtils;
+import com.github.rogerli.common.utils.validator.ValidatorUtils;
 import com.github.rogerli.generator.service.TokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

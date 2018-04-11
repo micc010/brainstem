@@ -213,12 +213,12 @@ public class GeneratorUtils {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Dao.xml";
         }
 
-        if (template.contains("list.html.vm")) {
+        if (template.contains("data.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator
                     + "modules" + File.separator + moduleName + File.separator + className.toLowerCase() + ".html";
         }
 
-        if (template.contains("list.js.vm")) {
+        if (template.contains("data.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "statics" + File.separator + "js" + File.separator
                     + "modules" + File.separator + moduleName + File.separator + className.toLowerCase() + ".js";
         }

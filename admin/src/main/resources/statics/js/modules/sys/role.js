@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/role/list',
+        url: baseURL + 'sys/role/data',
         datatype: "json",
         colModel: [
             { label: '角色ID', name: 'roleId', index: "role_id", width: 45, key: true },
@@ -20,9 +20,9 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
-            page: "page.currPage",
+            page: "page.pageNum",
             total: "page.totalPage",
-            records: "page.totalCount"
+            records: "page.total"
         },
         prmNames : {
             page:"page",
@@ -214,7 +214,7 @@ var vm = new Vue({
         },
         getMenuTree: function(roleId) {
             //加载菜单树
-            $.get(baseURL + "sys/menu/list", function(r){
+            $.get(baseURL + "sys/menu/data", function(r){
                 menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, r);
                 //展开所有节点
                 menu_ztree.expandAll(true);
@@ -226,7 +226,7 @@ var vm = new Vue({
         },
         getDataTree: function(roleId) {
             //加载菜单树
-            $.get(baseURL + "sys/dept/list", function(r){
+            $.get(baseURL + "sys/dept/data", function(r){
                 data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
                 //展开所有节点
                 data_ztree.expandAll(true);
@@ -234,7 +234,7 @@ var vm = new Vue({
         },
         getDept: function(){
             //加载部门树
-            $.get(baseURL + "sys/dept/list", function(r){
+            $.get(baseURL + "sys/dept/data", function(r){
                 dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
                 var node = dept_ztree.getNodeByParam("deptId", vm.role.deptId);
                 if(node != null){

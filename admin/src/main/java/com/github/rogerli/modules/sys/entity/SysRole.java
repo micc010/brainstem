@@ -63,8 +63,15 @@ public class SysRole implements Serializable {
     @TableField(exist = false)
     private String deptName;
 
+    /**
+     * 权限清单
+     */
     @TableField(exist = false)
     private List<Long> menuIdList;
+
+    /**
+     * 部门清单
+     */
     @TableField(exist = false)
     private List<Long> deptIdList;
 

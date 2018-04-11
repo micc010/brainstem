@@ -191,7 +191,7 @@ function getMenuId () {
 
 $(function () {
     var colunms = Menu.initColumn();
-    var table = new TreeTable(Menu.id, baseURL + "sys/menu/list", colunms);
+    var table = new TreeTable(Menu.id, baseURL + "sys/menu/data", colunms);
     table.setExpandColumn(2);
     table.setIdField("menuId");
     table.setCodeField("menuId");

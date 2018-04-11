@@ -15,6 +15,7 @@ package com.github.rogerli.modules.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.github.rogerli.common.model.Q;
 import com.github.rogerli.modules.sys.entity.SysDict;
 import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.modules.sys.dao.SysDictDao;
@@ -37,7 +38,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDict> impleme
         String name = (String)params.get("name");
 
         Page<SysDict> page = this.selectPage(
-                new Query<SysDict>(params).getPage(),
+                new Q<SysDict>(params).getPage(),
                 new EntityWrapper<SysDict>()
                     .like(StringUtils.isNotBlank(name),"name", name)
         );

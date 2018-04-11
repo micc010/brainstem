@@ -20,7 +20,6 @@ import com.github.rogerli.form.LoginForm;
 import com.github.rogerli.generator.service.TokenService;
 import com.github.rogerli.generator.service.UserService;
 import com.github.rogerli.common.exception.RRException;
-import com.github.rogerli.common.validator.Assert;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

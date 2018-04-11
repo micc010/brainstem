@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/dict/list',
+        url: baseURL + 'sys/dict/data',
         datatype: "json",
         colModel: [			
 			{ label: '字典名称', name: 'name', index: 'name', width: 80 },
@@ -21,9 +21,9 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
-            page: "page.currPage",
+            page: "page.pageNum",
             total: "page.totalPage",
-            records: "page.totalCount"
+            records: "page.total"
         },
         prmNames : {
             page:"page", 

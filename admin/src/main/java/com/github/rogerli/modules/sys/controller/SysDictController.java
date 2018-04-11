@@ -14,7 +14,7 @@ package com.github.rogerli.modules.sys.controller;
 
 import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.common.model.R;
-import com.github.rogerli.common.validator.ValidatorUtils;
+import com.github.rogerli.common.utils.validator.ValidatorUtils;
 import com.github.rogerli.modules.sys.entity.SysDict;
 import com.github.rogerli.modules.sys.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;

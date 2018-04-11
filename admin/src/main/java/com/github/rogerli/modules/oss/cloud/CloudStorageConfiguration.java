@@ -13,9 +13,9 @@
 package com.github.rogerli.modules.oss.cloud;
 
 
-import com.github.rogerli.common.validator.group.AliyunGroup;
-import com.github.rogerli.common.validator.group.QiniuGroup;
-import com.github.rogerli.common.validator.group.QcloudGroup;
+import com.github.rogerli.common.utils.validator.group.AliyunGroup;
+import com.github.rogerli.common.utils.validator.group.QiniuGroup;
+import com.github.rogerli.common.utils.validator.group.QcloudGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;

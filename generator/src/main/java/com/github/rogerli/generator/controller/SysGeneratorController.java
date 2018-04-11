@@ -53,7 +53,7 @@ public class SysGeneratorController {
         List<Map<String, Object>> list = sysGeneratorService.queryList(query);
         int total = sysGeneratorService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage().getCurrent());
+        PageUtils pageUtil = new PageUtils(list, total, query.getPageSize(), query.getPage().getCurrent());
 
         return R.ok().put("page", pageUtil);
     }

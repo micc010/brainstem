@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/user/list',
+        url: baseURL + 'sys/user/data',
         datatype: "json",
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
@@ -26,9 +26,9 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
-            page: "page.currPage",
+            page: "page.pageNum",
             total: "page.totalPage",
-            records: "page.totalCount"
+            records: "page.total"
         },
         prmNames : {
             page:"page", 
@@ -89,7 +89,7 @@ var vm = new Vue({
         },
         getDept: function(){
             //加载部门树
-            $.get(baseURL + "sys/dept/list", function(r){
+            $.get(baseURL + "sys/dept/data", function(r){
                 ztree = $.fn.zTree.init($("#deptTree"), setting, r);
                 var node = ztree.getNodeByParam("deptId", vm.user.deptId);
                 if(node != null){

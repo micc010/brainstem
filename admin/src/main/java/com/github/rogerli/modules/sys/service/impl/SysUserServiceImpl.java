@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.rogerli.common.annotation.DataFilter;
+import com.github.rogerli.common.model.Q;
 import com.github.rogerli.common.utils.Constant;
 import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.modules.sys.dao.SysUserDao;
@@ -59,7 +60,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
 		String username = (String)params.get("username");
 
 		Page<SysUser> page = this.selectPage(
-			new Query<SysUser>(params).getPage(),
+			new Q<SysUser>(params).getPage(),
 			new EntityWrapper<SysUser>()
 				.like(StringUtils.isNotBlank(username),"username", username)
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))

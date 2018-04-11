@@ -18,7 +18,6 @@ import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.modules.sys.entity.SysRole;
 import com.github.rogerli.modules.sys.service.SysRoleDeptService;
 import com.github.rogerli.modules.sys.service.SysRoleMenuService;
-import com.github.rogerli.common.validator.ValidatorUtils;
 import com.github.rogerli.modules.sys.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController extends AbstractController {
+
     @Autowired
     private SysRoleService sysRoleService;
     @Autowired
@@ -59,7 +59,7 @@ public class SysRoleController extends AbstractController {
     public R select() {
         List<SysRole> list = sysRoleService.selectList(null);
 
-        return R.ok().put("list", list);
+        return R.ok().put("data", list);
     }
 
     /**

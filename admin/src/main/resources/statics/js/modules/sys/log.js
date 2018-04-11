@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/log/list',
+        url: baseURL + 'sys/log/data',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', width: 30, key: true },
@@ -23,9 +23,9 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
-            page: "page.currPage",
+            page: "page.pageNum",
             total: "page.totalPage",
-            records: "page.totalCount"
+            records: "page.total"
         },
         prmNames : {
             page:"page", 

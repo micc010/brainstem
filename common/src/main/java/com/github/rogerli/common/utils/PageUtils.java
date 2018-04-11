@@ -19,53 +19,55 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 分页工具类
+ * 分页工具
  *
  * @author roger.li
  * @since 2018-03-30
  */
 @Data
 public class PageUtils implements Serializable {
-    private static final long serialVersionUID = 1L;
+
     //总记录数
-    private int totalCount;
+    private int total;
     //每页记录数
     private int pageSize;
     //总页数
     private int totalPage;
     //当前页数
-    private int currPage;
+    private int pageNum;
     //列表数据
-    private List<?> list;
+    private List<?> data;
 
     /**
      * 分页
      *
-     * @param list
+     * @param data
      *         列表数据
-     * @param totalCount
+     * @param total
      *         总记录数
      * @param pageSize
      *         每页记录数
-     * @param currPage
+     * @param pageNum
      *         当前页数
      */
-    public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
-        this.list = list;
-        this.totalCount = totalCount;
+    public PageUtils(List<?> data, int total, int pageSize, int pageNum) {
+        this.data = data;
+        this.total = total;
         this.pageSize = pageSize;
-        this.currPage = currPage;
-        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
+        this.pageNum = pageNum;
+        this.totalPage = (int) Math.ceil((double) total / pageSize);
     }
 
     /**
      * 分页
+     *
+     * @param page
      */
     public PageUtils(Page<?> page) {
-        this.list = page.getRecords();
-        this.totalCount = page.getTotal();
+        this.data = page.getRecords();
+        this.total = page.getTotal();
         this.pageSize = page.getSize();
-        this.currPage = page.getCurrent();
+        this.pageNum = page.getCurrent();
         this.totalPage = page.getPages();
     }
 }

@@ -10,7 +10,7 @@ var menuItem = Vue.extend({
         '		<i class="fa fa-angle-left pull-right"></i>',
         '	</a>',
         '	<ul v-if="item.type === 0" class="treeview-menu">',
-        '		<menu-item :item="item" v-for="item in item.list"></menu-item>',
+        '		<menu-item :item="item" v-for="item in item.data"></menu-item>',
         '	</ul>',
 
         '	<a v-if="item.type === 1 && item.parentId === 0" :href="\'#\'+item.url">',

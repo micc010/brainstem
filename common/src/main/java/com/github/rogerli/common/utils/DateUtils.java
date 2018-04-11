@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 日期处理
+ * 日期工具
  *
  * @author roger.li
  * @since 2018-03-30

@@ -12,6 +12,9 @@
  */
 package com.github.rogerli.common.security;
 
+import com.github.rogerli.modules.sys.entity.SysMenu;
+import com.github.rogerli.modules.sys.entity.SysRole;
+import com.github.rogerli.modules.sys.service.SysRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,7 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
             .getLogger(CustomFilterSecurityMetadataSource.class);
 
     @Autowired
-    private RoleService roleService;
+    private SysRoleService sysRoleService;
 
     /**
      * 资源所需要的权限
@@ -54,16 +57,12 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
 
         Collection<ConfigAttribute> securityConfigList = new ArrayList<ConfigAttribute>();
         //在Resource表找到该资源对应的角色
-        Purview query = new Purview();
+        SysMenu query = new SysMenu();
         query.setUrl(fi.getRequest().getServletPath());
-        List<Role> roleList = roleService.findRoleListByPurview(query);
+        List<SysRole> roleList = sysRoleService.findRoleListByPurview(query);
 
-        if (roleList == null || roleList.size() == 0) {
-            SecurityConfig securityConfig = new SecurityConfig("ROLE_ANONYMOUS");
-            securityConfigList.add(securityConfig);
-            LOGGER.info("url not need role");
-        } else {
-            for (Role role :
+        if (roleList != null && roleList.size() > 0) {
+            for (SysRole role :
                     roleList) {
                 //以角色名称来存放
                 SecurityConfig securityConfig = new SecurityConfig(role.getRole());

@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 
 /**
- * Map工具类
+ * Map工具
  *
  * @author roger.li
  * @since 2018-03-30

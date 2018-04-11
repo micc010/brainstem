@@ -15,6 +15,7 @@ package com.github.rogerli.modules.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.github.rogerli.common.model.Q;
 import com.github.rogerli.modules.sys.dao.SysLogDao;
 import com.github.rogerli.modules.sys.service.SysLogService;
 import com.github.rogerli.common.utils.PageUtils;
@@ -37,7 +38,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogDao, SysOptLog> impleme
         String key = (String)params.get("key");
 
         Page<SysOptLog> page = this.selectPage(
-            new Query<SysOptLog>(params).getPage(),
+            new Q<SysOptLog>(params).getPage(),
             new EntityWrapper<SysOptLog>().like(StringUtils.isNotBlank(key),"username", key)
         );
 

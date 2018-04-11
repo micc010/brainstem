@@ -16,12 +16,13 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.rogerli.common.exception.RRException;
+import com.github.rogerli.common.model.Q;
+import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.modules.sys.dao.SysConfigDao;
 import com.github.rogerli.modules.sys.entity.SysConfig;
-import com.google.gson.Gson;
 import com.github.rogerli.modules.sys.redis.RedisConfiguration;
 import com.github.rogerli.modules.sys.service.SysConfigService;
-import com.github.rogerli.common.utils.PageUtils;
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,82 +32,82 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> implements SysConfigService {
-	@Autowired
-	private RedisConfiguration sysConfigRedis;
 
-	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		String key = (String)params.get("key");
+    @Autowired
+    private RedisConfiguration sysConfigRedis;
 
-		Page<SysConfig> page = this.selectPage(
-				new Query<SysConfig>(params).getPage(),
-				new EntityWrapper<SysConfig>()
-					.like(StringUtils.isNotBlank(key),"key", key)
-					.eq("status", 1)
-		);
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
 
-		return new PageUtils(page);
-	}
-	
-	@Override
-	public void save(SysConfig config) {
-		this.insert(config);
-		sysConfigRedis.saveOrUpdate(config);
-	}
+        Page<SysConfig> page = this.selectPage(
+                new Q<SysConfig>(params).getPage(),
+                new EntityWrapper<SysConfig>()
+                        .like(StringUtils.isNotBlank(key), "key", key)
+                        .eq("status", 1)
+        );
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(SysConfig config) {
-		this.updateById(config);
-		sysConfigRedis.saveOrUpdate(config);
-	}
+        return new PageUtils(page);
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void updateValueByKey(String key, String value) {
-		baseMapper.updateValueByKey(key, value);
-		sysConfigRedis.delete(key);
-	}
+    @Override
+    public void save(SysConfig config) {
+        this.insert(config);
+        sysConfigRedis.saveOrUpdate(config);
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void deleteBatch(Long[] ids) {
-		for(Long id : ids){
-			SysConfig config = this.selectById(id);
-			sysConfigRedis.delete(config.getKey());
-		}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysConfig config) {
+        this.updateById(config);
+        sysConfigRedis.saveOrUpdate(config);
+    }
 
-		this.deleteBatchIds(Arrays.asList(ids));
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateValueByKey(String key, String value) {
+        baseMapper.updateValueByKey(key, value);
+        sysConfigRedis.delete(key);
+    }
 
-	@Override
-	public String getValue(String key) {
-		SysConfig config = sysConfigRedis.get(key);
-		if(config == null){
-			config = baseMapper.queryByKey(key);
-			sysConfigRedis.saveOrUpdate(config);
-		}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBatch(Long[] ids) {
+        for (Long id : ids) {
+            SysConfig config = this.selectById(id);
+            sysConfigRedis.delete(config.getKey());
+        }
 
-		return config == null ? null : config.getValue();
-	}
-	
-	@Override
-	public <T> T getConfigObject(String key, Class<T> clazz) {
-		String value = getValue(key);
-		if(StringUtils.isNotBlank(value)){
-			return new Gson().fromJson(value, clazz);
-		}
+        this.deleteBatchIds(Arrays.asList(ids));
+    }
 
-		try {
-			return clazz.newInstance();
-		} catch (Exception e) {
-			throw new RRException("获取参数失败");
-		}
-	}
+    @Override
+    public String getValue(String key) {
+        SysConfig config = sysConfigRedis.get(key);
+        if (config == null) {
+            config = baseMapper.queryByKey(key);
+            sysConfigRedis.saveOrUpdate(config);
+        }
+
+        return config == null ? null : config.getValue();
+    }
+
+    @Override
+    public <T> T getConfigObject(String key, Class<T> clazz) {
+        String value = getValue(key);
+        if (StringUtils.isNotBlank(value)) {
+            return new Gson().fromJson(value, clazz);
+        }
+
+        try {
+            return clazz.newInstance();
+        } catch (Exception e) {
+            throw new RRException("获取参数失败");
+        }
+    }
 }

@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + '${moduleName}/${pathName}/list',
+        url: baseURL + '${moduleName}/${pathName}/data',
         datatype: "json",
         colModel: [			
 #foreach($column in $columns)
@@ -22,10 +22,10 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader : {
-            root: "page.list",
-            page: "page.currPage",
+            root: "page.data",
+            page: "page.pageNum",
             total: "page.totalPage",
-            records: "page.totalCount"
+            records: "page.total"
         },
         prmNames : {
             page:"page", 

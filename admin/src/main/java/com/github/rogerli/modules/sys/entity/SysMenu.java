@@ -12,7 +12,6 @@
  */
 package com.github.rogerli.modules.sys.entity;
 
-
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -60,7 +59,7 @@ public class SysMenu implements Serializable {
 	private String url;
 
 	/**
-	 * 授权(多个用逗号分隔，如：user:list,user:create)
+	 * 授权(多个用逗号分隔，如：user:data,user:create)
 	 */
 	private String perms;
 

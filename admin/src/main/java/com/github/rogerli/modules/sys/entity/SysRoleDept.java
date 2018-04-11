@@ -12,7 +12,6 @@
  */
 package com.github.rogerli.modules.sys.entity;
 
-
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 

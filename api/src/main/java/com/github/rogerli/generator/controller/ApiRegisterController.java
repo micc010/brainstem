@@ -14,7 +14,7 @@ package com.github.rogerli.generator.controller;
 
 import com.github.rogerli.generator.service.UserService;
 import com.github.rogerli.common.model.R;
-import com.github.rogerli.common.validator.ValidatorUtils;
+import com.github.rogerli.common.utils.validator.ValidatorUtils;
 import com.github.rogerli.generator.entity.User;
 import com.github.rogerli.form.RegisterForm;
 import io.swagger.annotations.Api;

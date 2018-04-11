@@ -18,7 +18,7 @@ import com.github.rogerli.modules.sys.entity.SysConfig;
 import com.github.rogerli.modules.sys.service.SysConfigService;
 import com.github.rogerli.common.utils.PageUtils;
 import com.github.rogerli.common.model.R;
-import com.github.rogerli.common.validator.ValidatorUtils;
+import com.github.rogerli.common.utils.validator.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
