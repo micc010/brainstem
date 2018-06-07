@@ -12,6 +12,8 @@
         <module>common</module>
         <module>api</module>
         <module>generator</module>
+        <module>file</module>
+        <module>log</module>
     </modules>
     <packaging>pom</packaging>
 

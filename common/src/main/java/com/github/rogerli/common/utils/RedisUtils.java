@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
     @Resource(name = "redisTemplate")
@@ -58,7 +58,7 @@ public class RedisUtils {
      * @param expire
      */
     public void set(String key, Object value, long expire) {
-        valueOperations.set(key, toJson(value));
+        redisTemplate.opsForValue().set(key, toJson(value));
         if (expire != NOT_EXPIRE) {
             redisTemplate.expire(key, expire, TimeUnit.SECONDS);
         }
@@ -84,7 +84,7 @@ public class RedisUtils {
      * @return
      */
     public <T> T get(String key, Class<T> clazz, long expire) {
-        String value = valueOperations.get(key);
+        String value = (String) redisTemplate.opsForValue().get(key);
         if (expire != NOT_EXPIRE) {
             redisTemplate.expire(key, expire, TimeUnit.SECONDS);
         }
