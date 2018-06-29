@@ -38,7 +38,6 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                //加了ApiOperation注解的类，生成接口文档
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build();
@@ -47,7 +46,7 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("华蓝设计(集团)有限公司")
-                .description("api文档")
+                .description("Api文档")
                 .termsOfServiceUrl("http://www.gxhl.com")
                 .version("1.0.0")
                 .build();

@@ -40,22 +40,4 @@ public class FreemarkerConfiguration {
         return configurer;
     }
 
-    /**
-     * freemarker视图
-     *
-     * @return
-     */
-    @Bean(name = "viewResolver")
-    public FreeMarkerViewResolver viewResolver() {
-        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
-        viewResolver.setCache(true);
-        viewResolver.setPrefix("");
-        viewResolver.setSuffix(".ftl");
-        viewResolver.setContentType("text/html;charset=UTF-8");
-        viewResolver.setRequestContextAttribute("req");
-        viewResolver.setExposeSpringMacroHelpers(true);
-        viewResolver.setExposeRequestAttributes(true);
-        viewResolver.setExposeSessionAttributes(true);
-        return viewResolver;
-    }
 }

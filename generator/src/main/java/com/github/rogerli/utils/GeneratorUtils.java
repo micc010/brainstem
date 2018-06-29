@@ -16,18 +16,15 @@ import com.github.rogerli.common.exception.RRException;
 import com.github.rogerli.common.utils.DateUtils;
 import com.github.rogerli.generator.entity.Column;
 import com.github.rogerli.generator.entity.Table;
+import freemarker.template.Template;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -41,17 +38,19 @@ import java.util.zip.ZipOutputStream;
  */
 public class GeneratorUtils {
 
+    private static freemarker.template.Configuration configuration;
+
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
-        templates.add("template/Entity.java.vm");
-        templates.add("template/Dao.java.vm");
-        templates.add("template/Dao.xml.vm");
-        templates.add("template/Service.java.vm");
-        templates.add("template/ServiceImpl.java.vm");
-        templates.add("template/Controller.java.vm");
-        templates.add("template/list.html.vm");
-        templates.add("template/list.js.vm");
-        templates.add("template/menu.sql.vm");
+        templates.add("template/Entity.java.ftl");
+        templates.add("template/Dao.java.ftl");
+        templates.add("template/Dao.xml.ftl");
+        templates.add("template/Service.java.ftl");
+        templates.add("template/ServiceImpl.java.ftl");
+        templates.add("template/Controller.java.ftl");
+        templates.add("template/list.html.ftl");
+        templates.add("template/list.js.ftl");
+        templates.add("template/menu.sql.ftl");
         return templates;
     }
 
@@ -107,9 +106,9 @@ public class GeneratorUtils {
         }
 
         //设置velocity资源加载器
-        Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init(prop);
+//        Properties prop = new Properties();
+//        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+//        Velocity.init(prop);
 
         String mainPath = config.getString("mainPath");
         mainPath = StringUtils.isBlank(mainPath) ? "com.github.rogerli" : mainPath;
@@ -129,23 +128,25 @@ public class GeneratorUtils {
         map.put("moduleName", config.getString("moduleName"));
         map.put("author", config.getString("author"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
-        VelocityContext context = new VelocityContext(map);
+//        VelocityContext context = new VelocityContext(map);
+
+        configuration = getConfiguration();
 
         //获取模板列表
         List<String> templates = getTemplates();
         for (String template : templates) {
             //渲染模板
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, "UTF-8");
-            tpl.merge(context, sw);
-
             try {
+                Template tpl = configuration.getTemplate(template, "UTF-8");
+                tpl.process(map, sw);
+
                 //添加到zip
                 zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
             }
         }
@@ -178,6 +179,18 @@ public class GeneratorUtils {
         } catch (ConfigurationException e) {
             throw new RRException("获取配置文件失败，", e);
         }
+    }
+
+    /**
+     * 获取
+     *
+     * @return
+     */
+    public static freemarker.template.Configuration getConfiguration() {
+        if (configuration == null) {
+            configuration = new freemarker.template.Configuration(freemarker.template.Configuration.getVersion());
+        }
+        return configuration;
     }
 
     /**

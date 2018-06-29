@@ -10,24 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.rogerli.common.config;
+package ${package}.${moduleName}.dao;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import ${package}.${moduleName}.entity.${className}Entity;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
- * 资源
- *
- * @author roger.li
- * @since 2018-03-30
+ * ${comments}
+ * 
+ * @author ${author}
+ * @date ${datetime}
  */
-@Configuration
-public class ResourcesConfiguration extends WebMvcConfigurerAdapter {
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
-    }
-
+public interface ${className}Dao extends BaseMapper<${className}Entity> {
+	
 }
