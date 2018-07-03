@@ -72,13 +72,13 @@ var vm = new Vue({
 			    url: baseURL + url,
                 contentType: "application/json",
 			    data: JSON.stringify(vm.${classname}),
-			    success: function(r){
-			    	if(r.code === 0){
+			    success: function(responseModel){
+			    	if(responseModel.code === 0){
 						alert('操作成功', function(index){
 							vm.reload();
 						});
 					}else{
-						alert(r.msg);
+						alert(responseModel.msg);
 					}
 				}
 			});
@@ -95,21 +95,21 @@ var vm = new Vue({
 				    url: baseURL + "${moduleName}/${pathName}/delete",
                     contentType: "application/json",
 				    data: JSON.stringify(${pk.attrname}s),
-				    success: function(r){
-						if(r.code == 0){
+				    success: function(responseModel){
+						if(responseModel.code == 0){
 							alert('操作成功', function(index){
 								$("#jqGrid").trigger("reloadGrid");
 							});
 						}else{
-							alert(r.msg);
+							alert(responseModel.msg);
 						}
 					}
 				});
 			});
 		},
 		getInfo: function(${pk.attrname}){
-			$.get(baseURL + "${moduleName}/${pathName}/info/"+${pk.attrname}, function(r){
-                vm.${classname} = r.${classname};
+			$.get(baseURL + "${moduleName}/${pathName}/info/"+${pk.attrname}, function(responseModel){
+                vm.${classname} = responseModel.${classname};
             });
 		},
 		reload: function (event) {
