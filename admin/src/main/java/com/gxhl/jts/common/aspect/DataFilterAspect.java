@@ -43,6 +43,7 @@ import java.util.Set;
 @Aspect
 @Component
 public class DataFilterAspect {
+
     @Autowired
     private SysDeptService sysDeptService;
     @Autowired
@@ -124,4 +125,5 @@ public class DataFilterAspect {
 
         return sqlFilter.toString();
     }
+
 }

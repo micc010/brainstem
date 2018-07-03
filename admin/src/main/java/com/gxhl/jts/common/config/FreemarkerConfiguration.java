@@ -28,6 +28,10 @@ import java.util.Properties;
 @Configuration
 public class FreemarkerConfiguration {
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public FreeMarkerConfigurer freeMarkerConfigurer() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();

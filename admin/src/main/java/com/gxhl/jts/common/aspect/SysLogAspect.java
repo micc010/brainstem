@@ -41,6 +41,7 @@ import java.util.Date;
 @Aspect
 @Component
 public class SysLogAspect {
+
     @Autowired
     private SysLogService sysLogService;
 
@@ -54,9 +55,7 @@ public class SysLogAspect {
 
     /**
      * @param point
-     *
      * @return
-     *
      * @throws Throwable
      */
     @Around("logPointCut()")
@@ -116,4 +115,5 @@ public class SysLogAspect {
         //保存系统日志
         sysLogService.insert(sysLog);
     }
+
 }

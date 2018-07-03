@@ -12,25 +12,32 @@
  */
 package com.gxhl.jts.common.config;
 
-import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
+import com.gxhl.jts.common.xss.XssFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.DispatcherType;
+
 /**
- * mybatis-plus配置
+ * Filter配置
  *
  * @author roger.li
  * @since 2018-03-30
  */
 @Configuration
-public class MybatisPlusConfiguration {
+public class FilterConfiguration {
 
     /**
-     * 分页插件
+     * @return
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
+    public FilterRegistrationBean xssFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new XssFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("xssFilter");
+        return registration;
     }
-
 }

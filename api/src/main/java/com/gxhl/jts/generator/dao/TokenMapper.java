@@ -22,5 +22,5 @@ import com.gxhl.jts.generator.entity.Token;
  * @since 2018-03-30
  */
 public interface TokenMapper extends BaseMapper<Token> {
-	
+
 }

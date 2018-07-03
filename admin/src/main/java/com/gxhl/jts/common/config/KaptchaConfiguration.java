@@ -28,6 +28,9 @@ import java.util.Properties;
 @Configuration
 public class KaptchaConfiguration {
 
+    /**
+     * @return
+     */
     @Bean
     public DefaultKaptcha producer() {
         Properties properties = new Properties();
@@ -39,4 +42,5 @@ public class KaptchaConfiguration {
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
     }
+
 }

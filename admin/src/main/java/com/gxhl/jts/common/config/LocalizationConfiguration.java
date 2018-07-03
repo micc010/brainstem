@@ -6,6 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+/**
+ * 国际化配置
+ *
+ * @author roger.li
+ * @since 2018-03-30
+ */
 @Configuration
 public class LocalizationConfiguration {
 

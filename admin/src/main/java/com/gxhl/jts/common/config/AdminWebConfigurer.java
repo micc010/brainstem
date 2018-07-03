@@ -10,19 +10,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.gxhl.jts.annotation;
+package com.gxhl.jts.common.config;
 
-import java.lang.annotation.*;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 登录效验
+ * WebMvc配置
  *
  * @author roger.li
  * @since 2018-03-30
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Login {
-    
+@Configuration
+public class AdminWebConfigurer implements WebMvcConfigurer {
+
+    /**
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+    }
+
 }

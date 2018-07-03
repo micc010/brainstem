@@ -39,7 +39,6 @@ import static com.google.common.collect.Lists.newArrayList;
 public class SwaggerConfiguration {
 
     /**
-     *
      * @return
      */
     @Bean
@@ -49,12 +48,10 @@ public class SwaggerConfiguration {
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
-                .build()
-                .securitySchemes(security());
+                .build();
     }
 
     /**
-     *
      * @return
      */
     private ApiInfo apiInfo() {
@@ -64,16 +61,6 @@ public class SwaggerConfiguration {
                 .termsOfServiceUrl("http://www.gxhl.com")
                 .version("1.0.0")
                 .build();
-    }
-
-    /**
-     *
-     * @return
-     */
-    private List<ApiKey> security() {
-        return newArrayList(
-                new ApiKey("token", "token", "header")
-        );
     }
 
 }

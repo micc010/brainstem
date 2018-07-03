@@ -32,26 +32,26 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/api")
-@Api(tags="测试接口")
+@Api(tags = "测试接口")
 public class ApiTestController {
 
     @Login
     @GetMapping("userInfo")
-    @ApiOperation(value="获取用户信息", response=User.class)
-    public ResponseModel userInfo(@ApiIgnore @LoginUser User user){
+    @ApiOperation(value = "获取用户信息", response = User.class)
+    public ResponseModel userInfo(@ApiIgnore @LoginUser User user) {
         return ResponseModel.ok().put("user", user);
     }
 
     @Login
     @GetMapping("userId")
     @ApiOperation("获取用户ID")
-    public ResponseModel userInfo(@ApiIgnore @RequestAttribute("userId") Integer userId){
+    public ResponseModel userInfo(@ApiIgnore @RequestAttribute("userId") Integer userId) {
         return ResponseModel.ok().put("userId", userId);
     }
 
     @GetMapping("notToken")
     @ApiOperation("忽略Token验证测试")
-    public ResponseModel notToken(){
+    public ResponseModel notToken() {
         return ResponseModel.ok().put("msg", "无需token也能访问。。。");
     }
 
