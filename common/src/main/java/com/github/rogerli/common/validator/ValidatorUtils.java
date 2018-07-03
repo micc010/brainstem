@@ -10,9 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.rogerli.common.utils.validator;
+package com.github.rogerli.common.validator;
 
-import com.github.rogerli.common.exception.RRException;
+import com.github.rogerli.common.exception.RestException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -26,6 +26,7 @@ import java.util.Set;
  * @since 2018-03-30
  */
 public class ValidatorUtils {
+
     private static Validator validator;
 
     static {
@@ -40,15 +41,16 @@ public class ValidatorUtils {
      * @param groups
      *         待校验的组
      *
-     * @throws RRException
-     *         校验不通过，则报RRException异常
+     * @throws RestException
+     *         校验不通过，则报RestException异常
      */
     public static void validateEntity(Object object, Class<?>... groups)
-            throws RRException {
+            throws RestException {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
-            ConstraintViolation<Object> constraint = (ConstraintViolation<Object>) constraintViolations.iterator().next();
-            throw new RRException(constraint.getMessage());
+            ConstraintViolation<Object> constraint = constraintViolations.iterator().next();
+            throw new RestException(constraint.getMessage());
         }
     }
+
 }

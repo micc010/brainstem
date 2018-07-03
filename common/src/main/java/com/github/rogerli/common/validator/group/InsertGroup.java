@@ -10,15 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.rogerli.common.utils.validator.group;
+package com.github.rogerli.common.validator.group;
 
 /**
- * 更新数据 Group
+ * 新增数据 Group
  *
  * @author roger.li
  * @since 2018-03-30
  */
-
-public interface UpdateGroup {
-
+public interface InsertGroup {
 }

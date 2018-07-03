@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.rogerli.config.redis;
+package com.github.rogerli.common.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +32,11 @@ public class RedisConfiguration {
     @Autowired
     private RedisConnectionFactory factory;
 
+    /**
+     * 默认的RedisTemplate
+     *
+     * @return
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
@@ -43,28 +48,63 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
-//    @Bean(name = "redisTemplate")
-//    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Object> redisTemplate) {
-//        return redisTemplate.opsForHash();
-//    }
-//
-//    @Bean(name = "redisTemplate")
-//    public ValueOperations<String, String> valueOperations(RedisTemplate<String, String> redisTemplate) {
-//        return redisTemplate.opsForValue();
-//    }
-//
-//    @Bean(name = "redisTemplate")
-//    public ListOperations<String, Object> listOperations(RedisTemplate<String, Object> redisTemplate) {
-//        return redisTemplate.opsForList();
-//    }
-//
-//    @Bean(name = "redisTemplate")
-//    public SetOperations<String, Object> setOperations(RedisTemplate<String, Object> redisTemplate) {
-//        return redisTemplate.opsForSet();
-//    }
-//
-//    @Bean(name = "redisTemplate")
-//    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
-//        return redisTemplate.opsForZSet();
-//    }
+    /**
+     * HashOperations
+     *
+     * @param redisTemplate
+     *
+     * @return
+     */
+    @Bean(name = "redisTemplate")
+    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForHash();
+    }
+
+    /**
+     * ValueOperations
+     *
+     * @param redisTemplate
+     *
+     * @return
+     */
+    @Bean(name = "redisTemplate")
+    public ValueOperations<String, String> valueOperations(RedisTemplate<String, String> redisTemplate) {
+        return redisTemplate.opsForValue();
+    }
+
+    /**
+     * ListOperations
+     *
+     * @param redisTemplate
+     *
+     * @return
+     */
+    @Bean(name = "redisTemplate")
+    public ListOperations<String, Object> listOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForList();
+    }
+
+    /**
+     * SetOperations
+     *
+     * @param redisTemplate
+     *
+     * @return
+     */
+    @Bean(name = "redisTemplate")
+    public SetOperations<String, Object> setOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForSet();
+    }
+
+    /**
+     * ZSetOperations
+     *
+     * @param redisTemplate
+     *
+     * @return
+     */
+    @Bean(name = "redisTemplate")
+    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForZSet();
+    }
 }

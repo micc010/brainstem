@@ -24,45 +24,49 @@ import java.util.Map;
  * @author roger.li
  * @since 2018-03-30
  */
-public class R extends HashMap<String, Object> {
+public class ResponseModel extends HashMap<String, Object> {
 
     @Autowired
     private MessageSource messageSource;
 
-    public R() {
+    public ResponseModel() {
         put("code", 0);
         put("msg", "success");
     }
 
-    public static R error(String msg) {
+    public static ResponseModel error() {
+        return error(500, "未知异常，请联系管理员");
+    }
+
+    public static ResponseModel error(String msg) {
         return error(500, msg);
     }
 
-    public static R error(int code, String msg) {
-        R r = new R();
-        r.put("code", code);
-        r.put("msg", msg);
-        return r;
+    public static ResponseModel error(int code, String msg) {
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.put("code", code);
+        responseModel.put("msg", msg);
+        return responseModel;
     }
 
-    public static R ok(String msg) {
-        R r = new R();
-        r.put("msg", msg);
-        return r;
+    public static ResponseModel ok(String msg) {
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.put("msg", msg);
+        return responseModel;
     }
 
-    public static R ok(Map<String, Object> map) {
-        R r = new R();
-        r.putAll(map);
-        return r;
+    public static ResponseModel ok(Map<String, Object> map) {
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.putAll(map);
+        return responseModel;
     }
 
-    public static R ok() {
-        return new R();
+    public static ResponseModel ok() {
+        return new ResponseModel();
     }
 
     @Override
-    public R put(String key, Object value) {
+    public ResponseModel put(String key, Object value) {
         super.put(key, value);
         return this;
     }

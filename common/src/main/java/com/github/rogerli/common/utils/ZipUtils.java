@@ -43,8 +43,7 @@ public class ZipUtils {
             return;
         }
 
-        //如果是文件，则直接压缩该文件  
-        if (file.isFile()) {
+        if (file.isFile()) { //如果是文件，则直接压缩该文件
             int count, bufferLen = 1024;
             byte data[] = new byte[bufferLen];
 
@@ -62,9 +61,7 @@ public class ZipUtils {
             }
             bis.close();
             zos.closeEntry();
-        }
-        //如果是目录，则压缩整个目录  
-        else {
+        } else { //如果是目录，则压缩整个目录
             //压缩目录中的文件或子目录  
             File[] childFileList = file.listFiles();
             for (int n = 0; n < childFileList.length; n++) {

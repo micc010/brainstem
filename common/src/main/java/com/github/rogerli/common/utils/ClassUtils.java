@@ -123,10 +123,10 @@ public class ClassUtils {
      *
      * @return the located class
      *
-     * @throws UnknownClassException
+     * @throws RuntimeException
      *         if the class cannot be found.
      */
-    public static Class forName(String fqcn) throws UnknownClassException {
+    public static Class forName(String fqcn) throws RuntimeException {
 
         Class clazz = THREAD_CL_ACCESSOR.loadClass(fqcn);
 
@@ -153,29 +153,50 @@ public class ClassUtils {
                     + fqcn
                     + "] from the thread context, current, or "
                     + "system/application ClassLoaders.  All heuristics have been exhausted.  Class could not be found.";
-            throw new UnknownClassException(msg);
+            throw new RuntimeException(msg);
         }
 
         return clazz;
     }
 
+    /**
+     * @param fullyQualifiedClassName
+     *
+     * @return
+     */
     public static boolean isAvailable(String fullyQualifiedClassName) {
         try {
             forName(fullyQualifiedClassName);
             return true;
-        } catch (UnknownClassException e) {
+        } catch (RuntimeException e) {
             return false;
         }
     }
 
+    /**
+     * @param fqcn
+     *
+     * @return
+     */
     public static Object newInstance(String fqcn) {
         return newInstance(forName(fqcn));
     }
 
+    /**
+     * @param fqcn
+     * @param args
+     *
+     * @return
+     */
     public static Object newInstance(String fqcn, Object... args) {
         return newInstance(forName(fqcn), args);
     }
 
+    /**
+     * @param clazz
+     *
+     * @return
+     */
     public static Object newInstance(Class clazz) {
         if (clazz == null) {
             String msg = "Class method parameter cannot be null.";
@@ -184,10 +205,16 @@ public class ClassUtils {
         try {
             return clazz.newInstance();
         } catch (Exception e) {
-            throw new InstantiationException("Unable to instantiate class [" + clazz.getName() + "]", e);
+            throw new RuntimeException("Unable to instantiate class [" + clazz.getName() + "]", e);
         }
     }
 
+    /**
+     * @param clazz
+     * @param args
+     *
+     * @return
+     */
     public static Object newInstance(Class clazz, Object... args) {
         Class[] argTypes = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -197,6 +224,12 @@ public class ClassUtils {
         return instantiate(ctor, args);
     }
 
+    /**
+     * @param clazz
+     * @param argTypes
+     *
+     * @return
+     */
     public static Constructor getConstructor(Class clazz, Class... argTypes) {
         try {
             return clazz.getConstructor(argTypes);
@@ -206,13 +239,19 @@ public class ClassUtils {
 
     }
 
+    /**
+     * @param ctor
+     * @param args
+     *
+     * @return
+     */
     public static Object instantiate(Constructor ctor, Object... args) {
         try {
             return ctor.newInstance(args);
         } catch (Exception e) {
             String msg = "Unable to instantiate Permission instance with constructor ["
                     + ctor + "]";
-            throw new InstantiationException(msg, e);
+            throw new RuntimeException(msg, e);
         }
     }
 

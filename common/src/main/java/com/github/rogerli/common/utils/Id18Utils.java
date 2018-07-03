@@ -50,6 +50,10 @@ public class Id18Utils {
 		return validate[mode];
 	}
 
+	/**
+	 *
+	 * @param args
+     */
 	public static void main(String[] args) {
 		Id18Utils test = new Id18Utils();
 		System.out.println("该身份证验证码："

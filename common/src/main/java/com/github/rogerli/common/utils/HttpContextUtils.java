@@ -23,7 +23,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class HttpContextUtils {
 
+    /**
+     * 获取请求
+     *
+     * @return
+     */
     public static HttpServletRequest getHttpServletRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
+
 }

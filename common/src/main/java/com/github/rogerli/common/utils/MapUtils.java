@@ -23,6 +23,13 @@ import java.util.HashMap;
  */
 public class MapUtils extends HashMap<String, Object> {
 
+    /**
+     * 添加键值
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     @Override
     public MapUtils put(String key, Object value) {
         super.put(key, value);

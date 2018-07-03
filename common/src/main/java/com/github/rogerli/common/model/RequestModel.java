@@ -25,7 +25,7 @@ import java.util.Map;
  * @author roger.li
  * @since 2018-03-30
  */
-public class Q<T> extends LinkedHashMap<String, Object> {
+public class RequestModel<T> extends LinkedHashMap<String, Object> {
 
     /**
      * mybatis-plus分页参数
@@ -40,7 +40,7 @@ public class Q<T> extends LinkedHashMap<String, Object> {
      */
     private int pageSize = 10;
 
-    public Q(Map<String, Object> params) {
+    public RequestModel(Map<String, Object> params) {
         this.putAll(params);
 
         //分页参数

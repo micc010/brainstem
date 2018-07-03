@@ -12,12 +12,14 @@
  */
 package com.github.rogerli.common.utils;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,7 +59,7 @@ public class RedisUtils {
      * @param value
      * @param expire
      */
-    public void set(String key, Object value, long expire) {
+    public void set(String key, Object value, long expire) throws JsonProcessingException {
         redisTemplate.opsForValue().set(key, toJson(value));
         if (expire != NOT_EXPIRE) {
             redisTemplate.expire(key, expire, TimeUnit.SECONDS);
@@ -70,7 +72,7 @@ public class RedisUtils {
      * @param key
      * @param value
      */
-    public void set(String key, Object value) {
+    public void set(String key, Object value) throws JsonProcessingException {
         set(key, value, DEFAULT_EXPIRE);
     }
 
@@ -81,9 +83,10 @@ public class RedisUtils {
      * @param clazz
      * @param expire
      * @param <T>
+     *
      * @return
      */
-    public <T> T get(String key, Class<T> clazz, long expire) {
+    public <T> T get(String key, Class<T> clazz, long expire) throws IOException {
         String value = (String) redisTemplate.opsForValue().get(key);
         if (expire != NOT_EXPIRE) {
             redisTemplate.expire(key, expire, TimeUnit.SECONDS);
@@ -97,9 +100,10 @@ public class RedisUtils {
      * @param key
      * @param clazz
      * @param <T>
+     *
      * @return
      */
-    public <T> T get(String key, Class<T> clazz) {
+    public <T> T get(String key, Class<T> clazz) throws IOException {
         return get(key, clazz, NOT_EXPIRE);
     }
 
@@ -108,6 +112,7 @@ public class RedisUtils {
      *
      * @param key
      * @param expire
+     *
      * @return
      */
     public String get(String key, long expire) {
@@ -122,6 +127,7 @@ public class RedisUtils {
      * 获得
      *
      * @param key
+     *
      * @return
      */
     public String get(String key) {
@@ -140,18 +146,18 @@ public class RedisUtils {
     /**
      * Object转成JSON数据
      */
-    private String toJson(Object object) {
+    private String toJson(Object object) throws JsonProcessingException {
         if (object instanceof Integer || object instanceof Long || object instanceof Float ||
                 object instanceof Double || object instanceof Boolean || object instanceof String) {
             return String.valueOf(object);
         }
-        return JSON.toJSONString(object);
+        return new ObjectMapper().writeValueAsString(object);
     }
 
     /**
      * JSON数据，转成Object
      */
-    private <T> T fromJson(String json, Class<T> clazz) {
-        return JSON.parseObject(json, clazz);
+    private <T> T fromJson(String json, Class<T> clazz) throws IOException {
+        return new ObjectMapper().readValue(json, clazz);
     }
 }
