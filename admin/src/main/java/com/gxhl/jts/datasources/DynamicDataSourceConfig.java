@@ -31,18 +31,32 @@ import java.util.Map;
 @Configuration
 public class DynamicDataSourceConfig {
 
+    /**
+     *
+     * @return
+     */
     @Bean
     @ConfigurationProperties("spring.datasource.druid.first")
     public DataSource firstDataSource(){
         return DruidDataSourceBuilder.create().build();
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean
     @ConfigurationProperties("spring.datasource.druid.second")
     public DataSource secondDataSource(){
         return DruidDataSourceBuilder.create().build();
     }
 
+    /**
+     *
+     * @param firstDataSource
+     * @param secondDataSource
+     * @return
+     */
     @Bean
     @Primary
     public DynamicDataSource dataSource(DataSource firstDataSource, DataSource secondDataSource) {

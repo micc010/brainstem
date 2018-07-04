@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @since 2018-03-30
  */
 public abstract class AbstractController {
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected SysUser getUser() {

@@ -51,6 +51,9 @@ public class DataFilterAspect {
     @Autowired
     private SysRoleDeptService sysRoleDeptService;
 
+    /**
+     *
+     */
     @Pointcut("@annotation(com.gxhl.jts.common.annotation.DataFilter)")
     public void dataFilterCut() {
 
@@ -60,6 +63,7 @@ public class DataFilterAspect {
      * 数据过滤
      *
      * @param point
+     *
      * @throws Throwable
      */
     @Before("dataFilterCut()")
@@ -85,6 +89,7 @@ public class DataFilterAspect {
      *
      * @param user
      * @param point
+     *
      * @return
      */
     private String getSQLFilter(SysUser user, JoinPoint point) {

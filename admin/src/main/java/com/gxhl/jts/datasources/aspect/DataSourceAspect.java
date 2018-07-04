@@ -38,11 +38,20 @@ import java.lang.reflect.Method;
 public class DataSourceAspect implements Ordered {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     *
+     */
     @Pointcut("@annotation(com.gxhl.jts.datasources.annotation.DataSource)")
     public void dataSourcePointCut() {
 
     }
 
+    /**
+     *
+     * @param point
+     * @return
+     * @throws Throwable
+     */
     @Around("dataSourcePointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         MethodSignature signature = (MethodSignature) point.getSignature();
@@ -65,6 +74,10 @@ public class DataSourceAspect implements Ordered {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOrder() {
         return 1;

@@ -26,7 +26,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class AdminWebConfigurer implements WebMvcConfigurer {
 
     /**
-     *
      * @param registry
      */
     @Override

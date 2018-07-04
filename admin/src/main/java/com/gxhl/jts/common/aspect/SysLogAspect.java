@@ -12,12 +12,12 @@
  */
 package com.gxhl.jts.common.aspect;
 
-import com.gxhl.jts.common.annotation.SysLog;
-import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.google.gson.Gson;
+import com.gxhl.jts.common.annotation.SysLog;
 import com.gxhl.jts.common.utils.HttpContextUtils;
 import com.gxhl.jts.common.utils.IPUtils;
 import com.gxhl.jts.modules.sys.entity.SysOptLog;
+import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysLogService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -55,7 +55,9 @@ public class SysLogAspect {
 
     /**
      * @param point
+     *
      * @return
+     *
      * @throws Throwable
      */
     @Around("logPointCut()")

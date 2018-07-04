@@ -19,6 +19,7 @@ package com.gxhl.jts.datasources;
  * @since 2018-03-30
  */
 public interface DataSourceNames {
+
     String FIRST = "first";
     String SECOND = "second";
 

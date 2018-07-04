@@ -13,11 +13,14 @@
 package com.gxhl.jts.modules.sys.redis;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gxhl.jts.common.utils.RedisKeys;
 import com.gxhl.jts.common.utils.RedisUtils;
 import com.gxhl.jts.modules.sys.entity.SysConfig;
-import com.gxhl.jts.common.utils.RedisKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 系统配置Redis
@@ -31,20 +34,35 @@ public class RedisConfiguration {
     @Autowired
     private RedisUtils redisUtils;
 
-    public void saveOrUpdate(SysConfig config) {
-        if(config == null){
-            return ;
+    /**
+     *
+     * @param config
+     * @throws JsonProcessingException
+     */
+    public void saveOrUpdate(SysConfig config) throws JsonProcessingException {
+        if (config == null) {
+            return;
         }
         String key = RedisKeys.getSysConfigKey(config.getKey());
         redisUtils.set(key, config);
     }
 
+    /**
+     *
+     * @param configKey
+     */
     public void delete(String configKey) {
         String key = RedisKeys.getSysConfigKey(configKey);
         redisUtils.delete(key);
     }
 
-    public SysConfig get(String configKey){
+    /**
+     *
+     * @param configKey
+     * @return
+     * @throws IOException
+     */
+    public SysConfig get(String configKey) throws IOException {
         String key = RedisKeys.getSysConfigKey(configKey);
         return redisUtils.get(key, SysConfig.class);
     }

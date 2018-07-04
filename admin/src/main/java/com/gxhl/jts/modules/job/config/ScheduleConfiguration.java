@@ -28,6 +28,11 @@ import java.util.Properties;
 @Configuration
 public class ScheduleConfiguration {
 
+    /**
+     *
+     * @param dataSource
+     * @return
+     */
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();

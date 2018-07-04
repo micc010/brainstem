@@ -17,6 +17,7 @@ import com.gxhl.jts.common.model.ResponseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -48,8 +49,8 @@ public class RestExceptionHandler {
         return ResponseModel.error("数据库中已存在该记录");
     }
 
-    @ExceptionHandler(AuthorizationException.class)
-    public ResponseModel handleAuthorizationException(AuthorizationException e) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseModel handleAuthorizationException(AccessDeniedException e) {
         logger.error(e.getMessage(), e);
         return ResponseModel.error("没有权限，请联系管理员授权");
     }
