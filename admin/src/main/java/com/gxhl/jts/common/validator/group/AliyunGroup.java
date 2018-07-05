@@ -19,4 +19,5 @@ package com.gxhl.jts.common.validator.group;
  * @since 2018-03-30
  */
 public interface AliyunGroup {
+
 }

@@ -12,10 +12,11 @@
  */
 package com.gxhl.jts.common.aspect;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxhl.jts.common.annotation.SysLog;
 import com.gxhl.jts.common.utils.HttpContextUtils;
 import com.gxhl.jts.common.utils.IPUtils;
+import com.gxhl.jts.common.utils.SecurityHolder;
 import com.gxhl.jts.modules.sys.entity.SysOptLog;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysLogService;
@@ -25,7 +26,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,9 +55,7 @@ public class SysLogAspect {
 
     /**
      * @param point
-     *
      * @return
-     *
      * @throws Throwable
      */
     @Around("logPointCut()")
@@ -97,7 +95,7 @@ public class SysLogAspect {
         //请求的参数
         Object[] args = joinPoint.getArgs();
         try {
-            String params = new Gson().toJson(args[0]);
+            String params = new ObjectMapper().writeValueAsString(args[0]);
             sysLog.setParams(params);
         } catch (Exception e) {
 
@@ -109,7 +107,7 @@ public class SysLogAspect {
         sysLog.setIp(IPUtils.getIpAddr(request));
 
         //用户名
-        String username = ((SysUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username = ((SysUser) SecurityHolder.getPrincipal()).getUsername();
         sysLog.setUsername(username);
 
         sysLog.setTime(time);

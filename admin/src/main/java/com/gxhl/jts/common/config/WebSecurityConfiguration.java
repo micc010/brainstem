@@ -46,7 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AuthenticationManager 管理认证 AuthenticationProvider 改变认证方式 UserDetailsService 改变认证的用户信息来源 ProviderManager
+ * AuthenticationManager 管理认证
+ * AuthenticationProvider 改变认证方式
+ * UserDetailsService 改变认证的用户信息来源 ProviderManager
  * 清除返回的Authentication中的凭证信息，如密码 AccessDecisionManager
  *
  * @author roger.li
@@ -110,7 +112,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
 
         http.authorizeRequests()
-                .mvcMatchers("/", "/index", "/login", "/login?logout", "/login?error", "/login?invalid", "/403", "/404")
+                .mvcMatchers("/", "/index", "/login", "/login?logout", "/login?error", "/login?invalid", "/403", "/404", "/captcha.jpg")
                 .permitAll();
 
         http.headers().frameOptions().sameOrigin().addHeaderWriter(

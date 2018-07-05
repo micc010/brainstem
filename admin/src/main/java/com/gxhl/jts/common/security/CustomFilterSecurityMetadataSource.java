@@ -49,10 +49,10 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
     public Collection<ConfigAttribute> getAttributes(Object object)
             throws IllegalArgumentException {
         FilterInvocation fi = (FilterInvocation) object;
-        LOGGER.info("Full request URL: " + fi.getFullRequestUrl());
-        LOGGER.info("Request URL: " + fi.getRequestUrl());
-        LOGGER.info("HTTP Method: " + fi.getRequest().getMethod());
-        LOGGER.info("Context path: " + fi.getRequest().getContextPath());
+//        LOGGER.info("Full request URL: " + fi.getFullRequestUrl());
+//        LOGGER.info("Request URL: " + fi.getRequestUrl());
+//        LOGGER.info("HTTP Method: " + fi.getRequest().getMethod());
+//        LOGGER.info("Context path: " + fi.getRequest().getContextPath());
 
         Collection<ConfigAttribute> securityConfigList = new ArrayList<ConfigAttribute>();
         //在Resource表找到该资源对应的角色
@@ -73,7 +73,6 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -82,7 +81,6 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
     }
 
     /**
-     *
      * @param arg0
      * @return
      */

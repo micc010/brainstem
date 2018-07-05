@@ -75,7 +75,7 @@ public class SysLoginController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/sys/login", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseModel login(String username, String password, String captcha) {
         String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
         if (!captcha.equalsIgnoreCase(kaptcha)) {

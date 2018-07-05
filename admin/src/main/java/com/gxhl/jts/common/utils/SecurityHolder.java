@@ -25,7 +25,7 @@ public class SecurityHolder {
      *
      * @return
      */
-    public static Object getSubject() {
+    public static Object getPrincipal() {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
