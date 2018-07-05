@@ -26,6 +26,12 @@ import java.util.Map;
  */
 public interface SysLogService extends IService<SysOptLog> {
 
+    /**
+     * 分页查询日志
+     *
+     * @param params
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> params);
 
 }

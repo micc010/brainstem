@@ -29,8 +29,8 @@ import java.util.Properties;
 public class ScheduleConfiguration {
 
     /**
-     *
      * @param dataSource
+     *
      * @return
      */
     @Bean
@@ -68,4 +68,5 @@ public class ScheduleConfiguration {
 
         return factory;
     }
+
 }

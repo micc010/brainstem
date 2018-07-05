@@ -27,28 +27,48 @@ import java.util.Map;
  */
 public interface SysUserService extends IService<SysUser> {
 
-	PageUtils queryPage(Map<String, Object> params);
-	
-	/**
-	 * 查询用户的所有菜单ID
-	 */
-	List<Long> queryAllMenuId(Long userId);
-	
-	/**
-	 * 保存用户
-	 */
-	void save(SysUser user);
-	
-	/**
-	 * 修改用户
-	 */
-	void update(SysUser user);
+    /**
+     * 分页查询
+     *
+     * @param params
+     *
+     * @return
+     */
+    PageUtils queryPage(Map<String, Object> params);
 
-	/**
-	 * 修改密码
-	 * @param userId       用户ID
-	 * @param password     原密码
-	 * @param newPassword  新密码
-	 */
-	boolean updatePassword(Long userId, String password, String newPassword);
+    /**
+     * 查询用户的所有菜单ID
+     *
+     * @param userId
+     *
+     * @return
+     */
+    List<Long> queryAllMenuId(Long userId);
+
+    /**
+     * 保存用户
+     *
+     * @param user
+     */
+    void save(SysUser user);
+
+    /**
+     * 修改用户
+     *
+     * @param user
+     */
+    void update(SysUser user);
+
+    /**
+     * 修改密码
+     *
+     * @param userId
+     *         用户ID
+     * @param password
+     *         原密码
+     * @param newPassword
+     *         新密码
+     */
+    boolean updatePassword(Long userId, String password, String newPassword);
+
 }

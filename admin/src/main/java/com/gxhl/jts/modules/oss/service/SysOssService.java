@@ -26,5 +26,13 @@ import java.util.Map;
  */
 public interface SysOssService extends IService<SysOssEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
+    /**
+     * 分页查询
+     *
+     * @param params
+     *
+     * @return
+     */
+    PageUtils queryPage(Map<String, Object> params);
+
 }

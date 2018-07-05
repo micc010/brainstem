@@ -22,5 +22,5 @@ import com.gxhl.jts.modules.job.entity.ScheduleJobLogEntity;
  * @since 2018-03-30
  */
 public interface ScheduleJobLogDao extends BaseMapper<ScheduleJobLogEntity> {
-	
+
 }

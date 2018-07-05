@@ -33,6 +33,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/scheduleLog")
 public class ScheduleJobLogController {
+
     @Autowired
     private ScheduleJobLogService scheduleJobLogService;
 
@@ -55,4 +56,5 @@ public class ScheduleJobLogController {
 
         return ResponseModel.ok().put("log", log);
     }
+
 }

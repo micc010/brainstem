@@ -15,7 +15,8 @@ package com.gxhl.jts.modules.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * 系统配置信息
@@ -26,6 +27,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Data
 @TableName("sys_config")
 public class SysConfig {
+
     @TableId
     private Long id;
     @NotBlank(message = "参数名不能为空")
@@ -33,4 +35,5 @@ public class SysConfig {
     @NotBlank(message = "参数值不能为空")
     private String value;
     private String remark;
+
 }

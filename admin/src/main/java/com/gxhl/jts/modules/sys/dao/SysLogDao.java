@@ -12,7 +12,6 @@
  */
 package com.gxhl.jts.modules.sys.dao;
 
-
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gxhl.jts.modules.sys.entity.SysOptLog;
 
@@ -23,5 +22,5 @@ import com.gxhl.jts.modules.sys.entity.SysOptLog;
  * @since 2018-03-30
  */
 public interface SysLogDao extends BaseMapper<SysOptLog> {
-	
+
 }

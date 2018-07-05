@@ -23,17 +23,29 @@ import java.util.List;
  * @author roger.li
  * @since 2018-03-30
  */
-public interface SysUserRoleService extends IService<SysUserRole>  {
-	
-	void saveOrUpdate(Long userId, List<Long> roleIdList);
-	
-	/**
-	 * 根据用户ID，获取角色ID列表
-	 */
-	List<Long> queryRoleIdList(Long userId);
+public interface SysUserRoleService extends IService<SysUserRole> {
 
-	/**
-	 * 根据角色ID数组，批量删除
-	 */
-	int deleteBatch(Long[] roleIds);
+    /**
+     * 保存
+     *
+     * @param userId
+     * @param roleIdList
+     */
+    void saveOrUpdate(Long userId, List<Long> roleIdList);
+
+    /**
+     * 根据用户ID，获取角色ID列表
+     *
+     * @param userId
+     * @return
+     */
+    List<Long> queryRoleIdList(Long userId);
+
+    /**
+     * 根据角色ID数组，批量删除
+     *
+     * @param roleIds
+     * @return
+     */
+    int deleteBatch(Long[] roleIds);
 }

@@ -12,13 +12,13 @@
  */
 package com.gxhl.jts.modules.sys.controller;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.gxhl.jts.common.annotation.SysLog;
 import com.gxhl.jts.common.exception.RestException;
 import com.gxhl.jts.common.model.ResponseModel;
 import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.modules.sys.entity.SysMenu;
 import com.gxhl.jts.modules.sys.service.SysMenuService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -145,7 +145,7 @@ public class SysMenuController extends AbstractController {
      * 验证参数是否正确
      */
     private void verifyForm(SysMenu menu) {
-        if (StringUtils.isBlank(menu.getName())) {
+        if (StringUtils.isEmpty(menu.getName())) {
             throw new RestException("菜单名称不能为空");
         }
 
@@ -155,7 +155,7 @@ public class SysMenuController extends AbstractController {
 
         //菜单
         if (menu.getType() == Constant.MenuType.MENU.getValue()) {
-            if (StringUtils.isBlank(menu.getUrl())) {
+            if (StringUtils.isEmpty(menu.getUrl())) {
                 throw new RestException("菜单URL不能为空");
             }
         }

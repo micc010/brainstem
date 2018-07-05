@@ -27,15 +27,28 @@ public abstract class AbstractController {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     *
+     * @return
+     */
     protected SysUser getUser() {
         return (SysUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    /**
+     *
+     * @return
+     */
     protected Long getUserId() {
         return getUser().getUserId();
     }
 
+    /**
+     *
+     * @return
+     */
     protected Long getDeptId() {
         return getUser().getDeptId();
     }
+
 }

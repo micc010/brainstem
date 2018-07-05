@@ -27,17 +27,28 @@ import java.util.Map;
  */
 public interface SysDeptService extends IService<SysDept> {
 
-	List<SysDept> queryList(Map<String, Object> map);
+    /**
+     * 查询部门列表
+     *
+     * @param map
+     * @return
+     */
+    List<SysDept> queryList(Map<String, Object> map);
 
-	/**
-	 * 查询子部门ID列表
-	 * @param parentId  上级部门ID
-	 */
-	List<Long> queryDetpIdList(Long parentId);
+    /**
+     * 查询子部门ID列表
+     *
+     * @param parentId
+     *         上级部门ID
+     */
+    List<Long> queryDetpIdList(Long parentId);
 
-	/**
-	 * 获取子部门ID，用于数据过滤
-	 */
-	List<Long> getSubDeptIdList(Long deptId);
+    /**
+     * 获取子部门ID，用于数据过滤
+     *
+     * @param deptId
+     * @return
+     */
+    List<Long> getSubDeptIdList(Long deptId);
 
 }

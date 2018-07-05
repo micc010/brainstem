@@ -30,22 +30,34 @@ import java.io.InputStream;
  * @since 2018-03-30
  */
 public class QiniuCloudStorageService extends CloudStorageService {
+
     private UploadManager uploadManager;
     private String token;
 
-    public QiniuCloudStorageService(CloudStorageConfiguration config){
+    public QiniuCloudStorageService(CloudStorageConfiguration config) {
         this.config = config;
 
-        //初始化
         init();
     }
 
-    private void init(){
+    /**
+     * 初始化
+     */
+    private void init() {
         uploadManager = new UploadManager(new Configuration(Zone.autoZone()));
         token = Auth.create(config.getQiniuAccessKey(), config.getQiniuSecretKey()).
                 uploadToken(config.getQiniuBucketName());
     }
 
+    /**
+     *
+     * @param data
+     *         文件字节数组
+     * @param path
+     *         文件路径，包含文件名
+     *
+     * @return
+     */
     @Override
     public String upload(byte[] data, String path) {
         try {
@@ -60,6 +72,15 @@ public class QiniuCloudStorageService extends CloudStorageService {
         return config.getQiniuDomain() + "/" + path;
     }
 
+    /**
+     *
+     * @param inputStream
+     *         字节流
+     * @param path
+     *         文件路径，包含文件名
+     *
+     * @return
+     */
     @Override
     public String upload(InputStream inputStream, String path) {
         try {
@@ -70,11 +91,29 @@ public class QiniuCloudStorageService extends CloudStorageService {
         }
     }
 
+    /**
+     *
+     * @param data
+     *         文件字节数组
+     * @param suffix
+     *         后缀
+     *
+     * @return
+     */
     @Override
     public String uploadSuffix(byte[] data, String suffix) {
         return upload(data, getPath(config.getQiniuPrefix(), suffix));
     }
 
+    /**
+     *
+     * @param inputStream
+     *         字节流
+     * @param suffix
+     *         后缀
+     *
+     * @return
+     */
     @Override
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return upload(inputStream, getPath(config.getQiniuPrefix(), suffix));

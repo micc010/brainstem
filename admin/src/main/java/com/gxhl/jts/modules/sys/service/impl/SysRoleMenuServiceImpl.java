@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * 角色与菜单对应关系
  *
@@ -33,36 +32,50 @@ import java.util.List;
 @Service("sysRoleMenuService")
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleMenu> implements SysRoleMenuService {
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
-		//先删除角色与菜单关系
-		deleteBatch(new Long[]{roleId});
+    /**
+     * @param roleId
+     * @param menuIdList
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
+        //先删除角色与菜单关系
+        deleteBatch(new Long[]{roleId});
 
-		if(menuIdList.size() == 0){
-			return ;
-		}
+        if (menuIdList.size() == 0) {
+            return;
+        }
 
-		//保存角色与菜单关系
-		List<SysRoleMenu> list = new ArrayList<>(menuIdList.size());
-		for(Long menuId : menuIdList){
-			SysRoleMenu sysRoleMenuEntity = new SysRoleMenu();
-			sysRoleMenuEntity.setMenuId(menuId);
-			sysRoleMenuEntity.setRoleId(roleId);
+        //保存角色与菜单关系
+        List<SysRoleMenu> list = new ArrayList<>(menuIdList.size());
+        for (Long menuId : menuIdList) {
+            SysRoleMenu sysRoleMenuEntity = new SysRoleMenu();
+            sysRoleMenuEntity.setMenuId(menuId);
+            sysRoleMenuEntity.setRoleId(roleId);
 
-			list.add(sysRoleMenuEntity);
-		}
-		this.insertBatch(list);
-	}
+            list.add(sysRoleMenuEntity);
+        }
+        this.insertBatch(list);
+    }
 
-	@Override
-	public List<Long> queryMenuIdList(Long roleId) {
-		return baseMapper.queryMenuIdList(roleId);
-	}
+    /**
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Long> queryMenuIdList(Long roleId) {
+        return baseMapper.queryMenuIdList(roleId);
+    }
 
-	@Override
-	public int deleteBatch(Long[] roleIds){
-		return baseMapper.deleteBatch(roleIds);
-	}
+    /**
+     *
+     * @param roleIds
+     * @return
+     */
+    @Override
+    public int deleteBatch(Long[] roleIds) {
+        return baseMapper.deleteBatch(roleIds);
+    }
 
 }

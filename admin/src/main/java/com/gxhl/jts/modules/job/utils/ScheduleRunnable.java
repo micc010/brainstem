@@ -26,33 +26,46 @@ import java.lang.reflect.Method;
  * @since 2018-03-30
  */
 public class ScheduleRunnable implements Runnable {
-	private Object target;
-	private Method method;
-	private String params;
-	
-	public ScheduleRunnable(String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
-		this.target = SpringContextUtils.getBean(beanName);
-		this.params = params;
-		
-		if(StringUtils.isNotBlank(params)){
-			this.method = target.getClass().getDeclaredMethod(methodName, String.class);
-		}else{
-			this.method = target.getClass().getDeclaredMethod(methodName);
-		}
-	}
 
-	@Override
-	public void run() {
-		try {
-			ReflectionUtils.makeAccessible(method);
-			if(StringUtils.isNotBlank(params)){
-				method.invoke(target, params);
-			}else{
-				method.invoke(target);
-			}
-		}catch (Exception e) {
-			throw new RestException("执行定时任务失败", e);
-		}
-	}
+    private Object target;
+    private Method method;
+    private String params;
+
+    /**
+     * 定时任务
+     *
+     * @param beanName
+     * @param methodName
+     * @param params
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     */
+    public ScheduleRunnable(String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
+        this.target = SpringContextUtils.getBean(beanName);
+        this.params = params;
+
+        if (StringUtils.isNotBlank(params)) {
+            this.method = target.getClass().getDeclaredMethod(methodName, String.class);
+        } else {
+            this.method = target.getClass().getDeclaredMethod(methodName);
+        }
+    }
+
+    /**
+     * 运行
+     */
+    @Override
+    public void run() {
+        try {
+            ReflectionUtils.makeAccessible(method);
+            if (StringUtils.isNotBlank(params)) {
+                method.invoke(target, params);
+            } else {
+                method.invoke(target);
+            }
+        } catch (Exception e) {
+            throw new RestException("执行定时任务失败", e);
+        }
+    }
 
 }

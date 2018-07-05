@@ -16,31 +16,35 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gxhl.jts.common.model.RequestModel;
-import com.gxhl.jts.modules.sys.entity.SysDict;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysDictDao;
+import com.gxhl.jts.modules.sys.entity.SysDict;
 import com.gxhl.jts.modules.sys.service.SysDictService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
 @Service("sysDictService")
 public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDict> implements SysDictService {
 
+    /**
+     * @param params
+     *
+     * @return
+     */
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String name = (String)params.get("name");
+        String name = (String) params.get("name");
 
         Page<SysDict> page = this.selectPage(
                 new RequestModel<SysDict>(params).getPage(),
                 new EntityWrapper<SysDict>()
-                    .like(StringUtils.isNotBlank(name),"name", name)
+                        .like(StringUtils.hasText(name), "name", name)
         );
 
         return new PageUtils(page);

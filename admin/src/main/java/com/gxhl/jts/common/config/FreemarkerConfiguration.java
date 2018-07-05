@@ -36,7 +36,6 @@ public class FreemarkerConfiguration {
     public FreeMarkerConfigurer freeMarkerConfigurer() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         configurer.setTemplateLoaderPath("classpath:/templates");
-
         Properties settings = new Properties();
         settings.setProperty("default_encoding", "utf-8");
         settings.setProperty("number_format", "0.##");

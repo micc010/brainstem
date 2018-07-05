@@ -24,16 +24,30 @@ import java.util.List;
  * @since 2018-03-30
  */
 public interface SysRoleDeptService extends IService<SysRoleDept> {
-	
-	void saveOrUpdate(Long roleId, List<Long> deptIdList);
-	
-	/**
-	 * 根据角色ID，获取部门ID列表
-	 */
-	List<Long> queryDeptIdList(Long[] roleIds) ;
 
-	/**
-	 * 根据角色ID数组，批量删除
-	 */
-	int deleteBatch(Long[] roleIds);
+    /**
+     * 保存
+     *
+     * @param roleId
+     * @param deptIdList
+     */
+    void saveOrUpdate(Long roleId, List<Long> deptIdList);
+
+    /**
+     * 根据角色ID，获取部门ID列表
+     *
+     * @param roleIds
+     *
+     * @return
+     */
+    List<Long> queryDeptIdList(Long[] roleIds);
+
+    /**
+     * 根据角色ID数组，批量删除
+     *
+     * @param roleIds
+     *
+     * @return
+     */
+    int deleteBatch(Long[] roleIds);
 }

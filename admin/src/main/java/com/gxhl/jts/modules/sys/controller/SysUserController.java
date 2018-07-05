@@ -21,9 +21,10 @@ import com.gxhl.jts.common.validator.group.UpdateGroup;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import com.gxhl.jts.modules.sys.service.SysUserService;
-import com.gxhl.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -39,13 +40,20 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController extends AbstractController {
+
     @Autowired
     private SysUserService sysUserService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * 所有用户列表
+     *
+     * @param params
+     *
+     * @return
      */
     @RequestMapping("/list")
     public ResponseModel list(@RequestParam Map<String, Object> params) {
@@ -56,6 +64,8 @@ public class SysUserController extends AbstractController {
 
     /**
      * 获取登录的用户信息
+     *
+     * @return
      */
     @RequestMapping("/info")
     public ResponseModel info() {
@@ -68,12 +78,13 @@ public class SysUserController extends AbstractController {
     @SysLog("修改密码")
     @RequestMapping("/password")
     public ResponseModel password(String password, String newPassword) {
-        Assert.isBlank(newPassword, "新密码不为能空");
+        Assert.hasText(newPassword, "新密码不为能空");
 
+        // TODO
         //原密码
-        password = ShiroUtils.sha256(password, getUser().getSalt());
+        password = passwordEncoder.encode(password);
         //新密码
-        newPassword = ShiroUtils.sha256(newPassword, getUser().getSalt());
+        newPassword = passwordEncoder.encode(newPassword);
 
         //更新密码
         boolean flag = sysUserService.updatePassword(getUserId(), password, newPassword);
@@ -86,6 +97,10 @@ public class SysUserController extends AbstractController {
 
     /**
      * 用户信息
+     *
+     * @param userId
+     *
+     * @return
      */
     @RequestMapping("/info/{userId}")
     public ResponseModel info(@PathVariable("userId") Long userId) {
@@ -100,6 +115,10 @@ public class SysUserController extends AbstractController {
 
     /**
      * 保存用户
+     *
+     * @param user
+     *
+     * @return
      */
     @SysLog("保存用户")
     @RequestMapping("/save")
@@ -113,6 +132,10 @@ public class SysUserController extends AbstractController {
 
     /**
      * 修改用户
+     *
+     * @param user
+     *
+     * @return
      */
     @SysLog("修改用户")
     @RequestMapping("/update")
@@ -126,6 +149,10 @@ public class SysUserController extends AbstractController {
 
     /**
      * 删除用户
+     *
+     * @param userIds
+     *
+     * @return
      */
     @SysLog("删除用户")
     @RequestMapping("/delete")
@@ -142,4 +169,5 @@ public class SysUserController extends AbstractController {
 
         return ResponseModel.ok();
     }
+
 }

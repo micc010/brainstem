@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 http://github.com/micc010
+ * Copyright 2018 https://github.com/micc010
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,35 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.gxhl.jts.modules.sys.dao;
+package com.gxhl.jts.common.utils;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.gxhl.jts.modules.sys.entity.SysUserRole;
-
-import java.util.List;
+import java.util.UUID;
 
 /**
- * 用户与角色对应关系
- *
  * @author roger.li
- * @since 2018-03-30
+ * @since 2018/7/5
  */
-public interface SysUserRoleDao extends BaseMapper<SysUserRole> {
+public class UUIDUtils {
 
     /**
-     * 根据用户ID，获取角色ID列表
+     * 替换'-'后的UUID
      *
-     * @param userId
      * @return
      */
-    List<Long> queryRoleIdList(Long userId);
+    public static String id() {
+        return all().replaceAll("-", "");
+    }
 
     /**
-     * 根据角色ID数组，批量删除
+     * 未替换'-'的UUID
      *
-     * @param roleIds
      * @return
      */
-    int deleteBatch(Long[] roleIds);
+    public static String all() {
+        return UUID.randomUUID().toString();
+    }
 
 }

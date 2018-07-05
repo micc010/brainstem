@@ -13,9 +13,9 @@
 package com.gxhl.jts.common.xss;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -59,7 +59,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
         //为空，直接返回
         String json = IOUtils.toString(super.getInputStream(), "utf-8");
-        if (StringUtils.isBlank(json)) {
+        if (StringUtils.isEmpty(json)) {
             return super.getInputStream();
         }
 
@@ -96,7 +96,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public String getParameter(String name) {
         String value = super.getParameter(xssEncode(name));
-        if (StringUtils.isNotBlank(value)) {
+        if (StringUtils.hasText(value)) {
             value = xssEncode(value);
         }
         return value;
@@ -145,7 +145,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public String getHeader(String name) {
         String value = super.getHeader(xssEncode(name));
-        if (StringUtils.isNotBlank(value)) {
+        if (StringUtils.hasText(value)) {
             value = xssEncode(value);
         }
         return value;

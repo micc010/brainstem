@@ -12,8 +12,8 @@
  */
 package com.gxhl.jts.modules.sys.dao;
 
-import com.gxhl.jts.modules.sys.entity.SysDict;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.gxhl.jts.modules.sys.entity.SysDict;
 
 /**
  * 数据字典
@@ -22,5 +22,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-03-30
  */
 public interface SysDictDao extends BaseMapper<SysDict> {
-	
+
 }

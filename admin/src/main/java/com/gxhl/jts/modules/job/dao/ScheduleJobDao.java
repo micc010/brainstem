@@ -24,9 +24,13 @@ import java.util.Map;
  * @since 2018-03-30
  */
 public interface ScheduleJobDao extends BaseMapper<ScheduleJobEntity> {
-	
-	/**
-	 * 批量更新状态
-	 */
-	int updateBatch(Map<String, Object> map);
+
+    /**
+     * 批量更新状态
+     *
+     * @param map
+     * @return
+     */
+    int updateBatch(Map<String, Object> map);
+    
 }

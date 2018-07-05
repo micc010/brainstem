@@ -21,8 +21,8 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -111,7 +111,7 @@ public class GeneratorUtils {
 //        Velocity.init(prop);
 
         String mainPath = config.getString("mainPath");
-        mainPath = StringUtils.isBlank(mainPath) ? "com.github.rogerli" : mainPath;
+        mainPath = StringUtils.isEmpty(mainPath) ? "com.gxhl.jts" : mainPath;
 
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
@@ -164,7 +164,7 @@ public class GeneratorUtils {
      * 表名转换成Java类名
      */
     public static String tableToJava(String tableName, String tablePrefix) {
-        if (StringUtils.isNotBlank(tablePrefix)) {
+        if (StringUtils.hasText(tablePrefix)) {
             tableName = tableName.replace(tablePrefix, "");
         }
         return columnToJava(tableName);
@@ -198,7 +198,7 @@ public class GeneratorUtils {
      */
     public static String getFileName(String template, String className, String packageName, String moduleName) {
         String packagePath = "main" + File.separator + "java" + File.separator;
-        if (StringUtils.isNotBlank(packageName)) {
+        if (StringUtils.hasText(packageName)) {
             packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
         }
 

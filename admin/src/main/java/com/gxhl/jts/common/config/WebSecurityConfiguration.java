@@ -10,10 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.gxhl.jts.common.security;
+package com.gxhl.jts.common.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.gxhl.jts.common.security.CustomAccessDecisionManager;
+import com.gxhl.jts.common.security.CustomFilterSecurityMetadataSource;
+import com.gxhl.jts.common.security.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +38,9 @@ import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.header.writers.CacheControlHeadersWriter;
-import org.springframework.security.web.header.writers.HstsHeaderWriter;
-import org.springframework.security.web.header.writers.XContentTypeOptionsHeaderWriter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +56,6 @@ import java.util.List;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfiguration.class);
 
     @Autowired
     private CustomUserDetailService userDetailService;
@@ -78,17 +75,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        LOGGER.debug("======WebSecurity configure======");
-        web.ignoring().antMatchers("/**/*.json",
-                "/**/*.js",
-                "/js/**",
+        web.ignoring().antMatchers(
                 "/css/**",
-                "/images/**",
                 "/fonts/**",
+                "/js/**",
+                "/libs/**",
+                "/img/**",
+                "/docs/**",
+                "/druid/**",
+                "/upload/**",
+                "/files/**",
                 "/theme/**",
                 "/html/**",
                 "/json/**",
-                "/lib/**",
                 "/widgets/**",
                 "/swagger-ui.html",
                 "/webjars/**",
@@ -106,28 +105,28 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LOGGER.debug("======HttpSecurity configure======");
+        http.csrf().disable();
 
-        http.csrf().disable(); // 关闭csrf
+        http.cors();
 
         http.authorizeRequests()
-                .mvcMatchers("/", "/index", "/login").permitAll();// 一般请求
+                .mvcMatchers("/", "/index", "/login", "/login?logout", "/login?error", "/login?invalid", "/403", "/404")
+                .permitAll();
 
-        // 设置头
-        http.headers()
-                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-                .addHeaderWriter(new XContentTypeOptionsHeaderWriter())
-                .addHeaderWriter(new XXssProtectionHeaderWriter())
-                .addHeaderWriter(new CacheControlHeadersWriter())
-                .addHeaderWriter(new HstsHeaderWriter());
+        http.headers().frameOptions().sameOrigin().addHeaderWriter(
+                new DelegatingRequestMatcherHeaderWriter(
+                        new AntPathRequestMatcher("/login"), new XFrameOptionsHeaderWriter()));
+        http.headers().xssProtection().block(false);
+        http.headers().httpStrictTransportSecurity().disable();
+        http.headers().cacheControl().disable();
+        http.headers().contentTypeOptions().disable();
 
-        // 一般请求
-        http.formLogin().loginPage("/login").permitAll().failureUrl("/login?error").defaultSuccessUrl("/home")
+        http.formLogin().loginPage("/login").failureUrl("/login?error").defaultSuccessUrl("/index")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout").permitAll()
+                .logout().logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .and()
-                .exceptionHandling().accessDeniedPage("/access-denie.html")
+                .exceptionHandling().accessDeniedPage("/403")
                 .and()
                 .authorizeRequests().expressionHandler(webSecurityExpressionHandler())
                 .and()
@@ -142,8 +141,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .and()
-                .sessionManagement().invalidSessionUrl("/login?invalid").maximumSessions(1); // session管理
-
+                .sessionManagement().invalidSessionUrl("/login?invalid").maximumSessions(1);
     }
 
     /**
@@ -176,7 +174,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     AccessDeniedHandler accessDeniedHandler() {
         AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
-        accessDeniedHandler.setErrorPage("/access-denie.html");
+        accessDeniedHandler.setErrorPage("/403");
         return accessDeniedHandler;
     }
 
@@ -249,7 +247,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean(name = "expressionHandler")
     public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
         DefaultWebSecurityExpressionHandler webSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-//        webSecurityExpressionHandler.setDefaultRolePrefix("");
+        webSecurityExpressionHandler.setDefaultRolePrefix("");
         return webSecurityExpressionHandler;
     }
 
@@ -258,7 +256,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Bean(name = "expressionVoter")
     public WebExpressionVoter webExpressionVoter() {
-        LOGGER.debug("======webExpressionVoter======");
         WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
         webExpressionVoter.setExpressionHandler(webSecurityExpressionHandler());
         return webExpressionVoter;

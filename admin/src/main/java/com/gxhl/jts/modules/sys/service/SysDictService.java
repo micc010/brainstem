@@ -26,6 +26,12 @@ import java.util.Map;
  */
 public interface SysDictService extends IService<SysDict> {
 
+    /**
+     * 分页查询字典
+     *
+     * @param params
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> params);
 }
 

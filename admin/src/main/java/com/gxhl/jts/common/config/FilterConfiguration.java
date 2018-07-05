@@ -12,12 +12,14 @@
  */
 package com.gxhl.jts.common.config;
 
+import com.google.common.collect.Maps;
 import com.gxhl.jts.common.xss.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.DispatcherType;
+import java.util.Map;
 
 /**
  * Filter配置
@@ -38,6 +40,8 @@ public class FilterConfiguration {
         registration.setFilter(new XssFilter());
         registration.addUrlPatterns("/*");
         registration.setName("xssFilter");
+        registration.setOrder(1);
+        registration.setEnabled(true);
         return registration;
     }
 }

@@ -33,8 +33,7 @@ import java.util.List;
  */
 public class CustomAccessDecisionManager extends AbstractAccessDecisionManager {
 
-    private final Logger LOGGER = LoggerFactory
-            .getLogger(CustomAccessDecisionManager.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     public CustomAccessDecisionManager(List<AccessDecisionVoter<? extends Object>> decisionVoters) {
         super(decisionVoters);
@@ -43,15 +42,16 @@ public class CustomAccessDecisionManager extends AbstractAccessDecisionManager {
     /**
      * 权限控制的逻辑
      *
-     * @param authentication   用户的认证对象
-     * @param object           the secured object
-     * @param configAttributes 访问该资源所要的权限
+     * @param authentication
+     *         用户的认证对象
+     * @param object
+     *         the secured object
+     * @param configAttributes
+     *         访问该资源所要的权限
      */
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
-        LOGGER.debug("======CustomAccessDecisionManager decide======");
-
         //如果资源要的权限为空，则可以访问
         if (configAttributes == null) {
             return;
@@ -61,23 +61,30 @@ public class CustomAccessDecisionManager extends AbstractAccessDecisionManager {
                 configAttributes) {
             for (GrantedAuthority ga : authentication.getAuthorities()) {
                 if (configAttribute.getAttribute().equals(ga.getAuthority())) { // 资源要的权限 = 用户的权限
-                    LOGGER.debug("======User has permission======");
                     return;
                 }
             }
         }
 
-        LOGGER.debug("======AccessDecision Dendied======");
-        throw new AccessDeniedException("======Access Dendied======");
+        LOGGER.error("Access Dendied");
+        throw new AccessDeniedException("Access Dendied");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     public boolean supports(ConfigAttribute arg0) {
-        LOGGER.debug("======ConfigAttribute supports======");
         return true;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     public boolean supports(Class<?> arg0) {
-        LOGGER.debug("======Class supports======");
         return true;
     }
 

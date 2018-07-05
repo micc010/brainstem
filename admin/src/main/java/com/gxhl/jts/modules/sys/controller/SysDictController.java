@@ -32,11 +32,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("sys/dict")
 public class SysDictController {
+
     @Autowired
     private SysDictService sysDictService;
 
     /**
      * 列表
+     *
+     * @param params
+     * @return
      */
     @RequestMapping("/list")
     public ResponseModel list(@RequestParam Map<String, Object> params) {
@@ -48,6 +52,9 @@ public class SysDictController {
 
     /**
      * 信息
+     *
+     * @param id
+     * @return
      */
     @RequestMapping("/info/{id}")
     public ResponseModel info(@PathVariable("id") Long id) {
@@ -58,6 +65,9 @@ public class SysDictController {
 
     /**
      * 保存
+     *
+     * @param dict
+     * @return
      */
     @RequestMapping("/save")
     public ResponseModel save(@RequestBody SysDict dict) {
@@ -71,6 +81,9 @@ public class SysDictController {
 
     /**
      * 修改
+     *
+     * @param dict
+     * @return
      */
     @RequestMapping("/update")
     public ResponseModel update(@RequestBody SysDict dict) {
@@ -84,6 +97,9 @@ public class SysDictController {
 
     /**
      * 删除
+     *
+     * @param ids
+     * @return
      */
     @RequestMapping("/delete")
     public ResponseModel delete(@RequestBody Long[] ids) {

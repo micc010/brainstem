@@ -13,12 +13,13 @@
 package com.gxhl.jts.modules.sys.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gxhl.jts.common.annotation.SysLog;
 import com.gxhl.jts.common.model.ResponseModel;
-import com.gxhl.jts.modules.sys.entity.SysConfig;
-import com.gxhl.jts.modules.sys.service.SysConfigService;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.common.validator.ValidatorUtils;
+import com.gxhl.jts.modules.sys.entity.SysConfig;
+import com.gxhl.jts.modules.sys.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,65 +34,87 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/config")
 public class SysConfigController extends AbstractController {
-	@Autowired
-	private SysConfigService sysConfigService;
-	
-	/**
-	 * 所有配置列表
-	 */
-	@RequestMapping("/list")
-	public ResponseModel list(@RequestParam Map<String, Object> params){
-		PageUtils page = sysConfigService.queryPage(params);
 
-		return ResponseModel.ok().put("page", page);
-	}
-	
-	
-	/**
-	 * 配置信息
-	 */
-	@RequestMapping("/info/{id}")
-	public ResponseModel info(@PathVariable("id") Long id){
-		SysConfig config = sysConfigService.selectById(id);
-		
-		return ResponseModel.ok().put("config", config);
-	}
-	
-	/**
-	 * 保存配置
-	 */
-	@SysLog("保存配置")
-	@RequestMapping("/save")
-	public ResponseModel save(@RequestBody SysConfig config){
-		ValidatorUtils.validateEntity(config);
+    @Autowired
+    private SysConfigService sysConfigService;
 
-		sysConfigService.save(config);
-		
-		return ResponseModel.ok();
-	}
-	
-	/**
-	 * 修改配置
-	 */
-	@SysLog("修改配置")
-	@RequestMapping("/update")
-	public ResponseModel update(@RequestBody SysConfig config){
-		ValidatorUtils.validateEntity(config);
-		
-		sysConfigService.update(config);
-		
-		return ResponseModel.ok();
-	}
-	
-	/**
-	 * 删除配置
-	 */
-	@SysLog("删除配置")
-	@RequestMapping("/delete")
-	public ResponseModel delete(@RequestBody Long[] ids){
-		sysConfigService.deleteBatch(ids);
-		
-		return ResponseModel.ok();
-	}
+    /**
+     * 所有配置列表
+     *
+     * @param params
+     *
+     * @return
+     */
+    @RequestMapping("/list")
+    public ResponseModel list(@RequestParam Map<String, Object> params) {
+        PageUtils page = sysConfigService.queryPage(params);
+
+        return ResponseModel.ok().put("page", page);
+    }
+
+
+    /**
+     * 配置信息
+     *
+     * @param id
+     *
+     * @return
+     */
+    @RequestMapping("/info/{id}")
+    public ResponseModel info(@PathVariable("id") Long id) {
+        SysConfig config = sysConfigService.selectById(id);
+
+        return ResponseModel.ok().put("config", config);
+    }
+
+    /**
+     * 保存配置
+     *
+     * @param config
+     *
+     * @return
+     *
+     * @throws JsonProcessingException
+     */
+    @SysLog("保存配置")
+    @RequestMapping("/save")
+    public ResponseModel save(@RequestBody SysConfig config) throws JsonProcessingException {
+        ValidatorUtils.validateEntity(config);
+
+        sysConfigService.save(config);
+
+        return ResponseModel.ok();
+    }
+
+    /**
+     * 修改配置
+     *
+     * @param config
+     *
+     * @return
+     */
+    @SysLog("修改配置")
+    @RequestMapping("/update")
+    public ResponseModel update(@RequestBody SysConfig config) throws JsonProcessingException {
+        ValidatorUtils.validateEntity(config);
+
+        sysConfigService.update(config);
+
+        return ResponseModel.ok();
+    }
+
+    /**
+     * 删除配置
+     *
+     * @param ids
+     * @return
+     */
+    @SysLog("删除配置")
+    @RequestMapping("/delete")
+    public ResponseModel delete(@RequestBody Long[] ids) {
+        sysConfigService.deleteBatch(ids);
+
+        return ResponseModel.ok();
+    }
 
 }

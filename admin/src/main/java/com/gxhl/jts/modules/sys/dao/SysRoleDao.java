@@ -22,6 +22,5 @@ import com.gxhl.jts.modules.sys.entity.SysRole;
  * @since 2018-03-30
  */
 public interface SysRoleDao extends BaseMapper<SysRole> {
-	
 
 }

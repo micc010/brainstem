@@ -15,19 +15,21 @@ package com.gxhl.jts.modules.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
 import com.gxhl.jts.common.exception.RestException;
 import com.gxhl.jts.common.model.RequestModel;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysConfigDao;
 import com.gxhl.jts.modules.sys.entity.SysConfig;
-import com.gxhl.jts.modules.sys.redis.RedisConfiguration;
+import com.gxhl.jts.modules.sys.redis.SysConfigRedis;
 import com.gxhl.jts.modules.sys.service.SysConfigService;
-import com.google.gson.Gson;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -39,8 +41,15 @@ import java.util.Map;
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> implements SysConfigService {
 
     @Autowired
-    private RedisConfiguration sysConfigRedis;
+    private SysConfigRedis sysConfigRedis;
 
+    /**
+     * 分页查询
+     *
+     * @param params
+     *
+     * @return
+     */
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String key = (String) params.get("key");
@@ -48,26 +57,46 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
         Page<SysConfig> page = this.selectPage(
                 new RequestModel<SysConfig>(params).getPage(),
                 new EntityWrapper<SysConfig>()
-                        .like(StringUtils.isNotBlank(key), "key", key)
+                        .like(StringUtils.hasText(key), "key", key)
                         .eq("status", 1)
         );
 
         return new PageUtils(page);
     }
 
+    /**
+     * 保存
+     *
+     * @param config
+     *
+     * @throws JsonProcessingException
+     */
     @Override
-    public void save(SysConfig config) {
+    public void save(SysConfig config) throws JsonProcessingException {
         this.insert(config);
         sysConfigRedis.saveOrUpdate(config);
     }
 
+    /**
+     * 更新
+     *
+     * @param config
+     *
+     * @throws JsonProcessingException
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysConfig config) {
+    public void update(SysConfig config) throws JsonProcessingException {
         this.updateById(config);
         sysConfigRedis.saveOrUpdate(config);
     }
 
+    /**
+     * 更新
+     *
+     * @param key
+     * @param value
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateValueByKey(String key, String value) {
@@ -75,6 +104,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
         sysConfigRedis.delete(key);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param ids
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteBatch(Long[] ids) {
@@ -86,8 +120,17 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
         this.deleteBatchIds(Arrays.asList(ids));
     }
 
+    /**
+     * 获得值
+     *
+     * @param key
+     *
+     * @return
+     *
+     * @throws IOException
+     */
     @Override
-    public String getValue(String key) {
+    public String getValue(String key) throws IOException {
         SysConfig config = sysConfigRedis.get(key);
         if (config == null) {
             config = baseMapper.queryByKey(key);
@@ -97,10 +140,22 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
         return config == null ? null : config.getValue();
     }
 
+    /**
+     * 获得对象
+     *
+     * @param key
+     *         key
+     * @param clazz
+     * @param <T>
+     *
+     * @return
+     *
+     * @throws IOException
+     */
     @Override
-    public <T> T getConfigObject(String key, Class<T> clazz) {
+    public <T> T getConfigObject(String key, Class<T> clazz) throws IOException {
         String value = getValue(key);
-        if (StringUtils.isNotBlank(value)) {
+        if (StringUtils.hasText(value)) {
             return new Gson().fromJson(value, clazz);
         }
 

@@ -12,6 +12,7 @@
  */
 package com.gxhl.jts.modules.oss.controller;
 
+import com.google.gson.Gson;
 import com.gxhl.jts.common.exception.RestException;
 import com.gxhl.jts.common.model.ResponseModel;
 import com.gxhl.jts.common.utils.Constant;
@@ -25,7 +26,6 @@ import com.gxhl.jts.modules.oss.cloud.OSSFactory;
 import com.gxhl.jts.modules.oss.entity.SysOssEntity;
 import com.gxhl.jts.modules.oss.service.SysOssService;
 import com.gxhl.jts.modules.sys.service.SysConfigService;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +46,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("sys/oss")
 public class SysOssController {
+
     @Autowired
     private SysOssService sysOssService;
     @Autowired
@@ -55,6 +56,9 @@ public class SysOssController {
 
     /**
      * 列表
+     *
+     * @param params
+     * @return
      */
     @RequestMapping("/list")
     public ResponseModel list(@RequestParam Map<String, Object> params) {
@@ -63,9 +67,10 @@ public class SysOssController {
         return ResponseModel.ok().put("page", page);
     }
 
-
     /**
      * 云存储配置信息
+     *
+     * @return
      */
     @RequestMapping("/config")
     public ResponseModel config() {
@@ -74,9 +79,11 @@ public class SysOssController {
         return ResponseModel.ok().put("config", config);
     }
 
-
     /**
      * 保存云存储配置信息
+     *
+     * @param config
+     * @return
      */
     @RequestMapping("/saveConfig")
     public ResponseModel saveConfig(@RequestBody CloudStorageConfiguration config) {
@@ -99,9 +106,12 @@ public class SysOssController {
         return ResponseModel.ok();
     }
 
-
     /**
      * 上传文件
+     *
+     * @param file
+     * @return
+     * @throws Exception
      */
     @RequestMapping("/upload")
     public ResponseModel upload(@RequestParam("file") MultipartFile file) throws Exception {
@@ -122,9 +132,11 @@ public class SysOssController {
         return ResponseModel.ok().put("url", url);
     }
 
-
     /**
      * 删除
+     *
+     * @param ids
+     * @return
      */
     @RequestMapping("/delete")
     public ResponseModel delete(@RequestBody Long[] ids) {

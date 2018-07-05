@@ -37,8 +37,7 @@ import java.util.List;
 @Component
 public class CustomFilterSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private final Logger LOGGER = LoggerFactory
-            .getLogger(CustomFilterSecurityMetadataSource.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SysRoleService sysRoleService;
@@ -73,11 +72,20 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
         return securityConfigList;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
         return null;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     public boolean supports(Class<?> arg0) {
         return true;
     }

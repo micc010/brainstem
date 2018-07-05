@@ -31,49 +31,71 @@ import java.io.InputStream;
  * @since 2018-03-30
  */
 public class QcloudCloudStorageService extends CloudStorageService {
+
     private COSClient client;
 
-    public QcloudCloudStorageService(CloudStorageConfiguration config){
+    public QcloudCloudStorageService(CloudStorageConfiguration config) {
         this.config = config;
 
-        //初始化
         init();
     }
 
-    private void init(){
-    	Credentials credentials = new Credentials(config.getQcloudAppId(), config.getQcloudSecretId(),
+    /**
+     * 初始化
+     */
+    private void init() {
+        Credentials credentials = new Credentials(config.getQcloudAppId(), config.getQcloudSecretId(),
                 config.getQcloudSecretKey());
-    	
-    	//初始化客户端配置
+
+        //初始化客户端配置
         ClientConfig clientConfig = new ClientConfig();
         //设置bucket所在的区域，华南：gz 华北：tj 华东：sh
         clientConfig.setRegion(config.getQcloudRegion());
-        
-    	client = new COSClient(clientConfig, credentials);
+
+        client = new COSClient(clientConfig, credentials);
     }
 
+    /**
+     *
+     * @param data
+     *         文件字节数组
+     * @param path
+     *         文件路径，包含文件名
+     *
+     * @return
+     */
     @Override
     public String upload(byte[] data, String path) {
         //腾讯云必需要以"/"开头
-        if(!path.startsWith("/")) {
+        if (!path.startsWith("/")) {
             path = "/" + path;
         }
-        
+
         //上传到腾讯云
         UploadFileRequest request = new UploadFileRequest(config.getQcloudBucketName(), path, data);
         String response = client.uploadFile(request);
 
         JSONObject jsonObject = JSONObject.fromObject(response);
-        if(jsonObject.getInt("code") != 0) {
+        if (jsonObject.getInt("code") != 0) {
             throw new RestException("文件上传失败，" + jsonObject.getString("message"));
         }
 
         return config.getQcloudDomain() + path;
     }
 
+    /**
+     *
+     *
+     * @param inputStream
+     *         字节流
+     * @param path
+     *         文件路径，包含文件名
+     *
+     * @return
+     */
     @Override
     public String upload(InputStream inputStream, String path) {
-    	try {
+        try {
             byte[] data = IOUtils.toByteArray(inputStream);
             return this.upload(data, path);
         } catch (IOException e) {
@@ -81,11 +103,29 @@ public class QcloudCloudStorageService extends CloudStorageService {
         }
     }
 
+    /**
+     *
+     * @param data
+     *         文件字节数组
+     * @param suffix
+     *         后缀
+     *
+     * @return
+     */
     @Override
     public String uploadSuffix(byte[] data, String suffix) {
         return upload(data, getPath(config.getQcloudPrefix(), suffix));
     }
 
+    /**
+     *
+     * @param inputStream
+     *         字节流
+     * @param suffix
+     *         后缀
+     *
+     * @return
+     */
     @Override
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return upload(inputStream, getPath(config.getQcloudPrefix(), suffix));

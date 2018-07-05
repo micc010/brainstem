@@ -26,12 +26,33 @@ import java.util.Map;
  */
 public interface SysRoleService extends IService<SysRole> {
 
-	PageUtils queryPage(Map<String, Object> params);
+    /**
+     * 分页查询
+     *
+     * @param params
+     * @return
+     */
+    PageUtils queryPage(Map<String, Object> params);
 
-	void save(SysRole role);
+    /**
+     * 保存
+     *
+     * @param role
+     */
+    void save(SysRole role);
 
-	void update(SysRole role);
-	
-	void deleteBatch(Long[] roleIds);
+    /**
+     * 更新
+     *
+     * @param role
+     */
+    void update(SysRole role);
+
+    /**
+     * 批量删除
+     *
+     * @param roleIds
+     */
+    void deleteBatch(Long[] roleIds);
 
 }

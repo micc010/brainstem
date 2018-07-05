@@ -24,14 +24,18 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface SysConfigDao extends BaseMapper<SysConfig> {
 
-	/**
-	 * 根据key，查询value
-	 */
-	SysConfig queryByKey(String paramKey);
+    /**
+     * 根据key，查询value
+     */
+    SysConfig queryByKey(String paramKey);
 
-	/**
-	 * 根据key，更新value
-	 */
-	int updateValueByKey(@Param("key") String key, @Param("value") String value);
-	
+    /**
+     * 根据key，更新value
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    int updateValueByKey(@Param("key") String key, @Param("value") String value);
+
 }

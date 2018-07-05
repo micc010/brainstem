@@ -29,6 +29,10 @@ public class ScheduleUtils {
 
     /**
      * 获取触发器key
+     *
+     * @param jobId
+     *
+     * @return
      */
     public static TriggerKey getTriggerKey(Long jobId) {
         return TriggerKey.triggerKey(JOB_NAME + jobId);
@@ -36,6 +40,10 @@ public class ScheduleUtils {
 
     /**
      * 获取jobKey
+     *
+     * @param jobId
+     *
+     * @return
      */
     public static JobKey getJobKey(Long jobId) {
         return JobKey.jobKey(JOB_NAME + jobId);
@@ -43,6 +51,11 @@ public class ScheduleUtils {
 
     /**
      * 获取表达式触发器
+     *
+     * @param scheduler
+     * @param jobId
+     *
+     * @return
      */
     public static CronTrigger getCronTrigger(Scheduler scheduler, Long jobId) {
         try {
@@ -54,6 +67,9 @@ public class ScheduleUtils {
 
     /**
      * 创建定时任务
+     *
+     * @param scheduler
+     * @param scheduleJob
      */
     public static void createScheduleJob(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
         try {
@@ -83,6 +99,9 @@ public class ScheduleUtils {
 
     /**
      * 更新定时任务
+     *
+     * @param scheduler
+     * @param scheduleJob
      */
     public static void updateScheduleJob(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
         try {
@@ -114,6 +133,9 @@ public class ScheduleUtils {
 
     /**
      * 立即执行任务
+     *
+     * @param scheduler
+     * @param scheduleJob
      */
     public static void run(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
         try {
@@ -129,6 +151,9 @@ public class ScheduleUtils {
 
     /**
      * 暂停任务
+     *
+     * @param scheduler
+     * @param jobId
      */
     public static void pauseJob(Scheduler scheduler, Long jobId) {
         try {
@@ -140,6 +165,9 @@ public class ScheduleUtils {
 
     /**
      * 恢复任务
+     *
+     * @param scheduler
+     * @param jobId
      */
     public static void resumeJob(Scheduler scheduler, Long jobId) {
         try {
@@ -151,6 +179,9 @@ public class ScheduleUtils {
 
     /**
      * 删除定时任务
+     *
+     * @param scheduler
+     * @param jobId
      */
     public static void deleteScheduleJob(Scheduler scheduler, Long jobId) {
         try {

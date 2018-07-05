@@ -12,7 +12,6 @@
  */
 package com.gxhl.jts.modules.oss.dao;
 
-
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gxhl.jts.modules.oss.entity.SysOssEntity;
 
@@ -23,5 +22,5 @@ import com.gxhl.jts.modules.oss.entity.SysOssEntity;
  * @since 2018-03-30
  */
 public interface SysOssDao extends BaseMapper<SysOssEntity> {
-	
+
 }

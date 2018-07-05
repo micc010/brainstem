@@ -25,43 +25,80 @@ import java.io.InputStream;
  * @since 2018-03-30
  */
 public class AliyunCloudStorageService extends CloudStorageService {
+
     private OSSClient client;
 
-    public AliyunCloudStorageService(CloudStorageConfiguration config){
+    /**
+     * 构造
+     *
+     * @param config
+     */
+    public AliyunCloudStorageService(CloudStorageConfiguration config) {
         this.config = config;
 
-        //初始化
         init();
     }
 
-    private void init(){
+    /**
+     * 初始化
+     */
+    private void init() {
         client = new OSSClient(config.getAliyunEndPoint(), config.getAliyunAccessKeyId(),
                 config.getAliyunAccessKeySecret());
     }
 
+    /**
+     * 上传
+     *
+     * @param data    文件字节数组
+     * @param path    文件路径，包含文件名
+     * @return
+     */
     @Override
     public String upload(byte[] data, String path) {
         return upload(new ByteArrayInputStream(data), path);
     }
 
+    /**
+     * 上传
+     *
+     * @param inputStream   字节流
+     * @param path          文件路径，包含文件名
+     * @return
+     */
     @Override
     public String upload(InputStream inputStream, String path) {
         try {
             client.putObject(config.getAliyunBucketName(), path, inputStream);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RestException("上传文件失败，请检查配置信息", e);
         }
 
         return config.getAliyunDomain() + "/" + path;
     }
 
+    /**
+     * 上传
+     *
+     * @param data     文件字节数组
+     * @param suffix   后缀
+     * @return
+     */
     @Override
     public String uploadSuffix(byte[] data, String suffix) {
         return upload(data, getPath(config.getAliyunPrefix(), suffix));
     }
 
+    /**
+     * 上传
+     *
+     * @param inputStream  字节流
+     * @param suffix       后缀
+     * @return
+     */
     @Override
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return upload(inputStream, getPath(config.getAliyunPrefix(), suffix));
     }
+
 }

@@ -13,9 +13,11 @@
 package com.gxhl.jts.modules.sys.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.gxhl.jts.modules.sys.entity.SysConfig;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gxhl.jts.common.utils.PageUtils;
+import com.gxhl.jts.modules.sys.entity.SysConfig;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -24,42 +26,46 @@ import java.util.Map;
  * @author roger.li
  * @since 2018-03-30
  */
-public interface SysConfigService extends IService<SysConfig>  {
+public interface SysConfigService extends IService<SysConfig> {
 
-	PageUtils queryPage(Map<String, Object> params);
-	
-	/**
-	 * 保存配置信息
-	 */
-	public void save(SysConfig config);
-	
-	/**
-	 * 更新配置信息
-	 */
-	public void update(SysConfig config);
-	
-	/**
-	 * 根据key，更新value
-	 */
-	public void updateValueByKey(String key, String value);
-	
-	/**
-	 * 删除配置信息
-	 */
-	public void deleteBatch(Long[] ids);
-	
-	/**
-	 * 根据key，获取配置的value值
-	 * 
-	 * @param key           key
-	 */
-	public String getValue(String key);
-	
-	/**
-	 * 根据key，获取value的Object对象
-	 * @param key    key
-	 * @param clazz  Object对象
-	 */
-	public <T> T getConfigObject(String key, Class<T> clazz);
-	
+    PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 保存配置信息
+     */
+    void save(SysConfig config) throws JsonProcessingException;
+
+    /**
+     * 更新配置信息
+     */
+    void update(SysConfig config) throws JsonProcessingException;
+
+    /**
+     * 根据key，更新value
+     */
+    void updateValueByKey(String key, String value);
+
+    /**
+     * 删除配置信息
+     */
+    void deleteBatch(Long[] ids);
+
+    /**
+     * 根据key，获取配置的value值
+     *
+     * @param key
+     *         key
+     */
+    String getValue(String key) throws IOException;
+
+    /**
+     * 根据key，获取value的Object对象
+     *
+     * @param key
+     *         key
+     * @param clazz
+     *         Object对象
+     */
+    <T> T getConfigObject(String key, Class<T> clazz) throws IOException;
+
 }

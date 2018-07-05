@@ -15,6 +15,8 @@ package com.gxhl.jts.common.security;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysRoleService;
 import com.gxhl.jts.modules.sys.service.SysUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,28 +39,38 @@ import java.util.Set;
 @Component
 public class CustomUserDetailService implements UserDetailsService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private SysUserService sysUserService;
 
     @Autowired
     private SysRoleService sysRoleService;
 
+    /**
+     * @param username
+     *
+     * @return
+     *
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         if (StringUtils.isEmpty(username)) {
+            LOGGER.error("Username not found");
             throw new UsernameNotFoundException("用户名为空");
         }
 
         SysUser login = sysUserService.findByUsername(username);
         if (login == null) {
+            LOGGER.error("User not exists");
             throw new UsernameNotFoundException("用户不存在");
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         sysRoleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return new CustomUserDetails(login.getUserId(), login.getUsername(), login.getFullName(), null, login.getDeptId(), null, new Date(), Whether.no.value(), authorities);
     }
 

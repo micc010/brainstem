@@ -13,8 +13,8 @@
 package com.gxhl.jts.modules.job.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.gxhl.jts.modules.job.entity.ScheduleJobLogEntity;
 import com.gxhl.jts.common.utils.PageUtils;
+import com.gxhl.jts.modules.job.entity.ScheduleJobLogEntity;
 
 import java.util.Map;
 
@@ -26,6 +26,11 @@ import java.util.Map;
  */
 public interface ScheduleJobLogService extends IService<ScheduleJobLogEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
-	
+    /**
+     *
+     * @param params
+     * @return
+     */
+    PageUtils queryPage(Map<String, Object> params);
+
 }

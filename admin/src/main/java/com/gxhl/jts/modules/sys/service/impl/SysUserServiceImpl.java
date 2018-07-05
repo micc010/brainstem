@@ -20,17 +20,17 @@ import com.gxhl.jts.common.model.RequestModel;
 import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysUserDao;
+import com.gxhl.jts.modules.sys.entity.SysDept;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysDeptService;
 import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import com.gxhl.jts.modules.sys.service.SysUserService;
-import com.gxhl.jts.modules.sys.entity.SysDept;
-import com.gxhl.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -44,67 +44,95 @@ import java.util.Map;
  */
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> implements SysUserService {
-	@Autowired
-	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysDeptService sysDeptService;
 
-	@Override
-	public List<Long> queryAllMenuId(Long userId) {
-		return baseMapper.queryAllMenuId(userId);
-	}
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private SysDeptService sysDeptService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-	@Override
-	@DataFilter(subDept = true, user = false)
-	public PageUtils queryPage(Map<String, Object> params) {
-		String username = (String)params.get("username");
+    /**
+     * @param userId
+     *
+     * @return
+     */
+    @Override
+    public List<Long> queryAllMenuId(Long userId) {
+        return baseMapper.queryAllMenuId(userId);
+    }
 
-		Page<SysUser> page = this.selectPage(
-			new RequestModel<SysUser>(params).getPage(),
-			new EntityWrapper<SysUser>()
-				.like(StringUtils.isNotBlank(username),"username", username)
-				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
-		);
+    /**
+     * @param params
+     *
+     * @return
+     */
+    @Override
+    @DataFilter(subDept = true, user = false)
+    public PageUtils queryPage(Map<String, Object> params) {
+        String username = (String) params.get("username");
 
-		for(SysUser sysUserEntity : page.getRecords()){
-			SysDept sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
-			sysUserEntity.setDeptName(sysDeptEntity.getName());
-		}
+        Page<SysUser> page = this.selectPage(
+                new RequestModel<SysUser>(params).getPage(),
+                new EntityWrapper<SysUser>()
+                        .like(StringUtils.hasText(username), "username", username)
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+        );
 
-		return new PageUtils(page);
-	}
+        for (SysUser sysUserEntity : page.getRecords()) {
+            SysDept sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
+            sysUserEntity.setDeptName(sysDeptEntity.getName());
+        }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void save(SysUser user) {
-		user.setCreateTime(new Date());
-		//sha256加密
-		String salt = RandomStringUtils.randomAlphanumeric(20);
-		user.setSalt(salt);
-		user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-		this.insert(user);
-		
-		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-	}
+        return new PageUtils(page);
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(SysUser user) {
-		if(StringUtils.isBlank(user.getPassword())){
-			user.setPassword(null);
-		}else{
-			user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-		}
-		this.updateById(user);
-		
-		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-	}
+    /**
+     * @param user
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(SysUser user) {
+        // TODO
+        user.setCreateTime(new Date());
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        user.setSalt(salt);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        this.insert(user);
 
+        //保存用户与角色关系
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+    }
 
-	@Override
-	public boolean updatePassword(Long userId, String password, String newPassword) {
+    /**
+     * @param user
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysUser user) {
+        if (StringUtils.isEmpty(user.getPassword())) {
+            user.setPassword(null); // TODO
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        this.updateById(user);
+
+        //保存用户与角色关系
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+    }
+
+    /**
+     * @param userId
+     *         用户ID
+     * @param password
+     *         原密码
+     * @param newPassword
+     *
+     * @return
+     */
+    @Override
+    public boolean updatePassword(Long userId, String password, String newPassword) {
+        // TODO
         SysUser userEntity = new SysUser();
         userEntity.setPassword(newPassword);
         return this.update(userEntity,

@@ -30,6 +30,13 @@ import java.util.Map;
 @Service("sysOssService")
 public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> implements SysOssService {
 
+    /**
+     * 分页查询
+     *
+     * @param params
+     *
+     * @return
+     */
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<SysOssEntity> page = this.selectPage(

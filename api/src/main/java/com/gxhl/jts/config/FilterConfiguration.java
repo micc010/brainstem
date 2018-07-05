@@ -38,6 +38,8 @@ public class FilterConfiguration {
         registration.setFilter(new XssFilter());
         registration.addUrlPatterns("/*");
         registration.setName("xssFilter");
+        registration.setOrder(1);
+        registration.setEnabled(true);
         return registration;
     }
 }

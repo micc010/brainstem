@@ -33,11 +33,15 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sys/log")
 public class SysLogController {
+
     @Autowired
     private SysLogService sysLogService;
 
     /**
      * 列表
+     *
+     * @param params
+     * @return
      */
     @ResponseBody
     @RequestMapping("/list")

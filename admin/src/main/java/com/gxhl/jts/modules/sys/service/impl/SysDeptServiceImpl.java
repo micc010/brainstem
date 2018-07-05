@@ -26,57 +26,75 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
 @Service("sysDeptService")
 public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> implements SysDeptService {
-	
-	@Override
-	@DataFilter(subDept = true, user = false)
-	public List<SysDept> queryList(Map<String, Object> params){
-		List<SysDept> deptList =
-			this.selectList(new EntityWrapper<SysDept>()
-			.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER)));
 
-		for(SysDept sysDeptEntity : deptList){
-			SysDept parentDeptEntity =  this.selectById(sysDeptEntity.getParentId());
-			if(parentDeptEntity != null){
-				sysDeptEntity.setParentName(parentDeptEntity.getName());
-			}
-		}
-		return deptList;
-	}
+    /**
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    @DataFilter(subDept = true, user = false)
+    public List<SysDept> queryList(Map<String, Object> params) {
+        List<SysDept> deptList =
+                this.selectList(new EntityWrapper<SysDept>()
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER)));
 
-	@Override
-	public List<Long> queryDetpIdList(Long parentId) {
-		return baseMapper.queryDetpIdList(parentId);
-	}
+        for (SysDept sysDeptEntity : deptList) {
+            SysDept parentDeptEntity = this.selectById(sysDeptEntity.getParentId());
+            if (parentDeptEntity != null) {
+                sysDeptEntity.setParentName(parentDeptEntity.getName());
+            }
+        }
+        return deptList;
+    }
 
-	@Override
-	public List<Long> getSubDeptIdList(Long deptId){
-		//部门及子部门ID列表
-		List<Long> deptIdList = new ArrayList<>();
+    /**
+     *
+     * @param parentId
+     * @return
+     */
+    @Override
+    public List<Long> queryDetpIdList(Long parentId) {
+        return baseMapper.queryDetpIdList(parentId);
+    }
 
-		//获取子部门ID
-		List<Long> subIdList = queryDetpIdList(deptId);
-		getDeptTreeList(subIdList, deptIdList);
+    /**
+     *
+     * @param deptId
+     * @return
+     */
+    @Override
+    public List<Long> getSubDeptIdList(Long deptId) {
+        //部门及子部门ID列表
+        List<Long> deptIdList = new ArrayList<>();
 
-		return deptIdList;
-	}
+        //获取子部门ID
+        List<Long> subIdList = queryDetpIdList(deptId);
+        getDeptTreeList(subIdList, deptIdList);
 
-	/**
-	 * 递归
-	 */
-	private void getDeptTreeList(List<Long> subIdList, List<Long> deptIdList){
-		for(Long deptId : subIdList){
-			List<Long> list = queryDetpIdList(deptId);
-			if(list.size() > 0){
-				getDeptTreeList(list, deptIdList);
-			}
+        return deptIdList;
+    }
 
-			deptIdList.add(deptId);
-		}
-	}
+    /**
+     * 递归
+     *
+     * @param subIdList
+     * @param deptIdList
+     */
+    private void getDeptTreeList(List<Long> subIdList, List<Long> deptIdList) {
+        for (Long deptId : subIdList) {
+            List<Long> list = queryDetpIdList(deptId);
+            if (list.size() > 0) {
+                getDeptTreeList(list, deptIdList);
+            }
+
+            deptIdList.add(deptId);
+        }
+    }
+
 }

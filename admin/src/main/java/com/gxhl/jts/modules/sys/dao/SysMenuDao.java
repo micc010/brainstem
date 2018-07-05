@@ -24,16 +24,18 @@ import java.util.List;
  * @since 2018-03-30
  */
 public interface SysMenuDao extends BaseMapper<SysMenu> {
-	
-	/**
-	 * 根据父菜单，查询子菜单
-	 * @param parentId 父菜单ID
-	 */
-	List<SysMenu> queryListParentId(Long parentId);
-	
-	/**
-	 * 获取不包含按钮的菜单列表
-	 */
-	List<SysMenu> queryNotButtonList();
+
+    /**
+     * 根据父菜单，查询子菜单
+     *
+     * @param parentId
+     *         父菜单ID
+     */
+    List<SysMenu> queryListParentId(Long parentId);
+
+    /**
+     * 获取不包含按钮的菜单列表
+     */
+    List<SysMenu> queryNotButtonList();
 
 }

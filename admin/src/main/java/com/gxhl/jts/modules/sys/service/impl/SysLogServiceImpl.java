@@ -16,30 +16,34 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gxhl.jts.common.model.RequestModel;
-import com.gxhl.jts.modules.sys.dao.SysLogDao;
-import com.gxhl.jts.modules.sys.service.SysLogService;
 import com.gxhl.jts.common.utils.PageUtils;
+import com.gxhl.jts.modules.sys.dao.SysLogDao;
 import com.gxhl.jts.modules.sys.entity.SysOptLog;
-import org.apache.commons.lang.StringUtils;
+import com.gxhl.jts.modules.sys.service.SysLogService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
 @Service("sysLogService")
 public class SysLogServiceImpl extends ServiceImpl<SysLogDao, SysOptLog> implements SysLogService {
 
+    /**
+     * @param params
+     *
+     * @return
+     */
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String key = (String)params.get("key");
+        String key = (String) params.get("key");
 
         Page<SysOptLog> page = this.selectPage(
-            new RequestModel<SysOptLog>(params).getPage(),
-            new EntityWrapper<SysOptLog>().like(StringUtils.isNotBlank(key),"username", key)
+                new RequestModel<SysOptLog>(params).getPage(),
+                new EntityWrapper<SysOptLog>().like(StringUtils.hasText(key), "username", key)
         );
 
         return new PageUtils(page);

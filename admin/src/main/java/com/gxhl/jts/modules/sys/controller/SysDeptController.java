@@ -35,11 +35,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/sys/dept")
 public class SysDeptController extends AbstractController {
+
     @Autowired
     private SysDeptService sysDeptService;
 
     /**
      * 列表
+     *
+     * @return
      */
     @RequestMapping("/list")
     public List<SysDept> list() {
@@ -50,12 +53,14 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 选择部门(添加、修改菜单)
+     *
+     * @return
      */
     @RequestMapping("/select")
     public ResponseModel select() {
         List<SysDept> deptList = sysDeptService.queryList(new HashMap<String, Object>());
 
-        //添加一级部门
+        // TODO 添加一级部门
         if (getUserId() == Constant.SUPER_ADMIN) {
             SysDept root = new SysDept();
             root.setDeptId(0L);
@@ -70,6 +75,8 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 上级部门Id(管理员则为0)
+     *
+     * @return
      */
     @RequestMapping("/info")
     public ResponseModel info() {
@@ -95,6 +102,9 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 信息
+     *
+     * @param deptId
+     * @return
      */
     @RequestMapping("/info/{deptId}")
     public ResponseModel info(@PathVariable("deptId") Long deptId) {
@@ -105,6 +115,9 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 保存
+     *
+     * @param dept
+     * @return
      */
     @RequestMapping("/save")
     public ResponseModel save(@RequestBody SysDept dept) {
@@ -115,6 +128,9 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 修改
+     *
+     * @param dept
+     * @return
      */
     @RequestMapping("/update")
     public ResponseModel update(@RequestBody SysDept dept) {
@@ -125,6 +141,9 @@ public class SysDeptController extends AbstractController {
 
     /**
      * 删除
+     *
+     * @param deptId
+     * @return
      */
     @RequestMapping("/delete")
     public ResponseModel delete(long deptId) {

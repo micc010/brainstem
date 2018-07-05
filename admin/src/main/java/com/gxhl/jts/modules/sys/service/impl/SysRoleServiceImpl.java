@@ -23,10 +23,10 @@ import com.gxhl.jts.modules.sys.dao.SysRoleDao;
 import com.gxhl.jts.modules.sys.entity.SysDept;
 import com.gxhl.jts.modules.sys.entity.SysRole;
 import com.gxhl.jts.modules.sys.service.*;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -41,6 +41,7 @@ import java.util.Map;
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> implements SysRoleService {
+
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
     @Autowired
@@ -50,6 +51,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Autowired
     private SysDeptService sysDeptService;
 
+    /**
+     * @param params
+     *
+     * @return
+     */
     @Override
     @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
@@ -58,7 +64,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         Page<SysRole> page = this.selectPage(
                 new RequestModel<SysRole>(params).getPage(),
                 new EntityWrapper<SysRole>()
-                        .like(StringUtils.isNotBlank(roleName), "role_name", roleName)
+                        .like(StringUtils.hasText(roleName), "role_name", roleName)
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
@@ -72,6 +78,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         return new PageUtils(page);
     }
 
+    /**
+     * @param role
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void save(SysRole role) {
@@ -85,6 +94,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
     }
 
+    /**
+     * @param role
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysRole role) {
@@ -97,6 +109,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
     }
 
+    /**
+     * @param roleIds
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteBatch(Long[] roleIds) {
@@ -112,6 +127,5 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         //删除角色与用户关联
         sysUserRoleService.deleteBatch(roleIds);
     }
-
 
 }

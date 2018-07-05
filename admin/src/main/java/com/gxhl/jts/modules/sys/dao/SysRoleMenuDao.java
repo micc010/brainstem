@@ -24,14 +24,21 @@ import java.util.List;
  * @since 2018-03-30
  */
 public interface SysRoleMenuDao extends BaseMapper<SysRoleMenu> {
-	
-	/**
-	 * 根据角色ID，获取菜单ID列表
-	 */
-	List<Long> queryMenuIdList(Long roleId);
 
-	/**
-	 * 根据角色ID数组，批量删除
-	 */
-	int deleteBatch(Long[] roleIds);
+    /**
+     * 根据角色ID，获取菜单ID列表
+     *
+     * @param roleId
+     * @return
+     */
+    List<Long> queryMenuIdList(Long roleId);
+
+    /**
+     * 根据角色ID数组，批量删除
+     *
+     * @param roleIds
+     * @return
+     */
+    int deleteBatch(Long[] roleIds);
+
 }

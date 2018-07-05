@@ -29,7 +29,7 @@ import java.io.IOException;
  * @since 2018-03-30
  */
 @Component
-public class RedisConfiguration {
+public class SysConfigRedis {
 
     @Autowired
     private RedisUtils redisUtils;

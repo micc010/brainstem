@@ -19,7 +19,6 @@ import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysDeptService;
 import com.gxhl.jts.modules.sys.service.SysRoleDeptService;
 import com.gxhl.jts.modules.sys.service.SysUserRoleService;
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -28,6 +27,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -97,7 +97,7 @@ public class DataFilterAspect {
         DataFilter dataFilter = signature.getMethod().getAnnotation(DataFilter.class);
         //获取表的别名
         String tableAlias = dataFilter.tableAlias();
-        if (StringUtils.isNotBlank(tableAlias)) {
+        if (StringUtils.hasText(tableAlias)) {
             tableAlias += ".";
         }
 
@@ -120,7 +120,7 @@ public class DataFilterAspect {
 
         StringBuilder sqlFilter = new StringBuilder();
         sqlFilter.append(" (");
-        sqlFilter.append(tableAlias).append("dept_id in(").append(StringUtils.join(deptIdList, ",")).append(")");
+        sqlFilter.append(tableAlias).append("dept_id in(").append(StringUtils.collectionToDelimitedString(deptIdList, ",")).append(")");
 
         //没有本部门数据权限，也能查询本人数据
         if (dataFilter.user()) {

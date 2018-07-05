@@ -14,7 +14,7 @@ package com.gxhl.jts.common.model;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.gxhl.jts.common.xss.SQLFilter;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,7 +41,6 @@ public class RequestModel<T> extends LinkedHashMap<String, Object> {
     private int pageSize = 10;
 
     /**
-     *
      * @param params
      */
     public RequestModel(Map<String, Object> params) {
@@ -69,7 +68,7 @@ public class RequestModel<T> extends LinkedHashMap<String, Object> {
         this.page = new Page<>(pageNum, pageSize, sortby);
 
         //排序
-        if (StringUtils.isNotBlank(sortby) && StringUtils.isNotBlank(sorted)) {
+        if (StringUtils.hasText(sortby) && StringUtils.hasText(sorted)) {
             this.page.setOrderByField(sortby);
             this.page.setAsc("ASC".equalsIgnoreCase(sorted));
         }
@@ -77,7 +76,6 @@ public class RequestModel<T> extends LinkedHashMap<String, Object> {
     }
 
     /**
-     *
      * @return
      */
     public Page<T> getPage() {
@@ -85,7 +83,6 @@ public class RequestModel<T> extends LinkedHashMap<String, Object> {
     }
 
     /**
-     *
      * @return
      */
     public int getPageNum() {
@@ -93,7 +90,6 @@ public class RequestModel<T> extends LinkedHashMap<String, Object> {
     }
 
     /**
-     *
      * @return
      */
     public int getPageSize() {

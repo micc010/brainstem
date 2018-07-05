@@ -45,6 +45,9 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 角色列表
+     *
+     * @param params
+     * @return
      */
     @RequestMapping("/list")
     public ResponseModel list(@RequestParam Map<String, Object> params) {
@@ -55,6 +58,8 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 角色列表
+     *
+     * @return
      */
     @RequestMapping("/select")
     public ResponseModel select() {
@@ -65,6 +70,9 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 角色信息
+     *
+     * @param roleId
+     * @return
      */
     @RequestMapping("/info/{roleId}")
     public ResponseModel info(@PathVariable("roleId") Long roleId) {
@@ -83,6 +91,9 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 保存角色
+     *
+     * @param role
+     * @return
      */
     @SysLog("保存角色")
     @RequestMapping("/save")
@@ -96,6 +107,9 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 修改角色
+     *
+     * @param role
+     * @return
      */
     @SysLog("修改角色")
     @RequestMapping("/update")
@@ -109,6 +123,9 @@ public class SysRoleController extends AbstractController {
 
     /**
      * 删除角色
+     *
+     * @param roleIds
+     * @return
      */
     @SysLog("删除角色")
     @RequestMapping("/delete")
@@ -117,4 +134,5 @@ public class SysRoleController extends AbstractController {
 
         return ResponseModel.ok();
     }
+
 }

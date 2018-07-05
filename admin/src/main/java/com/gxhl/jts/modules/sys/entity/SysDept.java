@@ -21,7 +21,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
-
 /**
  * 部门管理
  *
@@ -31,6 +30,7 @@ import java.util.List;
 @Data
 @TableName("sys_dept")
 public class SysDept implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     //部门ID
@@ -55,4 +55,5 @@ public class SysDept implements Serializable {
     private Boolean open;
     @TableField(exist = false)
     private List<?> list;
+
 }

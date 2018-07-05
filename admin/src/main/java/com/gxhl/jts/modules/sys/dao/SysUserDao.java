@@ -24,16 +24,21 @@ import java.util.List;
  * @since 2018-03-30
  */
 public interface SysUserDao extends BaseMapper<SysUser> {
-	
-	/**
-	 * 查询用户的所有权限
-	 * @param userId  用户ID
-	 */
-	List<String> queryAllPerms(Long userId);
-	
-	/**
-	 * 查询用户的所有菜单ID
-	 */
-	List<Long> queryAllMenuId(Long userId);
+
+    /**
+     * 查询用户的所有权限
+     *
+     * @param userId
+     *         用户ID
+     */
+    List<String> queryAllPerms(Long userId);
+
+    /**
+     * 查询用户的所有菜单ID
+     *
+     * @param userId
+     * @return
+     */
+    List<Long> queryAllMenuId(Long userId);
 
 }

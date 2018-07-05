@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
@@ -33,7 +32,6 @@ public class CustomUserDetails implements UserDetails {
     private String organId;
     private String organName;
     private Date lastPasswordResetDate;
-    private String isApp;
     private Set<GrantedAuthority> authorities;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
@@ -70,7 +68,6 @@ public class CustomUserDetails implements UserDetails {
         this.organId = organId;
         this.organName = organName;
         this.lastPasswordResetDate = lastPasswordResetDate;
-        this.isApp = isApp;
         this.authorities = authorities;
     }
 
@@ -84,7 +81,6 @@ public class CustomUserDetails implements UserDetails {
         this.organId = organId;
         this.organName = organName;
         this.lastPasswordResetDate = lastPasswordResetDate;
-        this.isApp = isApp;
         this.authorities = authorities;
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
@@ -162,9 +158,5 @@ public class CustomUserDetails implements UserDetails {
 
     public Date getLastPasswordResetDate() {
         return lastPasswordResetDate;
-    }
-
-    public String getIsApp() {
-        return isApp;
     }
 }

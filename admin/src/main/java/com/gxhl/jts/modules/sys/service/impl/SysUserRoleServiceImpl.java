@@ -14,10 +14,10 @@ package com.gxhl.jts.modules.sys.service.impl;
 
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.gxhl.jts.modules.sys.entity.SysUserRole;
-import com.gxhl.jts.modules.sys.dao.SysUserRoleDao;
-import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import com.gxhl.jts.common.utils.MapUtils;
+import com.gxhl.jts.modules.sys.dao.SysUserRoleDao;
+import com.gxhl.jts.modules.sys.entity.SysUserRole;
+import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,34 +32,50 @@ import java.util.List;
  */
 @Service("sysUserRoleService")
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserRole> implements SysUserRoleService {
-	@Override
-	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
-		//先删除用户与角色关系
-		this.deleteByMap(new MapUtils().put("user_id", userId));
 
-		if(roleIdList.size() == 0){
-			return ;
-		}
-		
-		//保存用户与角色关系
-		List<SysUserRole> list = new ArrayList<>(roleIdList.size());
-		for(Long roleId : roleIdList){
-			SysUserRole sysUserRoleEntity = new SysUserRole();
-			sysUserRoleEntity.setUserId(userId);
-			sysUserRoleEntity.setRoleId(roleId);
+    /**
+     *
+     * @param userId
+     * @param roleIdList
+     */
+    @Override
+    public void saveOrUpdate(Long userId, List<Long> roleIdList) {
+        //先删除用户与角色关系
+        this.deleteByMap(new MapUtils().put("user_id", userId));
 
-			list.add(sysUserRoleEntity);
-		}
-		this.insertBatch(list);
-	}
+        if (roleIdList.size() == 0) {
+            return;
+        }
 
-	@Override
-	public List<Long> queryRoleIdList(Long userId) {
-		return baseMapper.queryRoleIdList(userId);
-	}
+        //保存用户与角色关系
+        List<SysUserRole> list = new ArrayList<>(roleIdList.size());
+        for (Long roleId : roleIdList) {
+            SysUserRole sysUserRoleEntity = new SysUserRole();
+            sysUserRoleEntity.setUserId(userId);
+            sysUserRoleEntity.setRoleId(roleId);
 
-	@Override
-	public int deleteBatch(Long[] roleIds){
-		return baseMapper.deleteBatch(roleIds);
-	}
+            list.add(sysUserRoleEntity);
+        }
+        this.insertBatch(list);
+    }
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Long> queryRoleIdList(Long userId) {
+        return baseMapper.queryRoleIdList(userId);
+    }
+
+    /**
+     *
+     * @param roleIds
+     * @return
+     */
+    @Override
+    public int deleteBatch(Long[] roleIds) {
+        return baseMapper.deleteBatch(roleIds);
+    }
 }
