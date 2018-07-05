@@ -25,19 +25,20 @@ import java.io.IOException;
 public class XssFilter implements Filter {
 
     /**
-     *
      * @param config
+     *
      * @throws ServletException
      */
     @Override
     public void init(FilterConfig config) throws ServletException {
+
     }
 
     /**
-     *
      * @param request
      * @param response
      * @param chain
+     *
      * @throws IOException
      * @throws ServletException
      */

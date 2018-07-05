@@ -13,7 +13,7 @@
 package com.gxhl.jts.common.xss;
 
 import com.gxhl.jts.common.exception.RestException;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * SQL过滤
@@ -25,10 +25,12 @@ public class SQLFilter {
 
     /**
      * SQL注入过滤
-     * @param str  待验证的字符串
+     *
+     * @param str
+     *         待验证的字符串
      */
     public static String sqlInject(String str) {
-        if (StringUtils.isBlank(str)) {
+        if (!StringUtils.hasText(str)) {
             return null;
         }
         //去掉'|"|;|\字符

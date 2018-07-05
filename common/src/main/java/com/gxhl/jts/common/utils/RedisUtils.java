@@ -43,6 +43,7 @@ public class RedisUtils {
     private SetOperations<String, Object> setOperations;
     @Resource(name = "redisTemplate")
     private ZSetOperations<String, Object> zSetOperations;
+
     /**
      * 默认过期时长，单位：秒
      */
