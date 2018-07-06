@@ -16,9 +16,8 @@ package com.gxhl.jts.modules.sys.controller;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.gxhl.jts.common.model.ResponseModel;
-import com.gxhl.modules.sys.shiro.ShiroUtils;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.subject.Subject;
+import com.gxhl.jts.common.utils.SecurityHolder;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +48,7 @@ public class SysLoginController {
      * @throws IOException
      */
     @RequestMapping("captcha.jpg")
-    public void captcha(HttpServletResponse response) throws IOException {
+    public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
 
@@ -58,56 +57,56 @@ public class SysLoginController {
         //生成图片验证码
         BufferedImage image = producer.createImage(text);
 
-        //保存到shiro session
-        ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
+        //TODO 关闭session没办法调用了
+        request.setAttribute(Constants.KAPTCHA_SESSION_KEY, text);
 
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
     }
 
-    /**
-     * 登录
-     *
-     * @param username
-     * @param password
-     * @param captcha
-     *
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public ResponseModel login(String username, String password, String captcha) {
-        String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-        if (!captcha.equalsIgnoreCase(kaptcha)) {
-            return ResponseModel.error("验证码不正确");
-        }
+//    /**
+//     * 登录
+//     *
+//     * @param username
+//     * @param password
+//     * @param captcha
+//     *
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping(value = "login", method = RequestMethod.POST)
+//    public ResponseModel login(String username, String password, String captcha) {
+//        String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+//        if (!captcha.equalsIgnoreCase(kaptcha)) {
+//            return ResponseModel.error("验证码不正确");
+//        }
+//
+//        try {
+//            Subject subject = ShiroUtils.getSubject();
+//            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+//            subject.login(token);
+//        } catch (UnknownAccountException e) {
+//            return ResponseModel.error(e.getMessage());
+//        } catch (IncorrectCredentialsException e) {
+//            return ResponseModel.error("账号或密码不正确");
+//        } catch (LockedAccountException e) {
+//            return ResponseModel.error("账号已被锁定,请联系管理员");
+//        } catch (AuthenticationException e) {
+//            return ResponseModel.error("账户验证失败");
+//        }
+//
+//        return ResponseModel.ok();
+//    }
 
-        try {
-            Subject subject = ShiroUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-            subject.login(token);
-        } catch (UnknownAccountException e) {
-            return ResponseModel.error(e.getMessage());
-        } catch (IncorrectCredentialsException e) {
-            return ResponseModel.error("账号或密码不正确");
-        } catch (LockedAccountException e) {
-            return ResponseModel.error("账号已被锁定,请联系管理员");
-        } catch (AuthenticationException e) {
-            return ResponseModel.error("账户验证失败");
-        }
-
-        return ResponseModel.ok();
-    }
-
-    /**
-     * 退出
-     *
-     * @return
-     */
-    @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public String logout() {
-        ShiroUtils.logout();
-        return "redirect:login.html";
-    }
+//    /**
+//     * 退出
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "logout", method = RequestMethod.GET)
+//    public String logout() {
+//        ShiroUtils.logout();
+//        return "redirect:login.html";
+//    }
 
 }

@@ -25,11 +25,11 @@ import java.util.Set;
  */
 public class CustomUserDetails implements UserDetails {
 
-    private String id;
+    private Long id;
     private String username;
     private String fullname;
     private String password;
-    private String organId;
+    private Long organId;
     private String organName;
     private Date lastPasswordResetDate;
     private Set<GrantedAuthority> authorities;
@@ -44,6 +44,13 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public CustomUserDetails(String username, String fullname, String password, Set<GrantedAuthority> authorities) {
+        this.password = password;
+        this.username = username;
+        this.fullname = fullname;
+        this.authorities = authorities;
+    }
+
+    public CustomUserDetails(Long id, String username, String fullname, String password, Set<GrantedAuthority> authorities) {
         this.id = id;
         this.password = password;
         this.username = username;
@@ -51,16 +58,8 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public CustomUserDetails(String id, String username, String fullname, String password, Set<GrantedAuthority> authorities) {
-        this.id = id;
-        this.password = password;
-        this.username = username;
-        this.fullname = fullname;
-        this.authorities = authorities;
-    }
-
-    public CustomUserDetails(String id, String username, String fullname, String password, String organId,
-                             String organName, Date lastPasswordResetDate, String isApp, Set<GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String username, String fullname, String password, Long organId,
+                             String organName, Date lastPasswordResetDate, Set<GrantedAuthority> authorities) {
         this.id = id;
         this.password = password;
         this.username = username;
@@ -71,8 +70,8 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public CustomUserDetails(String id, String username, String fullname, String password, String organId,
-                             String organName, Date lastPasswordResetDate, String isApp, Set<GrantedAuthority> authorities,
+    public CustomUserDetails(Long id, String username, String fullname, String password, Long organId,
+                             String organName, Date lastPasswordResetDate, Set<GrantedAuthority> authorities,
                              boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
         this.id = id;
         this.password = password;
@@ -111,7 +110,7 @@ public class CustomUserDetails implements UserDetails {
         return username;
     }
 
-    public String getOrganId() {
+    public Long getOrganId() {
         return organId;
     }
 
@@ -148,7 +147,7 @@ public class CustomUserDetails implements UserDetails {
         return false;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

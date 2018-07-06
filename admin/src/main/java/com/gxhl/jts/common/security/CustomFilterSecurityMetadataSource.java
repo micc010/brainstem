@@ -12,8 +12,10 @@
  */
 package com.gxhl.jts.common.security;
 
-import com.gxhl.jts.modules.sys.entity.SysMenu;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.gxhl.jts.modules.sys.entity.SysRole;
+import com.gxhl.jts.modules.sys.entity.SysRoleMenu;
+import com.gxhl.jts.modules.sys.service.SysRoleMenuService;
 import com.gxhl.jts.modules.sys.service.SysRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +25,12 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 加载权限对应的角色
@@ -41,6 +45,8 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
 
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 资源所需要的权限
@@ -55,11 +61,14 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
 //        LOGGER.info("Context path: " + fi.getRequest().getContextPath());
 
         Collection<ConfigAttribute> securityConfigList = new ArrayList<ConfigAttribute>();
+        String url = fi.getRequest().getServletPath();
         //在Resource表找到该资源对应的角色
-        SysMenu query = new SysMenu();
-        query.setUrl(fi.getRequest().getServletPath());
-        List<SysRole> roleList = sysRoleService.findRoleListByPurview(query);
-
+        List<Long> idList = sysRoleMenuService.selectList(new EntityWrapper<SysRoleMenu>()
+                .eq(StringUtils.hasText(url), "url", url))
+                .stream().map(m -> {
+                    return m.getMenuId();
+                }).collect(Collectors.toList());
+        List<SysRole> roleList = sysRoleService.selectBatchIds(idList);
         if (roleList != null && roleList.size() > 0) {
             for (SysRole role :
                     roleList) {
@@ -82,6 +91,7 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
 
     /**
      * @param arg0
+     *
      * @return
      */
     public boolean supports(Class<?> arg0) {

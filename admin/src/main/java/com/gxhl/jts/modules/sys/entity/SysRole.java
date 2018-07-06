@@ -41,6 +41,11 @@ public class SysRole implements Serializable {
     private Long roleId;
 
     /**
+     * 角色标识
+     */
+    private String role;
+
+    /**
      * 角色名称
      */
     @NotBlank(message = "角色名称不能为空")

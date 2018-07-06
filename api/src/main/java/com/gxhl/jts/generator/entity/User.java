@@ -24,9 +24,10 @@ package com.gxhl.jts.generator.entity;
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -59,7 +60,7 @@ public class User implements Serializable {
     /**
      * 密码
      */
-    @JSONField(serialize = false)
+    @JsonIgnore
     private String password;
     /**
      * 创建时间

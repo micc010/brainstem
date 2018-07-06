@@ -12,8 +12,10 @@
  */
 package com.gxhl.jts.common.security;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import com.gxhl.jts.modules.sys.service.SysRoleService;
+import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import com.gxhl.jts.modules.sys.service.SysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +45,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     private SysUserService sysUserService;
-
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     /**
      * @param username
@@ -62,16 +65,17 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("用户名为空");
         }
 
-        SysUser login = sysUserService.findByUsername(username);
-        if (login == null) {
+        SysUser user = sysUserService.selectOne(new EntityWrapper<SysUser>().eq(StringUtils.hasText(username), "username", username));
+        if (user == null) {
             LOGGER.error("User not exists");
             throw new UsernameNotFoundException("用户不存在");
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
-        sysRoleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
+        sysRoleService.selectBatchIds(sysUserRoleService.queryRoleIdList(user.getUserId()))
+                .forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
-        return new CustomUserDetails(login.getUserId(), login.getUsername(), login.getFullName(), null, login.getDeptId(), null, new Date(), Whether.no.value(), authorities);
+        return new CustomUserDetails(user.getUserId(), user.getUsername(), user.getFullname(), null, user.getDeptId(), null, new Date(), authorities);
     }
 
 }

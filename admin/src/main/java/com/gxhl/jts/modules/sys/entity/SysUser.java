@@ -52,6 +52,12 @@ public class SysUser implements Serializable {
     private String username;
 
     /**
+     * 用户名
+     */
+    @NotBlank(message = "用户姓名不能为空", groups = {InsertGroup.class, UpdateGroup.class})
+    private String fullname;
+
+    /**
      * 密码
      */
     @NotBlank(message = "密码不能为空", groups = InsertGroup.class)

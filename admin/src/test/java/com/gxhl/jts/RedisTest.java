@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RedisTest {
@@ -17,7 +19,7 @@ public class RedisTest {
     private RedisUtils redisUtils;
 
     @Test
-    public void contextLoads() {
+    public void contextLoads() throws IOException{
         SysUser user = new SysUser();
         user.setEmail("123456@qq.com");
         redisUtils.set("user", user);
