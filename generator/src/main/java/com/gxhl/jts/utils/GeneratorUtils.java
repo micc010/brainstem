@@ -40,6 +40,10 @@ public class GeneratorUtils {
 
     private static freemarker.template.Configuration configuration;
 
+    /**
+     *
+     * @return
+     */
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
         templates.add("template/Entity.java.ftl");
@@ -56,6 +60,10 @@ public class GeneratorUtils {
 
     /**
      * 生成代码
+     *
+     * @param table
+     * @param columns
+     * @param zip
      */
     public static void generatorCode(Map<String, String> table,
                                      List<Map<String, String>> columns, ZipOutputStream zip) {
@@ -155,6 +163,9 @@ public class GeneratorUtils {
 
     /**
      * 列名转换成Java属性名
+     *
+     * @param columnName
+     * @return
      */
     public static String columnToJava(String columnName) {
         return WordUtils.capitalizeFully(columnName, new char[]{'_'}).replace("_", "");
@@ -162,6 +173,10 @@ public class GeneratorUtils {
 
     /**
      * 表名转换成Java类名
+     *
+     * @param tableName
+     * @param tablePrefix
+     * @return
      */
     public static String tableToJava(String tableName, String tablePrefix) {
         if (StringUtils.hasText(tablePrefix)) {
@@ -172,6 +187,8 @@ public class GeneratorUtils {
 
     /**
      * 获取配置信息
+     *
+     * @return
      */
     public static Configuration getConfig() {
         try {
@@ -195,6 +212,12 @@ public class GeneratorUtils {
 
     /**
      * 获取文件名
+     *
+     * @param template
+     * @param className
+     * @param packageName
+     * @param moduleName
+     * @return
      */
     public static String getFileName(String template, String className, String packageName, String moduleName) {
         String packagePath = "main" + File.separator + "java" + File.separator;
@@ -242,4 +265,5 @@ public class GeneratorUtils {
 
         return null;
     }
+
 }

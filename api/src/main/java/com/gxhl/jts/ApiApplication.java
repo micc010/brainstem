@@ -19,21 +19,19 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- *
- *
  * @author roger.li
  * @since 2018-03-30
  */
 @SpringBootApplication
-@MapperScan(basePackages = {"com.gxhl.dao"})
+@MapperScan(basePackages = {"com.gxhl.jts.modules.*.dao"})
 public class ApiApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApiApplication.class, args);
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ApiApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(ApiApplication.class);
+    }
 }

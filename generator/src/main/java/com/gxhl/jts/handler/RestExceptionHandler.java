@@ -42,6 +42,11 @@ public class RestExceptionHandler {
         return responseModel;
     }
 
+    /**
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(Exception.class)
     public ResponseModel handleException(Exception e) {
         logger.error(e.getMessage(), e);

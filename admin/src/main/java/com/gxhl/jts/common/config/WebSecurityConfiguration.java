@@ -12,9 +12,7 @@
  */
 package com.gxhl.jts.common.config;
 
-import com.gxhl.jts.common.security.CustomAccessDecisionManager;
-import com.gxhl.jts.common.security.CustomFilterSecurityMetadataSource;
-import com.gxhl.jts.common.security.CustomUserDetailService;
+import com.gxhl.jts.common.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,8 +34,8 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -61,10 +59,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomUserDetailService userDetailService;
-
     @Autowired
     private CustomFilterSecurityMetadataSource securityMetadataSource;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -72,7 +68,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Web层面的配置，一般用来配置无需安全检查的路径
      *
      * @param web
-     *
      * @throws Exception
      */
     @Override
@@ -102,7 +97,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Request层面的配置，对应XML Configuration中的<http>元素
      *
      * @param http
-     *
      * @throws Exception
      */
     @Override
@@ -123,16 +117,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl().disable();
         http.headers().contentTypeOptions().disable();
 
-        http.formLogin().loginPage("/login").failureUrl("/login?error").defaultSuccessUrl("/index")
+        http.formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?error")
+                .defaultSuccessUrl("/index")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true)
+                .logout().logoutSuccessUrl("/login?logout").invalidateHttpSession(true)
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
                 .and()
                 .authorizeRequests().expressionHandler(webSecurityExpressionHandler())
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .addFilterAt(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).exceptionHandling()
+                .authenticationEntryPoint(ajaxAuthenticationEntryPoint())
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     public <O extends FilterSecurityInterceptor> O postProcess(
                             O fsi) {
@@ -150,12 +149,37 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * 身份验证配置，用于注入自定义身份验证Bean和密码校验规则
      *
      * @param auth
-     *
      * @throws Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.eraseCredentials(true).userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
+    }
+
+
+    /**
+     * 初始化filter 可以验证验证码
+     *
+     * @return
+     */
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() {
+        CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(simpleUrlAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(simpleUrlAuthenticationFailureHandler());
+        filter.setRememberMeServices(tokenBasedRememberMeServices());
+        return filter;
+    }
+
+    /**
+     * entrypoint
+     *
+     * @return
+     */
+    @Bean
+    public AjaxAuthenticationEntryPoint ajaxAuthenticationEntryPoint() {
+        return new AjaxAuthenticationEntryPoint();
     }
 
     /**
@@ -224,6 +248,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean(name = "authenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() {
+
         AuthenticationManager authenticationManager = null;
         try {
             authenticationManager = super.authenticationManagerBean();
@@ -238,9 +263,31 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      *
      * @return
      */
+    @Bean(name = "successHandler")
+    public AuthenticationSuccessHandler simpleUrlAuthenticationSuccessHandler() {
+        return new SimpleUrlAuthenticationSuccessHandler("/index");
+    }
+
+    /**
+     * 失败处理器
+     *
+     * @return
+     */
     @Bean(name = "failureHandler")
     public AuthenticationFailureHandler simpleUrlAuthenticationFailureHandler() {
         return new SimpleUrlAuthenticationFailureHandler("/login?error");
+    }
+
+    /**
+     * rememberme设置
+     *
+     * @return
+     */
+    @Bean
+    public TokenBasedRememberMeServices tokenBasedRememberMeServices() {
+        TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices("remember", userDetailService);
+        rememberMeServices.setTokenValiditySeconds(60 * 60 * 24 * 7);
+        return rememberMeServices;
     }
 
     /**

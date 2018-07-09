@@ -14,8 +14,8 @@ package com.gxhl.jts.modules.job.utils;
 
 import com.gxhl.jts.common.exception.RestException;
 import com.gxhl.jts.common.utils.SpringContextUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -44,7 +44,7 @@ public class ScheduleRunnable implements Runnable {
         this.target = SpringContextUtils.getBean(beanName);
         this.params = params;
 
-        if (StringUtils.isNotBlank(params)) {
+        if (StringUtils.hasText(params)) {
             this.method = target.getClass().getDeclaredMethod(methodName, String.class);
         } else {
             this.method = target.getClass().getDeclaredMethod(methodName);
@@ -58,7 +58,7 @@ public class ScheduleRunnable implements Runnable {
     public void run() {
         try {
             ReflectionUtils.makeAccessible(method);
-            if (StringUtils.isNotBlank(params)) {
+            if (StringUtils.hasText(params)) {
                 method.invoke(target, params);
             } else {
                 method.invoke(target);
