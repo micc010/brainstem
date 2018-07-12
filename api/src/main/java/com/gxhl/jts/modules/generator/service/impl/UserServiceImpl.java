@@ -42,13 +42,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      *
-     * @param mobile
+     * @param username
      * @return
      */
     @Override
-    public User queryByMobile(String mobile) {
+    public User queryByUsername(String username) {
         User userEntity = new User();
-        userEntity.setMobile(mobile);
+        userEntity.setMobile(username);
         return baseMapper.selectOne(userEntity);
     }
 
@@ -59,12 +59,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Map<String, Object> login(LoginForm form) {
-        User user = queryByMobile(form.getMobile());
+        User user = queryByUsername(form.getUsername());
         Assert.isNull(user, "未注册的账号");
 
         //密码错误
         if (!passwordEncoder.matches(form.getPassword(), user.getPassword())) {
-            throw new RestException("手机号或密码错误");
+            throw new RestException("账号或密码错误");
         }
 
         // TODO 获取登录token

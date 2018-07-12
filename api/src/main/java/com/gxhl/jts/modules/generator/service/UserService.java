@@ -28,10 +28,10 @@ public interface UserService extends IService<User> {
 
     /**
      *
-     * @param mobile
+     * @param username
      * @return
      */
-    User queryByMobile(String mobile);
+    User queryByUsername(String username);
 
     /**
      * 用户登录

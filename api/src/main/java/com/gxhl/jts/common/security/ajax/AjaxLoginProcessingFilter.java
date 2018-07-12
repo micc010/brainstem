@@ -13,8 +13,8 @@
 package com.gxhl.jts.common.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rogerli.utils.RestfulUtils;
-import com.github.rogerli.utils.exception.AuthMethodNotSupportedException;
+import com.gxhl.jts.common.form.LoginForm;
+import com.gxhl.jts.common.security.exception.AuthMethodNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -45,7 +45,13 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     private final AuthenticationFailureHandler failureHandler;
 
     private final ObjectMapper objectMapper;
-    
+
+    /**
+     * @param defaultProcessUrl
+     * @param successHandler
+     * @param failureHandler
+     * @param mapper
+     */
     public AjaxLoginProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
                                      AuthenticationFailureHandler failureHandler, ObjectMapper mapper) {
         super(defaultProcessUrl);
@@ -54,43 +60,60 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
         this.objectMapper = mapper;
     }
 
+    /**
+     * @param request
+     * @param response
+     *
+     * @return
+     *
+     * @throws AuthenticationException
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-
-//        if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
-//            response.setHeader("Access-Control-Allow-Origin", "*");
-//            response.setHeader("Access-Control-Allow-Method", "POST");
-//            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, X-Requested-With, Content-Type");
-//            response.setStatus(HttpStatus.NO_CONTENT.value());
-//            response.flushBuffer();
-//            return null;
-//        }
-
-        if (!HttpMethod.POST.name().equals(request.getMethod()) || !RestfulUtils.isAjax(request)) {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Authentication method not supported. Request method: " + request.getMethod());
+        if (!HttpMethod.POST.name().equals(request.getMethod())) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("不支持的Http请求方法. Request method: " + request.getMethod());
             }
-            throw new AuthMethodNotSupportedException("Authentication method not supported");
+            throw new AuthMethodNotSupportedException("不支持的Http请求方法");
         }
 
-        LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
-        
-        if (StringUtils.isEmpty(loginRequest.getUsername()) || StringUtils.isEmpty(loginRequest.getPassword())) {
-            throw new AuthenticationServiceException("Username or Password not provided");
+        LoginForm loginForm = objectMapper.readValue(request.getReader(), LoginForm.class);
+
+        if (StringUtils.isEmpty(loginForm.getUsername()) || StringUtils.isEmpty(loginForm.getPassword())) {
+            throw new AuthenticationServiceException("未输入账户或密码");
         }
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
 
         return this.getAuthenticationManager().authenticate(token);
     }
 
+    /**
+     * @param request
+     * @param response
+     * @param chain
+     * @param authResult
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         successHandler.onAuthenticationSuccess(request, response, authResult);
     }
 
+    /**
+     * @param request
+     * @param response
+     * @param failed
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {

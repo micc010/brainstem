@@ -13,8 +13,7 @@
 package com.gxhl.jts.common.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rogerli.utils.error.ErrorCode;
-import com.github.rogerli.utils.error.ErrorResponse;
+import com.gxhl.jts.common.model.ResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -33,13 +32,21 @@ import java.io.IOException;
 @Component
 public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    /**
+     * 登录失败处理
+     *
+     * @param request
+     * @param response
+     * @param ex
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException ex) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized",
-                ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
+        mapper.writeValue(response.getWriter(), ResponseModel.error(ex.getMessage()));
     }
 }

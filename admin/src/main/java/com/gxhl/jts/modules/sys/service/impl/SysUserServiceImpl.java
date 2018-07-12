@@ -79,6 +79,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
+        // TODO 获取名称。。。
         for (SysUser sysUserEntity : page.getRecords()) {
             SysDept sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
             sysUserEntity.setDeptName(sysDeptEntity.getName());
@@ -93,6 +94,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void save(SysUser user) {
+
         // TODO
         user.setCreateTime(new Date());
         String salt = RandomStringUtils.randomAlphanumeric(20);

@@ -12,9 +12,9 @@
  */
 package com.gxhl.jts.common.security.ajax;
 
-import com.github.rogerli.config.jwt.model.UserContext;
-import com.github.rogerli.system.login.model.LoginRole;
-import com.github.rogerli.system.login.service.LoginService;
+import com.gxhl.jts.common.security.model.UserContext;
+import com.gxhl.jts.modules.generator.entity.User;
+import com.gxhl.jts.modules.generator.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +34,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author roger.li
  * @since 2018-03-30
  */
@@ -43,9 +42,8 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
-
     @Autowired
-    private LoginService loginService;
+    private UserService userService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -55,24 +53,26 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-        Optional<LoginRole> optional = loginService.findRoleByUsername(username);
+        User user = userService.queryByUsername(username);
+
+        Optional<LoginRole> optional = userService.findRoleByUsername(username);
 
         LoginRole login = optional.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        
-        if (!encoder.matches(password, login.getPassword())) {
+
+        if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
 
         if (login.getRoleList() == null) {
             throw new InsufficientAuthenticationException("User has no roles assigned");
         }
-        
+
         List<GrantedAuthority> authorities = login.getRoleList().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getRole()))
                 .collect(Collectors.toList());
 
-        UserContext userContext = UserContext.create(login.getUserName(), login.getOrganId(), authorities);
-        
+        UserContext userContext = UserContext.create(user.getUsername(), login.getOrganId(), authorities);
+
         return new UsernamePasswordAuthenticationToken(userContext, null, userContext.getAuthorities());
     }
 
