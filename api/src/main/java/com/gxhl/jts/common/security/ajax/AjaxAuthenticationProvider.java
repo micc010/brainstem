@@ -24,13 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -55,13 +53,11 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
         User user = userService.queryByUsername(username);
 
-        Optional<LoginRole> optional = userService.findRoleByUsername(username);
-
-        LoginRole login = optional.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
+
+
 
         if (login.getRoleList() == null) {
             throw new InsufficientAuthenticationException("User has no roles assigned");
@@ -71,7 +67,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
                 .map(authority -> new SimpleGrantedAuthority(authority.getRole()))
                 .collect(Collectors.toList());
 
-        UserContext userContext = UserContext.create(user.getUsername(), login.getOrganId(), authorities);
+        UserContext userContext = UserContext.create(user.getUsername(), authorities);
 
         return new UsernamePasswordAuthenticationToken(userContext, null, userContext.getAuthorities());
     }

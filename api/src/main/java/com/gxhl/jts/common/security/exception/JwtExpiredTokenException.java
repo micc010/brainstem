@@ -1,6 +1,6 @@
 package com.gxhl.jts.common.security.exception;
 
-import com.github.rogerli.config.jwt.token.JwtToken;
+import com.gxhl.jts.common.security.token.JwtToken;
 import org.springframework.security.core.AuthenticationException;
 
 /**

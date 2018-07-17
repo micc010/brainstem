@@ -1,6 +1,6 @@
 package com.gxhl.jts.common.security.token;
 
-import com.github.rogerli.utils.exception.JwtExpiredTokenException;
+import com.gxhl.jts.common.security.exception.JwtExpiredTokenException;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

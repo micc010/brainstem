@@ -1,9 +1,8 @@
 package com.gxhl.jts.common.security.token;
 
-import com.github.rogerli.config.jwt.JwtProperties;
-import com.github.rogerli.config.jwt.jti.JtiGenerator;
-import com.github.rogerli.config.jwt.model.UserContext;
-import com.github.rogerli.utils.RestfulUtils;
+import com.gxhl.jts.common.config.JwtProperties;
+import com.gxhl.jts.common.security.jti.JtiGenerator;
+import com.gxhl.jts.common.security.model.UserContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -89,8 +88,8 @@ public class JwtTokenFactory {
         DateTime currentTime = new DateTime();
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
-        claims.put("scopes", Arrays.asList(RestfulUtils.ROLE_REFRESH_TOKEN));
-        claims.put("organId", userContext.getOrganId());
+//        claims.put("scopes", Arrays.asList(RestfulUtils.ROLE_REFRESH_TOKEN));
+//        claims.put("organId", userContext.getOrganId());
 
         // 生成jti
         String jti = jtiGenerator.generateId(currentTime.toDate(),

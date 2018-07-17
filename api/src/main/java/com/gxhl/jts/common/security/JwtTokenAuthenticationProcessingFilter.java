@@ -12,9 +12,8 @@
  */
 package com.gxhl.jts.common.security;
 
-import com.github.rogerli.config.jwt.JwtWebSecurityConfiguration;
-import com.github.rogerli.config.jwt.auth.extractor.TokenExtractor;
-import com.github.rogerli.config.jwt.token.RawAccessJwtToken;
+import com.gxhl.jts.common.security.extractor.TokenExtractor;
+import com.gxhl.jts.common.security.token.RawAccessJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -50,15 +49,6 @@ public class JwtTokenAuthenticationProcessingFilter extends AbstractAuthenticati
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-//        if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
-//            response.setHeader("Access-Control-Allow-Origin", "*");
-//            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-//            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Content-Type, X-Auth-Token, X-Requested-With");
-//            response.setStatus(HttpStatus.NO_CONTENT.value());
-//            response.flushBuffer();
-//            return null;
-//        }
-
         String tokenPayload = request.getHeader(JwtWebSecurityConfiguration.JWT_TOKEN_HEADER_PARAM);
         RawAccessJwtToken token = new RawAccessJwtToken(tokenExtractor.extract(tokenPayload));
         return getAuthenticationManager().authenticate(new JwtAuthenticationToken(token));

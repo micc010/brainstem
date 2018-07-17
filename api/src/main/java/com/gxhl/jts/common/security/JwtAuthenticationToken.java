@@ -12,8 +12,8 @@
  */
 package com.gxhl.jts.common.security;
 
-import com.github.rogerli.config.jwt.model.UserContext;
-import com.github.rogerli.config.jwt.token.RawAccessJwtToken;
+import com.gxhl.jts.common.security.model.UserContext;
+import com.gxhl.jts.common.security.token.RawAccessJwtToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
