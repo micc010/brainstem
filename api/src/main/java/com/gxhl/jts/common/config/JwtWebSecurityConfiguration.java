@@ -117,11 +117,6 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll() // Login end-point
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll() // Token refresh end-point
-
-//        .and()
-//            .authorizeRequests()
-//                .antMatchers("/**").authenticated() // Protected All
-
                 .and()
                 .authorizeRequests()
                 .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated() // Protected API End-points
