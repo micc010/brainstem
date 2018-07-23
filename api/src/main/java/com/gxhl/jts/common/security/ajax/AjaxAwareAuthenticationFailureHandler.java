@@ -13,10 +13,9 @@
 package com.gxhl.jts.common.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rogerli.utils.error.ErrorCode;
-import com.github.rogerli.utils.error.ErrorResponse;
-import com.github.rogerli.utils.exception.AuthMethodNotSupportedException;
-import com.github.rogerli.utils.exception.JwtExpiredTokenException;
+import com.gxhl.jts.common.model.ResponseModel;
+import com.gxhl.jts.common.security.exception.AuthMethodNotSupportedException;
+import com.gxhl.jts.common.security.exception.JwtExpiredTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,29 +38,34 @@ public class AjaxAwareAuthenticationFailureHandler implements AuthenticationFail
 
     private final ObjectMapper mapper;
 
+    /**
+     * @param mapper
+     */
     @Autowired
     public AjaxAwareAuthenticationFailureHandler(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
+    /**
+     * @param request
+     * @param response
+     * @param e
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException e) throws IOException, ServletException {
-
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         if (e instanceof BadCredentialsException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password",
-                    ErrorCode.INVALID_USER_PASSWORD, HttpStatus.UNAUTHORIZED));
+            mapper.writeValue(response.getWriter(), ResponseModel.error(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"));
         } else if (e instanceof JwtExpiredTokenException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of("Token has expired",
-                    ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED));
+            mapper.writeValue(response.getWriter(), ResponseModel.error(HttpStatus.UNAUTHORIZED.value(), "Token has expired"));
         } else if (e instanceof AuthMethodNotSupportedException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(),
-                    ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
+            mapper.writeValue(response.getWriter(), ResponseModel.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
         }
-
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Authentication failed",
-                ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
+        mapper.writeValue(response.getWriter(), ResponseModel.error(HttpStatus.UNAUTHORIZED.value(), "Authentication failed"));
     }
 }

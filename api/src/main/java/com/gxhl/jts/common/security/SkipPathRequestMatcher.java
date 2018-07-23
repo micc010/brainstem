@@ -28,7 +28,12 @@ import java.util.stream.Collectors;
 public class SkipPathRequestMatcher implements RequestMatcher {
     private OrRequestMatcher matchers;
     private RequestMatcher processingMatcher;
-    
+
+    /**
+     *
+     * @param pathsToSkip
+     * @param processingPath
+     */
     public SkipPathRequestMatcher(List<String> pathsToSkip, String processingPath) {
         Assert.notNull(pathsToSkip, "路径不允许为空");
         List<RequestMatcher> m = pathsToSkip.stream().map(path -> new AntPathRequestMatcher(path)).collect(Collectors.toList());
@@ -36,6 +41,11 @@ public class SkipPathRequestMatcher implements RequestMatcher {
         processingMatcher = new AntPathRequestMatcher(processingPath);
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @Override
     public boolean matches(HttpServletRequest request) {
         if (matchers.matches(request)) {

@@ -16,6 +16,12 @@ import java.util.Date;
  */
 public interface JtiGenerator {
 
+    /**
+     *
+     * @param issuedAt
+     * @param expiration
+     * @return
+     */
     String generateId(Date issuedAt, Date expiration);
 
 }

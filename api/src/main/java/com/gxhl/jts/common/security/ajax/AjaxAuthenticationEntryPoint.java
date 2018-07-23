@@ -38,6 +38,7 @@ public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
      * @param request
      * @param response
      * @param ex
+     *
      * @throws IOException
      * @throws ServletException
      */

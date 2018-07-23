@@ -33,12 +33,4 @@ public interface UserService extends IService<User> {
      */
     User queryByUsername(String username);
 
-    /**
-     * 用户登录
-     *
-     * @param form 登录表单
-     * @return 返回登录信息
-     */
-    Map<String, Object> login(LoginForm form);
-
 }

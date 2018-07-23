@@ -14,9 +14,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 /**
  * Factory class that should be always used to create {@link JwtToken}.
  *
@@ -45,21 +42,16 @@ public class JwtTokenFactory {
      * Factory method for issuing new JWT Tokens.
      *
      * @param userContext
+     *
      * @return
      */
     public AccessJwtToken createAccessJwtToken(UserContext userContext) {
-        if (StringUtils.isEmpty(userContext.getUsername()))
+        if (userContext.getUser() == null || StringUtils.isEmpty(userContext.getUser().getUsername()))
             throw new IllegalArgumentException(
                     messageSource.getMessage("jwt.without.user", null, LocaleContextHolder.getLocale())
             );
 
-        if (userContext.getAuthorities() == null || userContext.getAuthorities().isEmpty())
-            throw new IllegalArgumentException("User doesn't have any privileges");
-
-        Claims claims = Jwts.claims().setSubject(userContext.getUsername());
-        claims.put("scopes", userContext.getAuthorities().stream()
-                .map(s -> s.toString()).collect(Collectors.toList()));
-        claims.put("organId", userContext.getOrganId());
+        Claims claims = Jwts.claims().setSubject(userContext.getUser().getUsername());
 
         DateTime currentTime = new DateTime();
 
@@ -76,10 +68,11 @@ public class JwtTokenFactory {
 
     /**
      * @param userContext
+     *
      * @return
      */
     public JwtToken createRefreshToken(UserContext userContext) {
-        if (StringUtils.isEmpty(userContext.getUsername())) {
+        if (userContext.getUser() == null || StringUtils.isEmpty(userContext.getUser().getUsername())) {
             throw new IllegalArgumentException(
                     messageSource.getMessage("jwt.without.user", null, LocaleContextHolder.getLocale())
             );
@@ -87,9 +80,7 @@ public class JwtTokenFactory {
 
         DateTime currentTime = new DateTime();
 
-        Claims claims = Jwts.claims().setSubject(userContext.getUsername());
-//        claims.put("scopes", Arrays.asList(RestfulUtils.ROLE_REFRESH_TOKEN));
-//        claims.put("organId", userContext.getOrganId());
+        Claims claims = Jwts.claims().setSubject(userContext.getUser().getUsername());
 
         // 生成jti
         String jti = jtiGenerator.generateId(currentTime.toDate(),

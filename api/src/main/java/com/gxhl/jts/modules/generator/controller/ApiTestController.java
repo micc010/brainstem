@@ -12,8 +12,6 @@
  */
 package com.gxhl.jts.modules.generator.controller;
 
-import com.gxhl.jts.common.annotation.Login;
-import com.gxhl.jts.common.annotation.LoginUser;
 import com.gxhl.jts.common.model.ResponseModel;
 import com.gxhl.jts.modules.generator.entity.User;
 import io.swagger.annotations.Api;
@@ -35,24 +33,26 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(tags = "测试接口")
 public class ApiTestController {
 
-    @Login
+    /**
+     * @param user
+     *
+     * @return
+     */
     @GetMapping("userInfo")
-    @ApiOperation(value = "获取用户信息", response = User.class)
-    public ResponseModel userInfo(@ApiIgnore @LoginUser User user) {
+    @ApiOperation(value = "获取用户信息", response = ResponseModel.class)
+    public ResponseModel userInfo(@ApiIgnore User user) {
         return ResponseModel.ok().put("user", user);
     }
 
-    @Login
+    /**
+     * @param userId
+     *
+     * @return
+     */
     @GetMapping("userId")
-    @ApiOperation("获取用户ID")
+    @ApiOperation(value = "获取用户ID", response = ResponseModel.class)
     public ResponseModel userInfo(@ApiIgnore @RequestAttribute("userId") Integer userId) {
         return ResponseModel.ok().put("userId", userId);
-    }
-
-    @GetMapping("notToken")
-    @ApiOperation("忽略Token验证测试")
-    public ResponseModel notToken() {
-        return ResponseModel.ok().put("msg", "无需token也能访问。。。");
     }
 
 }

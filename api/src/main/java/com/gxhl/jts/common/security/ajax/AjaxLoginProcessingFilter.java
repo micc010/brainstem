@@ -120,4 +120,5 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
         SecurityContextHolder.clearContext();
         failureHandler.onAuthenticationFailure(request, response, failed);
     }
+
 }

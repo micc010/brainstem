@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 
 public class RawAccessJwtToken implements JwtToken {
-    private static Logger LOGGER = LoggerFactory.getLogger(RawAccessJwtToken.class);
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
             
     private String token;
     
@@ -35,6 +36,10 @@ public class RawAccessJwtToken implements JwtToken {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getToken() {
         return token;

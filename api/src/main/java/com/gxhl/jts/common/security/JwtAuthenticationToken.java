@@ -29,12 +29,21 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private RawAccessJwtToken rawAccessToken;
     private UserContext userContext;
 
+    /**
+     *
+     * @param unsafeToken
+     */
     public JwtAuthenticationToken(RawAccessJwtToken unsafeToken) {
         super(null);
         this.rawAccessToken = unsafeToken;
         this.setAuthenticated(false);
     }
 
+    /**
+     *
+     * @param userContext
+     * @param authorities
+     */
     public JwtAuthenticationToken(UserContext userContext, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.eraseCredentials();
@@ -42,6 +51,10 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
+    /**
+     *
+     * @param authenticated
+     */
     @Override
     public void setAuthenticated(boolean authenticated) {
         if (authenticated) {
@@ -62,8 +75,9 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public void eraseCredentials() {        
+    public void eraseCredentials() {
         super.eraseCredentials();
         this.rawAccessToken = null;
     }
+
 }

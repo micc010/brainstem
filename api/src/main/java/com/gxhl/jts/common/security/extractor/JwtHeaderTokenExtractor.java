@@ -25,16 +25,19 @@ public class JwtHeaderTokenExtractor implements TokenExtractor {
 
     public static String HEADER_PREFIX = "Bearer ";
 
+    /**
+     *
+     * @param header
+     * @return
+     */
     @Override
     public String extract(String header) {
         if (StringUtils.isEmpty(header)) {
             throw new AuthenticationServiceException("Authorization header cannot be blank!");
         }
-
         if (header.length() < HEADER_PREFIX.length()) {
             throw new AuthenticationServiceException("Invalid authorization header size.");
         }
-
         return header.substring(HEADER_PREFIX.length(), header.length());
     }
 }

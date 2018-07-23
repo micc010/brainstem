@@ -12,21 +12,19 @@
  */
 package com.gxhl.jts.common.security;
 
-import com.github.rogerli.config.jwt.JwtProperties;
-import com.github.rogerli.config.jwt.model.UserContext;
-import com.github.rogerli.config.jwt.token.RawAccessJwtToken;
+import com.gxhl.jts.common.config.JwtProperties;
+import com.gxhl.jts.common.security.model.UserContext;
+import com.gxhl.jts.common.security.token.RawAccessJwtToken;
+import com.gxhl.jts.modules.generator.entity.User;
+import com.gxhl.jts.modules.generator.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.util.StringUtils;
 
 /**
  * @author roger.li
@@ -35,32 +33,43 @@ import java.util.stream.Collectors;
 @Component
 @SuppressWarnings("unchecked")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
+
     private final JwtProperties jwtProperties;
-    
+    @Autowired
+    private UserService userService;
+
     @Autowired
     public JwtAuthenticationProvider(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
+    /**
+     * @param authentication
+     *
+     * @return
+     *
+     * @throws AuthenticationException
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         RawAccessJwtToken rawAccessToken = (RawAccessJwtToken) authentication.getCredentials();
-
         Jws<Claims> jwsClaims = rawAccessToken.parseClaims(jwtProperties.getTokenSigningKey());
         String subject = jwsClaims.getBody().getSubject();
-        List<String> scopes = jwsClaims.getBody().get("scopes", List.class);
-        String organId = jwsClaims.getBody().get("organId", String.class);
-        List<GrantedAuthority> authorities = scopes.stream()
-                .map(authority -> new SimpleGrantedAuthority(authority))
-                .collect(Collectors.toList());
-
-        UserContext context = UserContext.create(subject, organId, authorities);
-        
-        return new JwtAuthenticationToken(context, context.getAuthorities());
+        User user = userService.queryByUsername(subject);
+        if (user == null || StringUtils.isEmpty(user.getUsername()))
+            throw new IllegalArgumentException("Username is blank: " + user.getUsername());
+        UserContext context = UserContext.create(user);
+        return new JwtAuthenticationToken(context, null);
     }
 
+    /**
+     * @param authentication
+     *
+     * @return
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return (JwtAuthenticationToken.class.isAssignableFrom(authentication));
     }
+
 }

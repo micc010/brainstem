@@ -33,6 +33,9 @@ public class RestExceptionHandler {
 
     /**
      * 处理自定义异常
+     *
+     * @param e
+     * @return
      */
     @ExceptionHandler(RestException.class)
     public ResponseModel handleRRException(RestException e) {

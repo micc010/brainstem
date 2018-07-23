@@ -13,20 +13,10 @@
 package com.gxhl.jts.modules.generator.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.gxhl.jts.common.exception.RestException;
-import com.gxhl.jts.common.form.LoginForm;
 import com.gxhl.jts.modules.generator.dao.UserMapper;
-import com.gxhl.jts.modules.generator.entity.Token;
 import com.gxhl.jts.modules.generator.entity.User;
-import com.gxhl.jts.modules.generator.service.TokenService;
 import com.gxhl.jts.modules.generator.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author roger.li
@@ -35,14 +25,9 @@ import java.util.Map;
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
     /**
-     *
      * @param username
+     *
      * @return
      */
     @Override
@@ -50,31 +35,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User userEntity = new User();
         userEntity.setMobile(username);
         return baseMapper.selectOne(userEntity);
-    }
-
-    /**
-     *
-     * @param form 登录表单
-     * @return
-     */
-    @Override
-    public Map<String, Object> login(LoginForm form) {
-        User user = queryByUsername(form.getUsername());
-        Assert.isNull(user, "未注册的账号");
-
-        //密码错误
-        if (!passwordEncoder.matches(form.getPassword(), user.getPassword())) {
-            throw new RestException("账号或密码错误");
-        }
-
-        // TODO 获取登录token
-        Token tokenEntity = tokenService.createToken(user.getUserId());
-
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("token", tokenEntity.getToken());
-        map.put("expire", tokenEntity.getExpireTime().getTime() - System.currentTimeMillis());
-
-        return map;
     }
 
 }

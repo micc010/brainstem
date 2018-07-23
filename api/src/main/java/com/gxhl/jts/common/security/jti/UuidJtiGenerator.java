@@ -22,6 +22,12 @@ import java.util.UUID;
 @Qualifier("uuidGenerator")
 public class UuidJtiGenerator implements JtiGenerator {
 
+    /**
+     *
+     * @param issuedAt
+     * @param expiration
+     * @return
+     */
     @Override
     public String generateId(Date issuedAt, Date expiration) {
         String jti = UUID.randomUUID().toString();
