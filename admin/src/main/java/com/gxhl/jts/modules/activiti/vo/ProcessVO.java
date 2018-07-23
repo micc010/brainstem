@@ -1,8 +1,10 @@
 package com.gxhl.jts.modules.activiti.vo;
 
+import lombok.Data;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 
+@Data
 public class ProcessVO {
     private String id;
     private String name;
@@ -19,27 +21,4 @@ public class ProcessVO {
         this.deploymentId = processDefinition.getDeploymentId();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDeploymentId() {
-        return deploymentId;
-    }
-
-    public void setDeploymentId(String deploymentId) {
-        this.deploymentId = deploymentId;
-    }
 }
