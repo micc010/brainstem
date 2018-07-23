@@ -20,7 +20,7 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader : {
             root: "page.list",
-            page: "page.pageNum",
+            page: "page.offset",
             total: "page.totalPage",
             records: "page.total"
         },

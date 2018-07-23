@@ -27,35 +27,26 @@ import java.util.List;
 @Data
 public class PageUtils implements Serializable {
 
-    //总记录数
     private int total;
-    //每页记录数
-    private int pageSize;
-    //总页数
+    private int limit;
     private int totalPage;
-    //当前页数
-    private int pageNum;
-    //列表数据
+    private int offset;
     private List<?> data;
 
     /**
      * 分页
      *
-     * @param data
-     *         列表数据
-     * @param total
-     *         总记录数
-     * @param pageSize
-     *         每页记录数
-     * @param pageNum
-     *         当前页数
+     * @param data   列表数据
+     * @param total  总记录数
+     * @param limit  每页记录数
+     * @param offset 当前页数
      */
-    public PageUtils(List<?> data, int total, int pageSize, int pageNum) {
+    public PageUtils(List<?> data, int total, int limit, int offset) {
         this.data = data;
         this.total = total;
-        this.pageSize = pageSize;
-        this.pageNum = pageNum;
-        this.totalPage = (int) Math.ceil((double) total / pageSize);
+        this.limit = limit;
+        this.offset = offset;
+        this.totalPage = (int) Math.ceil((double) total / limit);
     }
 
     /**
@@ -66,8 +57,8 @@ public class PageUtils implements Serializable {
     public PageUtils(Page<?> page) {
         this.data = page.getRecords();
         this.total = page.getTotal();
-        this.pageSize = page.getSize();
-        this.pageNum = page.getCurrent();
+        this.limit = page.getSize();
+        this.offset = page.getCurrent();
         this.totalPage = page.getPages();
     }
 }

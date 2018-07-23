@@ -12,14 +12,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ActivitiUtils {
-    /**
-     * 根据taskId查找businessKey
-     */
+
     @Autowired
     TaskService taskService;
     @Autowired
     RuntimeService runtimeService;
-    public String getBusinessKeyByTaskId(String taskId){
+
+    /**
+     * 根据taskId查找businessKey
+     *
+     * @param taskId
+     * @return
+     */
+    public String getBusinessKeyByTaskId(String taskId) {
         Task task = taskService
                 .createTaskQuery()
                 .taskId(taskId)
@@ -31,7 +36,12 @@ public class ActivitiUtils {
         return pi.getBusinessKey();
     }
 
-    public Task getTaskByTaskId(String taskId){
+    /**
+     *
+     * @param taskId
+     * @return
+     */
+    public Task getTaskByTaskId(String taskId) {
         Task task = taskService
                 .createTaskQuery()
                 .taskId(taskId)

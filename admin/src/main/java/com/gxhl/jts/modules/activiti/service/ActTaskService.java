@@ -1,6 +1,7 @@
 package com.gxhl.jts.modules.activiti.service;
 
-import com.bootdo.activiti.domain.ActivitiDO;
+
+import com.gxhl.jts.modules.activiti.domain.ActivitiDO;
 
 import java.io.InputStream;
 import java.util.List;

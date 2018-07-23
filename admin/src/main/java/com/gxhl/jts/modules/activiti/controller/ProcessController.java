@@ -1,11 +1,10 @@
 package com.gxhl.jts.modules.activiti.controller;
 
-import com.bootdo.activiti.service.ProcessService;
-import com.bootdo.activiti.vo.ProcessVO;
-import com.bootdo.common.config.Constant;
-import com.bootdo.common.controller.BaseController;
-import com.bootdo.common.utils.PageUtils;
-import com.bootdo.common.utils.R;
+import com.gxhl.jts.common.model.ResponseModel;
+import com.gxhl.jts.common.utils.PageUtils;
+import com.gxhl.jts.modules.activiti.service.ProcessService;
+import com.gxhl.jts.modules.activiti.vo.ProcessVO;
+import com.gxhl.jts.modules.sys.controller.AbstractController;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -29,7 +28,7 @@ import java.util.zip.ZipInputStream;
 
 @RequestMapping("activiti/process")
 @RestController
-public class ProcessController extends BaseController{
+public class ProcessController extends AbstractController {
 
     @Autowired
     private RepositoryService repositoryService;
@@ -51,10 +50,10 @@ public class ProcessController extends BaseController{
                 .listPage(offset, limit);
         int count = (int) repositoryService.createProcessDefinitionQuery().count();
         List<Object> list = new ArrayList<>();
-        for(ProcessDefinition processDefinition: processDefinitions){
+        for (ProcessDefinition processDefinition : processDefinitions) {
             list.add(new ProcessVO(processDefinition));
         }
-        PageUtils pageUtils = new PageUtils(list, count);
+        PageUtils pageUtils = new PageUtils(list, count, limit, offset);
         return pageUtils;
     }
 
@@ -65,10 +64,7 @@ public class ProcessController extends BaseController{
 
     @PostMapping("/save")
     @Transactional(readOnly = false)
-    public R deploy(String exportDir, String category, MultipartFile file) {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel deploy(String exportDir, String category, MultipartFile file) {
         String message = "";
         String fileName = file.getOriginalFilename();
         try {
@@ -105,7 +101,7 @@ public class ProcessController extends BaseController{
         } catch (Exception e) {
             throw new ActivitiException("部署失败！", e);
         }
-        return R.ok(message);
+        return ResponseModel.ok(message);
     }
 
     /**
@@ -118,24 +114,21 @@ public class ProcessController extends BaseController{
      * @throws XMLStreamException
      */
     @RequestMapping(value = "/convertToModel/{procDefId}")
-    public R convertToModel(@PathVariable("procDefId") String procDefId, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException, XMLStreamException {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel convertToModel(@PathVariable("procDefId") String procDefId, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException, XMLStreamException {
         org.activiti.engine.repository.Model modelData = null;
         try {
             modelData = processService.convertToModel(procDefId);
-            return R.ok( "转换模型成功，模型ID=" + modelData.getId());
+            return ResponseModel.ok("转换模型成功，模型ID=" + modelData.getId());
         } catch (Exception e) {
             e.printStackTrace();
-            return R.ok( "转换模型失败");
+            return ResponseModel.ok("转换模型失败");
         }
 
     }
 
     @RequestMapping(value = "/resource/read/{xml}/{id}")
     public void resourceRead(@PathVariable("xml") String resType, @PathVariable("id") String id, HttpServletResponse response) throws Exception {
-        InputStream resourceAsStream = processService.resourceRead(id,resType);
+        InputStream resourceAsStream = processService.resourceRead(id, resType);
         byte[] b = new byte[1024];
         int len = -1;
         while ((len = resourceAsStream.read(b, 0, 1024)) != -1) {
@@ -144,21 +137,16 @@ public class ProcessController extends BaseController{
     }
 
     @PostMapping("/remove")
-    public R remove(String id){
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
-        repositoryService.deleteDeployment(id,true);
-        return R.ok();
+    public ResponseModel remove(String id) {
+        repositoryService.deleteDeployment(id, true);
+        return ResponseModel.ok();
     }
+
     @PostMapping("/batchRemove")
-    public R batchRemove(@RequestParam("ids[]") String[] ids) {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel batchRemove(@RequestParam("ids[]") String[] ids) {
         for (String id : ids) {
-            repositoryService.deleteDeployment(id,true);
+            repositoryService.deleteDeployment(id, true);
         }
-        return R.ok();
+        return ResponseModel.ok();
     }
 }

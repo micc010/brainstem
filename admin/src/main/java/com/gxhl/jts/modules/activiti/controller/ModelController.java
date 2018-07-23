@@ -1,12 +1,11 @@
 package com.gxhl.jts.modules.activiti.controller;
 
-import com.bootdo.common.config.Constant;
-import com.bootdo.common.controller.BaseController;
-import com.bootdo.common.utils.PageUtils;
-import com.bootdo.common.utils.R;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.gxhl.jts.common.model.ResponseModel;
+import com.gxhl.jts.common.utils.PageUtils;
+import com.gxhl.jts.modules.sys.controller.AbstractController;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
@@ -15,14 +14,11 @@ import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
-import org.activiti.rest.editor.model.ModelEditorJsonRestResource;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +35,7 @@ import static org.activiti.editor.constants.ModelDataJsonConstants.*;
  */
 @RequestMapping("/activiti")
 @RestController
-public class ModelController extends BaseController{
-    protected static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
+public class ModelController extends AbstractController {
 
     @Autowired
     private RepositoryService repositoryService;
@@ -48,20 +43,32 @@ public class ModelController extends BaseController{
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * @return
+     */
     @GetMapping("/model")
     ModelAndView model() {
         return new ModelAndView("act/model/model");
     }
 
+    /**
+     * @param offset
+     * @param limit
+     * @return
+     */
     @GetMapping("/model/list")
     PageUtils list(int offset, int limit) {
         List<Model> list = repositoryService.createModelQuery().listPage(offset
                 , limit);
         int total = (int) repositoryService.createModelQuery().count();
-        PageUtils pageUtil = new PageUtils(list, total);
+        PageUtils pageUtil = new PageUtils(list, total, limit, offset);
         return pageUtil;
     }
 
+    /**
+     * @param response
+     * @throws UnsupportedEncodingException
+     */
     @RequestMapping("/model/add")
     public void newModel(HttpServletResponse response) throws UnsupportedEncodingException {
 
@@ -92,7 +99,7 @@ public class ModelController extends BaseController{
         ObjectNode stencilSetNode = objectMapper.createObjectNode();
         stencilSetNode.put("namespace",
                 "http://b3mn.org/stencilset/bpmn2.0#");
-        editorNode.put("stencilset", stencilSetNode);
+        editorNode.set("stencilset", stencilSetNode);
         repositoryService.addModelEditorSource(id, editorNode.toString().getBytes("utf-8"));
         try {
             response.sendRedirect("/modeler.html?modelId=" + id);
@@ -101,6 +108,10 @@ public class ModelController extends BaseController{
         }
     }
 
+    /**
+     * @param modelId
+     * @return
+     */
     @GetMapping(value = "/model/{modelId}/json")
     public ObjectNode getEditorJson(@PathVariable String modelId) {
         ObjectNode modelNode = null;
@@ -119,13 +130,16 @@ public class ModelController extends BaseController{
                 modelNode.put("model", editorJsonNode);
 
             } catch (Exception e) {
-                LOGGER.error("Error creating model JSON", e);
+                logger.error("Error creating model JSON", e);
                 throw new ActivitiException("Error creating model JSON", e);
             }
         }
         return modelNode;
     }
 
+    /**
+     * @return
+     */
     @RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String getStencilset() {
         InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("stencilset.json");
@@ -136,6 +150,10 @@ public class ModelController extends BaseController{
         }
     }
 
+    /**
+     * @param response
+     * @param id
+     */
     @GetMapping("/model/edit/{id}")
     public void edit(HttpServletResponse response, @PathVariable("id") String id) {
         try {
@@ -145,33 +163,36 @@ public class ModelController extends BaseController{
         }
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @DeleteMapping("/model/{id}")
-    public R remove(@PathVariable("id") String id) {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel remove(@PathVariable("id") String id) {
         repositoryService.deleteModel(id);
-        return R.ok();
+        return ResponseModel.ok();
     }
 
+    /**
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/model/deploy/{id}")
-    public R deploy(@PathVariable("id") String id) throws Exception {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel deploy(@PathVariable("id") String id) throws Exception {
         //获取模型
         Model modelData = repositoryService.getModel(id);
         byte[] bytes = repositoryService.getModelEditorSource(modelData.getId());
 
         if (bytes == null) {
-            return R.error("模型数据为空，请先设计流程并成功保存，再进行发布。");
+            return ResponseModel.error("模型数据为空，请先设计流程并成功保存，再进行发布。");
         }
 
         JsonNode modelNode = new ObjectMapper().readTree(bytes);
 
         BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
         if (model.getProcesses().size() == 0) {
-            return R.error("数据模型不符要求，请至少设计一条主线流程。");
+            return ResponseModel.error("数据模型不符要求，请至少设计一条主线流程。");
         }
         byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 
@@ -184,20 +205,28 @@ public class ModelController extends BaseController{
         modelData.setDeploymentId(deployment.getId());
         repositoryService.saveModel(modelData);
 
-        return R.ok();
+        return ResponseModel.ok();
     }
 
+    /**
+     * @param ids
+     * @return
+     */
     @PostMapping("/model/batchRemove")
-    public R batchRemove(@RequestParam("ids[]") String[] ids) {
-        if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-            return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-        }
+    public ResponseModel batchRemove(@RequestParam("ids[]") String[] ids) {
         for (String id : ids) {
             repositoryService.deleteModel(id);
         }
-        return R.ok();
+        return ResponseModel.ok();
     }
 
+    /**
+     * @param modelId
+     * @param name
+     * @param description
+     * @param json_xml
+     * @param svg_xml
+     */
     @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void saveModel(@PathVariable String modelId
@@ -233,11 +262,15 @@ public class ModelController extends BaseController{
             outStream.close();
 
         } catch (Exception e) {
-            LOGGER.error("Error saving model", e);
+            logger.error("Error saving model", e);
             throw new ActivitiException("Error saving model", e);
         }
     }
 
+    /**
+     * @param id
+     * @param response
+     */
     @GetMapping("/model/export/{id}")
     public void exportToXml(@PathVariable("id") String id, HttpServletResponse response) {
         try {

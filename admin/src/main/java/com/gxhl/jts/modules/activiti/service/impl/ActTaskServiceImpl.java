@@ -1,9 +1,9 @@
 package com.gxhl.jts.modules.activiti.service.impl;
 
-import com.bootdo.activiti.domain.ActivitiDO;
-import com.bootdo.activiti.service.ActTaskService;
-import com.bootdo.common.utils.ShiroUtils;
-import com.bootdo.common.utils.StringUtils;
+import com.gxhl.jts.common.utils.SecurityHolder;
+import com.gxhl.jts.modules.activiti.domain.ActivitiDO;
+import com.gxhl.jts.modules.activiti.service.ActTaskService;
+import com.gxhl.jts.modules.sys.entity.SysUser;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
@@ -18,6 +18,7 @@ import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -50,10 +51,16 @@ public class ActTaskServiceImpl implements ActTaskService {
     @Autowired
     private HistoryService historyService;
 
+    public SysUser getUser() {
+        return (SysUser) SecurityHolder.getPrincipal();
+    }
+
     @Override
     public List<ActivitiDO> listTodo(ActivitiDO act) {
-        String userId = String.valueOf(ShiroUtils.getUserId());
+        String userId = String.valueOf(getUser().getUserId());
         List<ActivitiDO> result = new ArrayList<ActivitiDO>();
+
+        // TODO
         return result;
     }
 
@@ -69,7 +76,7 @@ public class ActTaskServiceImpl implements ActTaskService {
     @Override
     public void complete(String taskId, String procInsId, String comment, String title, Map<String, Object> vars) {
         // 添加意见
-        if (StringUtils.isNotBlank(procInsId) && StringUtils.isNotBlank(comment)) {
+        if (StringUtils.hasText(procInsId) && StringUtils.hasText(comment)) {
             taskService.addComment(taskId, procInsId, comment);
         }
 
@@ -79,7 +86,7 @@ public class ActTaskServiceImpl implements ActTaskService {
         }
 
         // 设置流程标题
-        if (StringUtils.isNotBlank(title)) {
+        if (StringUtils.hasText(title)) {
             vars.put("title", title);
         }
 
@@ -115,7 +122,7 @@ public class ActTaskServiceImpl implements ActTaskService {
      */
     @Override
     public String startProcess(String procDefKey, String businessTable, String businessId, String title, Map<String, Object> vars) {
-        String userId = ShiroUtils.getUser().getUsername();//ObjectUtils.toString(UserUtils.getUser().getId())
+        String userId = getUser().getUsername();//ObjectUtils.toString(UserUtils.getUser().getId())
 
         // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
         identityService.setAuthenticatedUserId(userId);
@@ -126,7 +133,7 @@ public class ActTaskServiceImpl implements ActTaskService {
         }
 
         // 设置流程标题
-        if (StringUtils.isNotBlank(title)) {
+        if (StringUtils.hasText(title)) {
             vars.put("title", title);
         }
 
@@ -144,18 +151,18 @@ public class ActTaskServiceImpl implements ActTaskService {
     @Override
     public String getFormKey(String procDefId, String taskDefKey) {
         String formKey = "";
-        if (StringUtils.isNotBlank(procDefId)) {
-            if (StringUtils.isNotBlank(taskDefKey)) {
+        if (StringUtils.hasText(procDefId)) {
+            if (StringUtils.hasText(taskDefKey)) {
                 try {
                     formKey = formService.getTaskFormKey(procDefId, taskDefKey);
                 } catch (Exception e) {
                     formKey = "";
                 }
             }
-            if (StringUtils.isBlank(formKey)) {
+            if (StringUtils.isEmpty(formKey)) {
                 formKey = formService.getStartFormKey(procDefId);
             }
-            if (StringUtils.isBlank(formKey)) {
+            if ("".equals(formKey)) {
                 formKey = "/404";
             }
         }
@@ -225,6 +232,7 @@ public class ActTaskServiceImpl implements ActTaskService {
 
     /**
      * 获取需要高亮的线
+     *
      * @param processDefinitionEntity
      * @param historicActivityInstances
      * @return

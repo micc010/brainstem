@@ -1,9 +1,8 @@
 package com.gxhl.jts.modules.activiti.service.impl;
 
-import com.bootdo.activiti.config.ActivitiConstant;
-import com.bootdo.activiti.dao.SalaryDao;
-import com.bootdo.activiti.domain.SalaryDO;
-import com.bootdo.activiti.service.SalaryService;
+import com.gxhl.jts.modules.activiti.dao.SalaryDao;
+import com.gxhl.jts.modules.activiti.domain.SalaryDO;
+import com.gxhl.jts.modules.activiti.service.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

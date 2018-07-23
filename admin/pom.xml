@@ -18,7 +18,7 @@
         <aliyun.oss.version>2.5.0</aliyun.oss.version>
         <qcloud.cos.version>4.4</qcloud.cos.version>
         <swagger.version>2.7.0</swagger.version>
-        <!--<activiti.version>5.22.0</activiti.version>-->
+        <activiti.version>5.22.0</activiti.version>
     </properties>
 
     <dependencies>
@@ -126,34 +126,34 @@
             </exclusions>
         </dependency>
 
-        <!--&lt;!&ndash;activiti&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.activiti</groupId>-->
-        <!--<artifactId>activiti-engine</artifactId>-->
-        <!--<version>${activiti.version}</version>-->
-        <!--<exclusions>-->
-        <!--<exclusion>-->
-        <!--<groupId>org.mybatis</groupId>-->
-        <!--<artifactId>mybatis</artifactId>-->
-        <!--</exclusion>-->
-        <!--</exclusions>-->
-        <!--</dependency>-->
+        <!--activiti-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-engine</artifactId>
+            <version>${activiti.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.activiti</groupId>-->
-        <!--<artifactId>activiti-spring</artifactId>-->
-        <!--<version>${activiti.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.activiti</groupId>-->
-        <!--<artifactId>activiti-modeler</artifactId>-->
-        <!--<version>${activiti.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.activiti</groupId>-->
-        <!--<artifactId>activiti-diagram-rest</artifactId>-->
-        <!--<version>${activiti.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-modeler</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-diagram-rest</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -11,8 +11,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-public class ActivitiConfig {
-    //流程配置，与spring整合采用SpringProcessEngineConfiguration这个实现
+public class ActivitiConfiguration {
+
+    /**
+     * 流程配置，与spring整合采用SpringProcessEngineConfiguration这个实现
+     *
+     * @param dataSource
+     * @param transactionManager
+     * @return
+     */
     @Bean
     public ProcessEngineConfiguration processEngineConfiguration(DataSource dataSource, PlatformTransactionManager transactionManager){
         SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
@@ -30,7 +37,12 @@ public class ActivitiConfig {
         return processEngineConfiguration;
     }
 
-    //流程引擎，与spring整合使用factoryBean
+    /**
+     * 流程引擎，与spring整合使用factoryBean
+     *
+     * @param processEngineConfiguration
+     * @return
+     */
     @Bean
     public ProcessEngineFactoryBean processEngine(ProcessEngineConfiguration processEngineConfiguration){
         ProcessEngineFactoryBean processEngineFactoryBean = new ProcessEngineFactoryBean();
@@ -38,46 +50,84 @@ public class ActivitiConfig {
         return processEngineFactoryBean;
     }
 
-    //八大接口
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public RepositoryService repositoryService(ProcessEngine processEngine){
         return processEngine.getRepositoryService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public RuntimeService runtimeService(ProcessEngine processEngine){
         return processEngine.getRuntimeService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public TaskService taskService(ProcessEngine processEngine){
         return processEngine.getTaskService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public HistoryService historyService(ProcessEngine processEngine){
         return processEngine.getHistoryService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public FormService formService(ProcessEngine processEngine){
         return processEngine.getFormService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public IdentityService identityService(ProcessEngine processEngine){
         return processEngine.getIdentityService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public ManagementService managementService(ProcessEngine processEngine){
         return processEngine.getManagementService();
     }
 
+    /**
+     *
+     * @param processEngine
+     * @return
+     */
     @Bean
     public DynamicBpmnService dynamicBpmnService(ProcessEngine processEngine){
         return processEngine.getDynamicBpmnService();
     }
 
-    //八大接口 end
 }

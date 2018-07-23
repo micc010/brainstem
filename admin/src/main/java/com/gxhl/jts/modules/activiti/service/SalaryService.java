@@ -1,6 +1,7 @@
 package com.gxhl.jts.modules.activiti.service;
 
-import com.bootdo.activiti.domain.SalaryDO;
+
+import com.gxhl.jts.modules.activiti.domain.SalaryDO;
 
 import java.util.List;
 import java.util.Map;
