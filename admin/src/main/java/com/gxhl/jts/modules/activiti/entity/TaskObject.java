@@ -10,22 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.gxhl.jts.modules.activiti.service;
+package com.gxhl.jts.modules.activiti.entity;
 
-import org.activiti.engine.repository.Model;
-import org.springframework.stereotype.Service;
+import lombok.Data;
 
-import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author roger.li
  * @since 2018-03-30
  */
-@Service
-public interface ProcessService {
+@Data
+public class TaskObject {
 
-    Model convertToModel(String procDefId) throws Exception;
-
-    InputStream resourceRead(String id, String resType) throws Exception;
+    private String taskId;
+    private String taskComment;
+    private String taskPass;
+    private Map<String, Object> vars;
 
 }

@@ -1,6 +1,6 @@
 package com.gxhl.jts.modules.notify.controller;
 
-import com.bootdo.system.service.SessionService;
+import com.gxhl.jts.modules.notify.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ public class WebSocketController {
 	SimpMessagingTemplate template;
 
 	@Autowired
-    SessionService sessionService;
+	SessionService sessionService;
 
 	/*@Autowired
 	WelcomeTask welcomeTask;

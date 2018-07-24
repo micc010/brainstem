@@ -1,7 +1,19 @@
+/**
+ * Copyright 2018 http://github.com/micc010
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package com.gxhl.jts.modules.activiti.service.impl;
 
 import com.gxhl.jts.common.utils.SecurityHolder;
-import com.gxhl.jts.modules.activiti.domain.ActivitiDO;
+import com.gxhl.jts.modules.activiti.entity.ProcessInstance;
 import com.gxhl.jts.modules.activiti.service.ActTaskService;
 import com.gxhl.jts.modules.sys.entity.SysUser;
 import org.activiti.bpmn.model.BpmnModel;
@@ -12,7 +24,6 @@ import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.spring.ProcessEngineFactoryBean;
@@ -27,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author roger.li
+ * @since 2018-03-30
  */
 @Service
 public class ActTaskServiceImpl implements ActTaskService {
@@ -56,9 +69,9 @@ public class ActTaskServiceImpl implements ActTaskService {
     }
 
     @Override
-    public List<ActivitiDO> listTodo(ActivitiDO act) {
+    public List<ProcessInstance> listTodo(ProcessInstance act) {
         String userId = String.valueOf(getUser().getUserId());
-        List<ActivitiDO> result = new ArrayList<ActivitiDO>();
+        List<ProcessInstance> result = new ArrayList<ProcessInstance>();
 
         // TODO
         return result;
@@ -67,11 +80,16 @@ public class ActTaskServiceImpl implements ActTaskService {
     /**
      * 提交任务, 并保存意见
      *
-     * @param taskId    任务ID
-     * @param procInsId 流程实例ID，如果为空，则不保存任务提交意见
-     * @param comment   任务提交意见的内容
-     * @param title     流程标题，显示在待办任务标题
-     * @param vars      任务变量
+     * @param taskId
+     *         任务ID
+     * @param procInsId
+     *         流程实例ID，如果为空，则不保存任务提交意见
+     * @param comment
+     *         任务提交意见的内容
+     * @param title
+     *         流程标题，显示在待办任务标题
+     * @param vars
+     *         任务变量
      */
     @Override
     public void complete(String taskId, String procInsId, String comment, String title, Map<String, Object> vars) {
@@ -113,11 +131,17 @@ public class ActTaskServiceImpl implements ActTaskService {
     /**
      * 启动流程
      *
-     * @param procDefKey    流程定义KEY
-     * @param businessTable 业务表表名
-     * @param businessId    业务表编号
-     * @param title         流程标题，显示在待办任务标题
-     * @param vars          流程变量
+     * @param procDefKey
+     *         流程定义KEY
+     * @param businessTable
+     *         业务表表名
+     * @param businessId
+     *         业务表编号
+     * @param title
+     *         流程标题，显示在待办任务标题
+     * @param vars
+     *         流程变量
+     *
      * @return 流程实例ID
      */
     @Override
@@ -138,7 +162,7 @@ public class ActTaskServiceImpl implements ActTaskService {
         }
 
         // 启动流程
-        ProcessInstance procIns = runtimeService.startProcessInstanceByKey(procDefKey, businessId, vars);
+        org.activiti.engine.runtime.ProcessInstance procIns = runtimeService.startProcessInstanceByKey(procDefKey, businessId, vars);
 
         return null;
     }
@@ -235,6 +259,7 @@ public class ActTaskServiceImpl implements ActTaskService {
      *
      * @param processDefinitionEntity
      * @param historicActivityInstances
+     *
      * @return
      */
     private List<String> getHighLightedFlows(

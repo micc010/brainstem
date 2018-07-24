@@ -1,3 +1,15 @@
+/**
+ * Copyright 2018 http://github.com/micc010
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package com.gxhl.jts.modules.activiti.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,7 +43,8 @@ import java.util.List;
 import static org.activiti.editor.constants.ModelDataJsonConstants.*;
 
 /**
- * @author bootdo 1992lcg@163.com
+ * @author roger.li
+ * @since 2018-03-30
  */
 @RequestMapping("/activiti")
 @RestController
@@ -54,6 +67,7 @@ public class ModelController extends AbstractController {
     /**
      * @param offset
      * @param limit
+     *
      * @return
      */
     @GetMapping("/model/list")
@@ -67,6 +81,7 @@ public class ModelController extends AbstractController {
 
     /**
      * @param response
+     *
      * @throws UnsupportedEncodingException
      */
     @RequestMapping("/model/add")
@@ -110,10 +125,11 @@ public class ModelController extends AbstractController {
 
     /**
      * @param modelId
+     *
      * @return
      */
     @GetMapping(value = "/model/{modelId}/json")
-    public ObjectNode getEditorJson(@PathVariable String modelId) {
+    public ObjectNode editorJson(@PathVariable String modelId) {
         ObjectNode modelNode = null;
         Model model = repositoryService.getModel(modelId);
         if (model != null) {
@@ -141,7 +157,7 @@ public class ModelController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public String getStencilset() {
+    public String stencilset() {
         InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("stencilset.json");
         try {
             return IOUtils.toString(stencilsetStream, "utf-8");
@@ -165,6 +181,7 @@ public class ModelController extends AbstractController {
 
     /**
      * @param id
+     *
      * @return
      */
     @DeleteMapping("/model/{id}")
@@ -175,7 +192,9 @@ public class ModelController extends AbstractController {
 
     /**
      * @param id
+     *
      * @return
+     *
      * @throws Exception
      */
     @PostMapping("/model/deploy/{id}")
@@ -210,6 +229,7 @@ public class ModelController extends AbstractController {
 
     /**
      * @param ids
+     *
      * @return
      */
     @PostMapping("/model/batchRemove")

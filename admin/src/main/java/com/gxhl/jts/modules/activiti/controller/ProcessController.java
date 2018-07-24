@@ -1,9 +1,21 @@
+/**
+ * Copyright 2018 http://github.com/micc010
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package com.gxhl.jts.modules.activiti.controller;
 
 import com.gxhl.jts.common.model.ResponseModel;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.activiti.service.ProcessService;
-import com.gxhl.jts.modules.activiti.vo.ProcessVO;
+import com.gxhl.jts.modules.activiti.model.ProcessModel;
 import com.gxhl.jts.modules.sys.controller.AbstractController;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
@@ -26,6 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
+/**
+ * @author roger.li
+ * @since 2018-03-30
+ */
 @RequestMapping("activiti/process")
 @RestController
 public class ProcessController extends AbstractController {
@@ -51,7 +67,7 @@ public class ProcessController extends AbstractController {
         int count = (int) repositoryService.createProcessDefinitionQuery().count();
         List<Object> list = new ArrayList<>();
         for (ProcessDefinition processDefinition : processDefinitions) {
-            list.add(new ProcessVO(processDefinition));
+            list.add(new ProcessModel(processDefinition));
         }
         PageUtils pageUtils = new PageUtils(list, count, limit, offset);
         return pageUtils;

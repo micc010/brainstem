@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
-
+ *
+ * @author roger.li
+ * @since 2018-03-30
  */
 @Component
 public class ActivitiUtils {

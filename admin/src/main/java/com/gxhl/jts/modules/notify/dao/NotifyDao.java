@@ -1,7 +1,7 @@
 package com.gxhl.jts.modules.notify.dao;
 
-import com.bootdo.oa.domain.NotifyDO;
-import com.bootdo.oa.domain.NotifyDTO;
+import com.gxhl.jts.modules.notify.entity.Notify;
+import com.gxhl.jts.modules.notify.model.NotifyModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * 通知通告
- * 
+ *
  * @author chglee
  * @email 1992lcg@163.com
  * @date 2017-10-05 17:11:16
@@ -17,23 +17,23 @@ import java.util.Map;
 @Mapper
 public interface NotifyDao {
 
-	NotifyDO get(Long id);
+    Notify get(Long id);
 
-	List<NotifyDO> list(Map<String, Object> map);
+    List<Notify> list(Map<String, Object> map);
 
-	int count(Map<String, Object> map);
+    int count(Map<String, Object> map);
 
-	int save(NotifyDO notify);
+    int save(Notify notify);
 
-	int update(NotifyDO notify);
+    int update(Notify notify);
 
-	int remove(Long id);
+    int remove(Long id);
 
-	int batchRemove(Long[] ids);
+    int batchRemove(Long[] ids);
 
-	List<NotifyDO> listByIds(Long[] ids);
+    List<Notify> listByIds(Long[] ids);
 
-	int countDTO(Map<String, Object> map);
+    int countDTO(Map<String, Object> map);
 
-	List<NotifyDTO> listDTO(Map<String, Object> map);
+    List<NotifyModel> listDTO(Map<String, Object> map);
 }
