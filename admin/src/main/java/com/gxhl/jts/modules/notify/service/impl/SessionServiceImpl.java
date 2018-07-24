@@ -1,9 +1,16 @@
 package com.gxhl.jts.modules.notify.service.impl;
 
 import com.gxhl.jts.modules.notify.model.UserOnline;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gxhl.jts.modules.notify.service.SessionService;
+import com.gxhl.jts.modules.sys.entity.SysUser;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.session.ExpiringSession;
+import org.springframework.session.SessionRepository;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,41 +22,39 @@ import java.util.List;
 @Service
 public class SessionServiceImpl implements SessionService {
 
-    private final SessionDAO sessionDAO;
+    @Resource(name = "sessionRepository")
+    private SessionRepository sessionRepository;
 
-    @Autowired
-    public SessionServiceImpl(SessionDAO sessionDAO) {
-        this.sessionDAO = sessionDAO;
-    }
+    @Resource
+    private SessionRegistry sessionRegistry;
+
 
     @Override
     public List<UserOnline> list() {
         List<UserOnline> list = new ArrayList<>();
-        Collection<Session> sessions = sessionDAO.getActiveSessions();
-        for (Session session : sessions) {
-            UserOnline userOnline = new UserOnline();
-            if (session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) == null) {
-                continue;
-            } else {
-                SimplePrincipalCollection principalCollection = (SimplePrincipalCollection) session
-                        .getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-                UserDO userDO = (UserDO) principalCollection.getPrimaryPrincipal();
-                userOnline.setUsername(userDO.getUsername());
+        List<Object> principals = sessionRegistry.getAllPrincipals();
+        for (Object principal : principals) {
+            SysUser user = (SysUser) principal;
+            List<SessionInformation> informationList = sessionRegistry.getAllSessions(principal, true);
+            for (SessionInformation info :
+                    informationList) {
+                UserOnline userOnline = new UserOnline();
+                userOnline.setId(user.getUserId().toString());
+                userOnline.setUsername(user.getUsername());
+                userOnline.setHost(info.get());
+                userOnline.setStartTimestamp(.getStartTimestamp());
+                userOnline.setLastAccessTime(info.getLastRequest());
+                userOnline.setTimeout(info.);
+                list.add(userOnline);
             }
-            userOnline.setId((String) session.getId());
-            userOnline.setHost(session.getHost());
-            userOnline.setStartTimestamp(session.getStartTimestamp());
-            userOnline.setLastAccessTime(session.getLastAccessTime());
-            userOnline.setTimeout(session.getTimeout());
-            list.add(userOnline);
         }
         return list;
     }
 
     @Override
-    public List<UserDO> listOnlineUser() {
-        List<UserDO> list = new ArrayList<>();
-        UserDO userDO;
+    public List<SysUser> listOnlineUser() {
+        List<SysUser> list = new ArrayList<>();
+        SysUser userDO;
         Collection<Session> sessions = sessionDAO.getActiveSessions();
         for (Session session : sessions) {
             SimplePrincipalCollection principalCollection = new SimplePrincipalCollection();

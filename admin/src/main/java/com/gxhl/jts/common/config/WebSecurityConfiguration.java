@@ -28,6 +28,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
@@ -36,10 +38,15 @@ import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.session.ConcurrentSessionFilter;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
+import org.springframework.security.web.session.SimpleRedirectSessionInformationExpiredStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +70,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CustomFilterSecurityMetadataSource securityMetadataSource;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Resource
+    private SessionRegistry sessionRegistry;
 
     /**
      * Web层面的配置，一般用来配置无需安全检查的路径
@@ -130,7 +139,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
-                .addFilterAt(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).exceptionHandling()
+                .addFilterBefore(validateCodeFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new ConcurrentSessionFilter(sessionRegistry,
+                                new SimpleRedirectSessionInformationExpiredStrategy("/login")),
+                        ConcurrentSessionFilter.class)
+                .exceptionHandling()
                 .authenticationEntryPoint(ajaxAuthenticationEntryPoint())
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     public <O extends FilterSecurityInterceptor> O postProcess(
@@ -142,7 +156,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .and()
-                .sessionManagement().invalidSessionUrl("/login?invalid").maximumSessions(1);
+                .sessionManagement().invalidSessionUrl("/login?invalid")
+                .maximumSessions(1).maxSessionsPreventsLogin(false);
     }
 
     /**
@@ -156,20 +171,43 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.eraseCredentials(true).userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
     }
 
+    /**
+     * 验证验证码filter
+     *
+     * @return
+     */
+    @Bean
+    public UsernamePasswordAuthenticationFilter validateCodeFilter() {
+        ValidateCodeUsernamePasswordAuthenticationFilter filter = new ValidateCodeUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(simpleUrlAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(simpleUrlAuthenticationFailureHandler());
+        return filter;
+    }
 
     /**
-     * 初始化filter 可以验证验证码
+     * 初始化filter
      *
      * @return
      */
     @Bean
     public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() {
-        CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
+        UsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
+        filter.setPostOnly(true);
         filter.setAuthenticationManager(authenticationManagerBean());
-        filter.setAuthenticationSuccessHandler(simpleUrlAuthenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(simpleUrlAuthenticationFailureHandler());
+        filter.setAuthenticationSuccessHandler(simpleUrlAuthenticationSuccessHandler());
+        filter.setSessionAuthenticationStrategy(new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
         filter.setRememberMeServices(tokenBasedRememberMeServices());
         return filter;
+    }
+
+    /**
+     * @return
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     /**

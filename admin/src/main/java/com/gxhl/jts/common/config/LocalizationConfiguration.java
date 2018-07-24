@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 /**
@@ -23,12 +24,13 @@ public class LocalizationConfiguration {
     private String encoding;
 
     @Bean(name = "messageSource")
-    public MessageSource messageSource() {
+    public MessageSourceAccessor messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setDefaultEncoding(encoding);
         messageSource.setBasename(baseName);
         messageSource.setCacheSeconds(cacheSeconds);
-        return messageSource;
+        MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+        return accessor;
     }
 
 }
