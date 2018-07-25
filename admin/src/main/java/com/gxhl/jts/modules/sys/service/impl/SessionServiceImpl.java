@@ -1,13 +1,11 @@
-package com.gxhl.jts.modules.notify.service.impl;
+package com.gxhl.jts.modules.sys.service.impl;
 
-import com.gxhl.jts.modules.notify.model.UserOnline;
-import com.gxhl.jts.modules.notify.service.SessionService;
 import com.gxhl.jts.modules.sys.entity.SysUser;
+import com.gxhl.jts.modules.sys.model.UserOnline;
+import com.gxhl.jts.modules.sys.service.SessionService;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.session.ExpiringSession;
 import org.springframework.session.SessionRepository;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,8 +1,8 @@
-package com.gxhl.jts.modules.notify.controller;
+package com.gxhl.jts.modules.sys.controller;
 
 import com.gxhl.jts.common.model.ResponseModel;
-import com.gxhl.jts.modules.notify.model.UserOnline;
-import com.gxhl.jts.modules.notify.service.SessionService;
+import com.gxhl.jts.modules.sys.model.UserOnline;
+import com.gxhl.jts.modules.sys.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

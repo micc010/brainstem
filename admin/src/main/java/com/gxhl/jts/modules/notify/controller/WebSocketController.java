@@ -1,6 +1,6 @@
 package com.gxhl.jts.modules.notify.controller;
 
-import com.gxhl.jts.modules.notify.service.SessionService;
+import com.gxhl.jts.modules.sys.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;

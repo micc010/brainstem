@@ -22,7 +22,7 @@ import com.gxhl.jts.common.model.RequestModel;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysConfigDao;
 import com.gxhl.jts.modules.sys.entity.SysConfig;
-import com.gxhl.jts.modules.sys.redis.SysConfigRedis;
+import com.gxhl.jts.modules.sys.utils.SysConfigRedisUtils;
 import com.gxhl.jts.modules.sys.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ import java.util.Map;
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> implements SysConfigService {
 
     @Autowired
-    private SysConfigRedis sysConfigRedis;
+    private SysConfigRedisUtils sysConfigRedisUtils;
 
     /**
      * 分页查询
@@ -74,7 +74,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
     @Override
     public void save(SysConfig config) throws JsonProcessingException {
         this.insert(config);
-        sysConfigRedis.saveOrUpdate(config);
+        sysConfigRedisUtils.saveOrUpdate(config);
     }
 
     /**
@@ -88,7 +88,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
     @Transactional(rollbackFor = Exception.class)
     public void update(SysConfig config) throws JsonProcessingException {
         this.updateById(config);
-        sysConfigRedis.saveOrUpdate(config);
+        sysConfigRedisUtils.saveOrUpdate(config);
     }
 
     /**
@@ -101,7 +101,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
     @Transactional(rollbackFor = Exception.class)
     public void updateValueByKey(String key, String value) {
         baseMapper.updateValueByKey(key, value);
-        sysConfigRedis.delete(key);
+        sysConfigRedisUtils.delete(key);
     }
 
     /**
@@ -114,7 +114,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
     public void deleteBatch(Long[] ids) {
         for (Long id : ids) {
             SysConfig config = this.selectById(id);
-            sysConfigRedis.delete(config.getKey());
+            sysConfigRedisUtils.delete(config.getKey());
         }
 
         this.deleteBatchIds(Arrays.asList(ids));
@@ -131,10 +131,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
      */
     @Override
     public String getValue(String key) throws IOException {
-        SysConfig config = sysConfigRedis.get(key);
+        SysConfig config = sysConfigRedisUtils.get(key);
         if (config == null) {
             config = baseMapper.queryByKey(key);
-            sysConfigRedis.saveOrUpdate(config);
+            sysConfigRedisUtils.saveOrUpdate(config);
         }
 
         return config == null ? null : config.getValue();

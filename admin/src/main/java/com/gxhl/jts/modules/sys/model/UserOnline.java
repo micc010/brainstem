@@ -1,4 +1,4 @@
-package com.gxhl.jts.modules.notify.model;
+package com.gxhl.jts.modules.sys.model;
 
 import lombok.Data;
 
@@ -27,8 +27,8 @@ public class UserOnline {
      */
     private String userAgent;
     /**
-     * 在线状态
-     */
+    * 在线状态
+    */
     private String status = "on_line";
     /**
      * session创建时间
@@ -42,9 +42,5 @@ public class UserOnline {
      * 超时时间
      */
     private Long timeout;
-    /**
-     * 备份的当前用户会话
-     */
-    private String onlineSession;
 
 }
