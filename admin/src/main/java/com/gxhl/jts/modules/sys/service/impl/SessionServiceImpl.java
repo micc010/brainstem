@@ -5,6 +5,8 @@ import com.gxhl.jts.modules.sys.model.UserOnline;
 import com.gxhl.jts.modules.sys.service.SessionService;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.session.ExpiringSession;
+import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +33,19 @@ public class SessionServiceImpl implements SessionService {
     public List<UserOnline> list() {
         List<UserOnline> list = new ArrayList<>();
         List<Object> principals = sessionRegistry.getAllPrincipals();
+
         for (Object principal : principals) {
             SysUser user = (SysUser) principal;
             List<SessionInformation> informationList = sessionRegistry.getAllSessions(principal, true);
+
             for (SessionInformation info :
                     informationList) {
+                Session session = sessionRepository.getSession(info.getSessionId());
+
                 UserOnline userOnline = new UserOnline();
                 userOnline.setId(user.getUserId().toString());
+                userOnline.setUserId(user.getUserId().toString());
+                userOnline.setSystemHost(session.);
                 userOnline.setUsername(user.getUsername());
                 userOnline.setHost(info.get());
                 userOnline.setStartTimestamp(.getStartTimestamp());
