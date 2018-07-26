@@ -1,5 +1,6 @@
 package com.gxhl.jts.modules.sys.model;
 
+import com.gxhl.jts.modules.sys.enums.OnlineStatus;
 import lombok.Data;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ public class UserOnline {
     /**
     * 在线状态
     */
-    private String status = "on_line";
+    private String status = OnlineStatus.online.name();
     /**
      * session创建时间
      */
