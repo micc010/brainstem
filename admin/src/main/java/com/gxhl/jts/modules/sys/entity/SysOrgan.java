@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,26 +29,38 @@ import java.util.List;
  * @since 2018-03-30
  */
 @Data
-@TableName("sys_dept")
-public class SysDept implements Serializable {
+@TableName("sys_organ")
+public class SysOrgan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //部门ID
+    //单位ID
     @TableId
-    private Long deptId;
-    //上级部门ID，一级部门为0
-    private Long parentId;
-    //部门名称
+    private Long orgId;
+    //单位名称
+    @NotBlank(message = "单位名称不能为空")
     private String name;
-    //上级部门名称
-    @TableField(exist = false)
-    private String parentName;
+    //单位代码
+    private String code;
+    // 简称
+    private String shortName;
+    // 单位类型
+    private String organType;
     //排序
     private Integer orderNum;
 
     @TableLogic
-    private Integer delFlag;
+    private Integer locked;
+    private Integer checked;
+    //上级单位ID，一级单位为0
+    private Long parentId;
+    //上级单位名称
+    @TableField(exist = false)
+    private String parentName;
+    //上级单位简称
+    @TableField(exist = false)
+    private String parentShort;
+
     /**
      * ztree属性
      */

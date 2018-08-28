@@ -26,11 +26,9 @@ import javax.servlet.DispatcherType;
  * @since 2018-03-30
  */
 @Configuration
-public class FilterConfiguration {
+public class XssFilterConfiguration {
 
     /**
-     * xssFilter
-     *
      * @return
      */
     @Bean
@@ -44,5 +42,4 @@ public class FilterConfiguration {
         registration.setEnabled(true);
         return registration;
     }
-
 }

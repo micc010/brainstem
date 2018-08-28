@@ -16,7 +16,7 @@ import com.gxhl.jts.common.annotation.DataFilter;
 import com.gxhl.jts.common.exception.RestException;
 import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.modules.sys.entity.SysUser;
-import com.gxhl.jts.modules.sys.service.SysDeptService;
+import com.gxhl.jts.modules.sys.service.SysOrganService;
 import com.gxhl.jts.modules.sys.service.SysRoleDeptService;
 import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import org.aspectj.lang.JoinPoint;
@@ -45,7 +45,7 @@ import java.util.Set;
 public class DataFilterAspect {
 
     @Autowired
-    private SysDeptService sysDeptService;
+    private SysOrganService sysDeptService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
     @Autowired

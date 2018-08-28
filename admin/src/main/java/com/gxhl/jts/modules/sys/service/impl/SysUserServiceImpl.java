@@ -20,9 +20,9 @@ import com.gxhl.jts.common.model.RequestModel;
 import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysUserDao;
-import com.gxhl.jts.modules.sys.entity.SysDept;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
 import com.gxhl.jts.modules.sys.entity.SysUser;
-import com.gxhl.jts.modules.sys.service.SysDeptService;
+import com.gxhl.jts.modules.sys.service.SysOrganService;
 import com.gxhl.jts.modules.sys.service.SysUserRoleService;
 import com.gxhl.jts.modules.sys.service.SysUserService;
 import org.apache.commons.lang.RandomStringUtils;
@@ -48,7 +48,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Autowired
     private SysUserRoleService sysUserRoleService;
     @Autowired
-    private SysDeptService sysDeptService;
+    private SysOrganService sysDeptService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -81,7 +81,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
 
         // TODO 获取名称。。。
         for (SysUser sysUserEntity : page.getRecords()) {
-            SysDept sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
+            SysOrgan sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
             sysUserEntity.setDeptName(sysDeptEntity.getName());
         }
 

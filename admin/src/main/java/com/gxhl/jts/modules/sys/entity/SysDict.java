@@ -66,6 +66,6 @@ public class SysDict implements Serializable {
      * 删除标记  -1：已删除  0：正常
      */
     @TableLogic
-    private Integer delFlag;
+    private Integer locked;
 
 }

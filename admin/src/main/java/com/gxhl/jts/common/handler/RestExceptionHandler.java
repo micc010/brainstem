@@ -43,18 +43,36 @@ public class RestExceptionHandler {
         return responseModel;
     }
 
+    /**
+     * 主键重复
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseModel handleDuplicateKeyException(DuplicateKeyException e) {
         logger.error(e.getMessage(), e);
         return ResponseModel.error("数据库中已存在该记录");
     }
 
+    /**
+     * 认证失败
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseModel handleAuthorizationException(AccessDeniedException e) {
         logger.error(e.getMessage(), e);
         return ResponseModel.error("没有权限，请联系管理员授权");
     }
 
+    /**
+     * 异常
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(Exception.class)
     public ResponseModel handleException(Exception e) {
         logger.error(e.getMessage(), e);

@@ -12,36 +12,25 @@
  */
 package com.gxhl.jts.common.config;
 
-import com.google.common.collect.Maps;
-import com.gxhl.jts.common.xss.XssFilter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.DispatcherType;
-import java.util.Map;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Filter配置
+ * WebMvc配置
  *
  * @author roger.li
  * @since 2018-03-30
  */
 @Configuration
-public class FilterConfiguration {
+public class AdminWebConfiguration implements WebMvcConfigurer {
 
     /**
-     * @return
+     * @param registry
      */
-    @Bean
-    public FilterRegistrationBean xssFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setDispatcherTypes(DispatcherType.REQUEST);
-        registration.setFilter(new XssFilter());
-        registration.addUrlPatterns("/*");
-        registration.setName("xssFilter");
-        registration.setOrder(1);
-        registration.setEnabled(true);
-        return registration;
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
     }
+
 }

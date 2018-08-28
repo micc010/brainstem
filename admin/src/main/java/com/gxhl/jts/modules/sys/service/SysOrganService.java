@@ -14,37 +14,37 @@ package com.gxhl.jts.modules.sys.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
-import com.gxhl.jts.modules.sys.entity.SysDept;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 部门管理
+ * 单位管理
  *
  * @author roger.li
  * @since 2018-03-30
  */
-public interface SysDeptService extends IService<SysDept> {
+public interface SysOrganService extends IService<SysOrgan> {
 
     /**
-     * 查询部门列表
+     * 查询单位列表
      *
      * @param map
      * @return
      */
-    List<SysDept> queryList(Map<String, Object> map);
+    List<SysOrgan> queryList(Map<String, Object> map);
 
     /**
-     * 查询子部门ID列表
+     * 查询下级单位列表
      *
      * @param parentId
-     *         上级部门ID
+     *         上级单位ID
      */
     List<Long> queryDetpIdList(Long parentId);
 
     /**
-     * 获取子部门ID，用于数据过滤
+     * 获取下级单位ID，用于数据过滤
      *
      * @param deptId
      * @return

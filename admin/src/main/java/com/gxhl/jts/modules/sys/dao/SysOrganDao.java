@@ -13,20 +13,20 @@
 package com.gxhl.jts.modules.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.gxhl.jts.modules.sys.entity.SysDept;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
 
 import java.util.List;
 
 /**
- * 部门管理
+ * 单位管理
  *
  * @author roger.li
  * @since 2018-03-30
  */
-public interface SysDeptDao extends BaseMapper<SysDept> {
+public interface SysOrganDao extends BaseMapper<SysOrgan> {
 
     /**
-     * 查询子部门ID列表
+     * 查询下级单位ID列表
      *
      * @param parentId
      *         上级部门ID

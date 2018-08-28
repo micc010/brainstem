@@ -20,7 +20,7 @@ import com.gxhl.jts.common.model.RequestModel;
 import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.common.utils.PageUtils;
 import com.gxhl.jts.modules.sys.dao.SysRoleDao;
-import com.gxhl.jts.modules.sys.entity.SysDept;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
 import com.gxhl.jts.modules.sys.entity.SysRole;
 import com.gxhl.jts.modules.sys.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Autowired
     private SysUserRoleService sysUserRoleService;
     @Autowired
-    private SysDeptService sysDeptService;
+    private SysOrganService sysDeptService;
 
     /**
      * @param params
@@ -69,7 +69,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         );
 
         for (SysRole sysRoleEntity : page.getRecords()) {
-            SysDept sysDeptEntity = sysDeptService.selectById(sysRoleEntity.getDeptId());
+            SysOrgan sysDeptEntity = sysDeptService.selectById(sysRoleEntity.getDeptId());
             if (sysDeptEntity != null) {
                 sysRoleEntity.setDeptName(sysDeptEntity.getName());
             }

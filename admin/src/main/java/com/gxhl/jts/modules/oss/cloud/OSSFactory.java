@@ -16,6 +16,8 @@ import com.gxhl.jts.common.utils.Constant;
 import com.gxhl.jts.common.utils.SpringContextUtils;
 import com.gxhl.jts.modules.sys.service.SysConfigService;
 
+import java.io.IOException;
+
 /**
  * 文件上传Factory
  *
@@ -35,7 +37,7 @@ public final class OSSFactory {
      *
      * @return
      */
-    public static CloudStorageService build() {
+    public static CloudStorageService build() throws IOException {
         CloudStorageConfiguration config = sysConfigService.getConfigObject(Constant.CLOUD_STORAGE_CONFIG_KEY, CloudStorageConfiguration.class);
 
         if (config.getType() == Constant.CloudService.QINIU.getValue()) {

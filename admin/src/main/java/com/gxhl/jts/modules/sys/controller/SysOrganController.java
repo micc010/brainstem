@@ -14,8 +14,8 @@ package com.gxhl.jts.modules.sys.controller;
 
 import com.gxhl.jts.common.model.ResponseModel;
 import com.gxhl.jts.common.utils.Constant;
-import com.gxhl.jts.modules.sys.entity.SysDept;
-import com.gxhl.jts.modules.sys.service.SysDeptService;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
+import com.gxhl.jts.modules.sys.service.SysOrganService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,11 +33,11 @@ import java.util.List;
  * @since 2018-03-30
  */
 @RestController
-@RequestMapping("/sys/dept")
-public class SysDeptController extends AbstractController {
+@RequestMapping("/sys/organ")
+public class SysOrganController extends AbstractController {
 
     @Autowired
-    private SysDeptService sysDeptService;
+    private SysOrganService sysDeptService;
 
     /**
      * 列表
@@ -45,8 +45,8 @@ public class SysDeptController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    public List<SysDept> list() {
-        List<SysDept> deptList = sysDeptService.queryList(new HashMap<String, Object>());
+    public List<SysOrgan> list() {
+        List<SysOrgan> deptList = sysDeptService.queryList(new HashMap<String, Object>());
 
         return deptList;
     }
@@ -58,12 +58,12 @@ public class SysDeptController extends AbstractController {
      */
     @RequestMapping("/select")
     public ResponseModel select() {
-        List<SysDept> deptList = sysDeptService.queryList(new HashMap<String, Object>());
+        List<SysOrgan> deptList = sysDeptService.queryList(new HashMap<String, Object>());
 
         // TODO 添加一级部门
         if (getUserId() == Constant.SUPER_ADMIN) {
-            SysDept root = new SysDept();
-            root.setDeptId(0L);
+            SysOrgan root = new SysOrgan();
+            root.setOrgId(0L);
             root.setName("一级部门");
             root.setParentId(-1L);
             root.setOpen(true);
@@ -82,9 +82,9 @@ public class SysDeptController extends AbstractController {
     public ResponseModel info() {
         long deptId = 0;
         if (getUserId() != Constant.SUPER_ADMIN) {
-            List<SysDept> deptList = sysDeptService.queryList(new HashMap<String, Object>());
+            List<SysOrgan> deptList = sysDeptService.queryList(new HashMap<String, Object>());
             Long parentId = null;
-            for (SysDept sysDeptEntity : deptList) {
+            for (SysOrgan sysDeptEntity : deptList) {
                 if (parentId == null) {
                     parentId = sysDeptEntity.getParentId();
                     continue;
@@ -108,7 +108,7 @@ public class SysDeptController extends AbstractController {
      */
     @RequestMapping("/info/{deptId}")
     public ResponseModel info(@PathVariable("deptId") Long deptId) {
-        SysDept dept = sysDeptService.selectById(deptId);
+        SysOrgan dept = sysDeptService.selectById(deptId);
 
         return ResponseModel.ok().put("dept", dept);
     }
@@ -120,7 +120,7 @@ public class SysDeptController extends AbstractController {
      * @return
      */
     @RequestMapping("/save")
-    public ResponseModel save(@RequestBody SysDept dept) {
+    public ResponseModel save(@RequestBody SysOrgan dept) {
         sysDeptService.insert(dept);
 
         return ResponseModel.ok();
@@ -133,7 +133,7 @@ public class SysDeptController extends AbstractController {
      * @return
      */
     @RequestMapping("/update")
-    public ResponseModel update(@RequestBody SysDept dept) {
+    public ResponseModel update(@RequestBody SysOrgan dept) {
         sysDeptService.updateById(dept);
 
         return ResponseModel.ok();

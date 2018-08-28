@@ -8,14 +8,11 @@
  */
 package com.gxhl.jts.common.config;
 
-import com.github.rogerli.config.mvc.LocalizationConfiguration;
-import com.github.rogerli.config.mvc.RestfulRequestMappingHandlerMapping;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +46,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 //        useDefaultFilters = false,
 //        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {RestController.class, RestControllerAdvice.class})}
 //)
-@AutoConfigureAfter({LocalizationConfiguration.class})
-public class JwtWebMvcConfiguration extends WebMvcConfigurerAdapter {
+public class JwtWebMvcConfiguration implements WebMvcConfigurer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtWebMvcConfiguration.class);
 
@@ -82,16 +78,16 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurerAdapter {
 //        return  new RequestMappingHandlerMapping();
     }
 
-    /**
-     * 默认视图
-     *
-     * @param registry
-     */
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        LOGGER.info("======addViewControllers======");
-        super.addViewControllers(registry);
-    }
+//    /**
+//     * 默认视图
+//     *
+//     * @param registry
+//     */
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        LOGGER.info("======addViewControllers======");
+//        super.addViewControllers(registry);
+//    }
 
     /**
      * Override this method to configure cross origin requests processing.
@@ -136,43 +132,36 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurerAdapter {
                 "classpath:/public/",
                 "classpath:/resources/",
                 "classpath:/META-INF/resources/").setCachePeriod(31556926);
-        super.addResourceHandlers(registry);
+//        super.addResourceHandlers(registry);
     }
 
-    /**
-     * 自定义解析器实现请求参数绑定方法
-     *
-     * @param argumentResolvers
-     */
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        LOGGER.info("======addArgumentResolvers======");
-        super.addArgumentResolvers(argumentResolvers);
-    }
+//    /**
+//     * 自定义解析器实现请求参数绑定方法
+//     *
+//     * @param argumentResolvers
+//     */
+//    @Override
+//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+//        LOGGER.info("======addArgumentResolvers======");
+//        super.addArgumentResolvers(argumentResolvers);
+//    }
+
+//    /**
+//     * 自定义处理器实现返回值处理
+//     *
+//     * @param returnValueHandlers
+//     */
+//    @Override
+//    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+//        LOGGER.info("======addReturnValueHandlers======");
+//        super.addReturnValueHandlers(returnValueHandlers);
+//    }
 
     /**
-     * 自定义处理器实现返回值处理
-     *
-     * @param returnValueHandlers
-     */
-    @Override
-    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-        LOGGER.info("======addReturnValueHandlers======");
-        super.addReturnValueHandlers(returnValueHandlers);
-    }
-
-    /**
-     * 配置messageConverter
-     * ByteArrayHttpMessageConverter
-     * ResourceHttpMessageConverter
-     * SourceHttpMessageConverter
-     * AllEncompassingFormHttpMessageConverter
-     * 根据环境还可能有
-     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
-     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
-     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
-     * jackson2Present：MappingJackson2HttpMessageConverter
-     * gsonPresent：GsonHttpMessageConverter
+     * 配置messageConverter ByteArrayHttpMessageConverter ResourceHttpMessageConverter SourceHttpMessageConverter
+     * AllEncompassingFormHttpMessageConverter 根据环境还可能有 romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
+     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter jaxb2Present：Jaxb2RootElementHttpMessageConverter
+     * jackson2Present：MappingJackson2HttpMessageConverter gsonPresent：GsonHttpMessageConverter
      *
      * @param converters
      */
@@ -191,6 +180,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     /**
      * 文件上传配置
+     *
      * @return
      */
     @Bean

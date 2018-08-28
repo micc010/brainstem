@@ -16,9 +16,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gxhl.jts.common.annotation.DataFilter;
 import com.gxhl.jts.common.utils.Constant;
-import com.gxhl.jts.modules.sys.dao.SysDeptDao;
-import com.gxhl.jts.modules.sys.entity.SysDept;
-import com.gxhl.jts.modules.sys.service.SysDeptService;
+import com.gxhl.jts.modules.sys.dao.SysOrganDao;
+import com.gxhl.jts.modules.sys.entity.SysOrgan;
+import com.gxhl.jts.modules.sys.service.SysOrganService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ import java.util.Map;
  * @author roger.li
  * @since 2018-03-30
  */
-@Service("sysDeptService")
-public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> implements SysDeptService {
+@Service("sysOrganService")
+public class SysOrganServiceImpl extends ServiceImpl<SysOrganDao, SysOrgan> implements SysOrganService {
 
     /**
      *
@@ -39,13 +39,13 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> impleme
      */
     @Override
     @DataFilter(subDept = true, user = false)
-    public List<SysDept> queryList(Map<String, Object> params) {
-        List<SysDept> deptList =
-                this.selectList(new EntityWrapper<SysDept>()
+    public List<SysOrgan> queryList(Map<String, Object> params) {
+        List<SysOrgan> deptList =
+                this.selectList(new EntityWrapper<SysOrgan>()
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER)));
 
-        for (SysDept sysDeptEntity : deptList) {
-            SysDept parentDeptEntity = this.selectById(sysDeptEntity.getParentId());
+        for (SysOrgan sysDeptEntity : deptList) {
+            SysOrgan parentDeptEntity = this.selectById(sysDeptEntity.getParentId());
             if (parentDeptEntity != null) {
                 sysDeptEntity.setParentName(parentDeptEntity.getName());
             }
@@ -70,10 +70,10 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> impleme
      */
     @Override
     public List<Long> getSubDeptIdList(Long deptId) {
-        //部门及子部门ID列表
+        //单位及下级单位ID列表
         List<Long> deptIdList = new ArrayList<>();
 
-        //获取子部门ID
+        //获取下级单位ID
         List<Long> subIdList = queryDetpIdList(deptId);
         getDeptTreeList(subIdList, deptIdList);
 
